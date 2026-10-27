@@ -838,3 +838,6 @@ main.page.home-grid { display: grid; grid-template-columns: minmax(0, 1fr) 380px
   .foot-grid { padding: 28px 0 22px; gap: 22px; }
   .toast { left: 16px; right: 16px; transform: none; text-align: center; }
 }
+
+/* Portrait photos (people): keep the face in the frame */
+.media img.portrait { object-position: 50% 18%; }

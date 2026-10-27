@@ -14,7 +14,7 @@ on:
     branches: [main]
 
 permissions:
-  contents: read
+  contents: write   # only used to save the README screenshots in the branch "screenshots"
   pages: write
   id-token: write
 
@@ -79,6 +79,19 @@ jobs:
       - name: Screenshots
         continue-on-error: true
         run: python -m site_builder.screenshots
+
+      # The README shows these pictures. They live in their own branch
+      # ("screenshots", always just one commit), so the main history stays clean.
+      - name: Screenshots für die README speichern
+        continue-on-error: true
+        run: |
+          cd site/screenshots
+          git init -q -b screenshots
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -q -m "Screenshots vom $(date -u '+%Y-%m-%d %H:%M') UTC"
+          git push -q -f "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" screenshots
 
       - uses: actions/upload-pages-artifact@v3
         with:

@@ -373,3 +373,38 @@ def test_impressum_from_settings(monkeypatch):
     build()
     html = (SITE / "impressum.html").read_text(encoding="utf-8")
     assert "Erika Muster" in html and "60311 Frankfurt" in html and "todo" not in html
+
+
+def test_wikipedia_lead_image(monkeypatch, tmp_path):
+    """The photo of a person in the story is found via Wikipedia, with licence and author."""
+    from pipeline import images
+
+    class Resp:
+        def __init__(self, data): self.data = data
+        def raise_for_status(self): pass
+        def json(self): return self.data
+
+    def fake_get(url, params=None, **kw):
+        if "wikipedia" in url:
+            name = params["titles"]
+            return Resp({"query": {"pages": {"1": {"pageimage": "Merz_2024.jpg"} if name == "Friedrich Merz" else {}}}})
+        return Resp({"query": {"pages": {"2": {"title": "File:Merz_2024.jpg", "imageinfo": [{
+            "width": 1200, "height": 1600, "thumburl": "https://upload.example/merz.jpg",
+            "descriptionurl": "https://commons.example/Merz", "extmetadata": {
+                "LicenseShortName": {"value": "CC BY-SA 4.0"}, "Artist": {"value": "<a>Jane Doe</a>"}}}]}}}})
+
+    monkeypatch.setattr(images.requests, "get", fake_get)
+    monkeypatch.setattr(images, "download", lambda url, sid, referer=None: {"src": "media/x.jpg", "w": 900, "h": 1200})
+    story = {"id": "s1", "location": None, "entities": ["Bundestag", "Friedrich Merz"]}
+    img = images.from_wikipedia(story, set())
+    assert img and img["licence"] == "CC BY-SA 4.0" and "Jane Doe" in img["credit"]
+
+
+def test_non_free_or_svg_images_are_rejected():
+    from pipeline.images import _commons_image
+    page = {"title": "File:Flag_of_Germany.svg", "imageinfo": [{"width": 2000, "height": 1200,
+            "extmetadata": {"LicenseShortName": {"value": "Public domain"}}}]}
+    assert _commons_image(page, 500, True) is None
+    page = {"title": "File:Photo.jpg", "imageinfo": [{"width": 2000, "height": 1200,
+            "extmetadata": {"LicenseShortName": {"value": "CC BY-NC 2.0"}}}]}
+    assert _commons_image(page, 500, True) is None

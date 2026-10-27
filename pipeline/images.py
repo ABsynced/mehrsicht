@@ -7,7 +7,9 @@ Two sources, set with IMAGE_SOURCE in .env (tried in this order):
            ⚠ These photos are copyrighted (AP, dpa, Reuters, ...). Use this
            only on your own computer (private use, demos). NOT for a public site.
 
-  commons  Free photos from Wikimedia Commons. Only licences that allow
+  commons  Free photos: first the main photo of the Wikipedia article about a
+           person, place or organisation in the story, then a search on
+           Wikimedia Commons. Only licences that allow
            reuse and editing: public domain, CC0, CC BY, CC BY-SA ("NC" and
            "ND" are rejected). Safe for the public website.
 
@@ -149,6 +151,33 @@ def _press_image(got: dict, url: str, art: dict, used: set[str]) -> dict:
 
 
 # ---------------------------------------------------------------- Wikimedia
+def _commons_image(page: dict, min_width: int = 900, allow_portrait: bool = False) -> tuple[float, dict] | None:
+    """Turn one Commons API page into our image record, or None if it is not usable."""
+    info = (page.get("imageinfo") or [{}])[0]
+    meta = info.get("extmetadata", {})
+    licence = meta.get("LicenseShortName", {}).get("value", "")
+    title = page.get("title", "")
+    if not licence_ok(licence) or title.lower().endswith((".svg", ".gif", ".tif", ".tiff", ".pdf")):
+        return None
+    if allow_portrait:
+        width = info.get("width", 0)
+        if width < min_width or any(w in title.lower() for w in BAD_WORDS):
+            return None
+        s = 1.0
+    else:
+        s = score(info, title)
+        if s <= 0:
+            return None
+    return s, {
+        "remote_url": info.get("thumburl") or info.get("url"),
+        "page_url": info.get("descriptionurl"),
+        "author": clean_html(meta.get("Artist", {}).get("value", "Unbekannt"))[:80],
+        "licence": licence,
+        "title": title.removeprefix("File:"),
+        "kind": "free",
+    }
+
+
 def search_commons(query: str) -> list[dict]:
     """All usable pictures for a search, best first."""
     params = {
@@ -163,23 +192,71 @@ def search_commons(query: str) -> list[dict]:
     except (requests.RequestException, ValueError) as exc:
         log.warning("Commons-Suche fehlgeschlagen (%s): %s", query, exc)
         return []
-    found = []
-    for page in pages.values():
-        info = (page.get("imageinfo") or [{}])[0]
-        meta = info.get("extmetadata", {})
-        licence = meta.get("LicenseShortName", {}).get("value", "")
-        s = score(info, page.get("title", ""))
-        if not licence_ok(licence) or s <= 0:
-            continue
-        found.append((s, {
-            "remote_url": info.get("thumburl") or info.get("url"),
-            "page_url": info.get("descriptionurl"),
-            "author": clean_html(meta.get("Artist", {}).get("value", "Unbekannt"))[:80],
-            "licence": licence,
-            "title": page.get("title", "").removeprefix("File:"),
-            "kind": "free",
-        }))
+    found = [r for r in (_commons_image(p) for p in pages.values()) if r]
     return [img for _, img in sorted(found, key=lambda f: f[0], reverse=True)]
+
+
+# ---------------------------------------------------------------- Wikipedia
+WIKI_API = "https://{lang}.wikipedia.org/w/api.php"
+
+
+def wiki_lead_image(name: str, lang: str = "de") -> str | None:
+    """File name of the main picture of a Wikipedia article – only if it is freely licensed."""
+    params = {"action": "query", "format": "json", "titles": name, "prop": "pageimages",
+              "piprop": "name", "pilicense": "free", "redirects": 1}
+    try:
+        resp = requests.get(WIKI_API.format(lang=lang), params=params, timeout=20,
+                            headers={"User-Agent": config.USER_AGENT})
+        resp.raise_for_status()
+        pages = resp.json().get("query", {}).get("pages", {})
+    except (requests.RequestException, ValueError):
+        return None
+    for page in pages.values():
+        if page.get("pageimage"):
+            return page["pageimage"]
+    return None
+
+
+def commons_file(file_name: str) -> dict | None:
+    """Licence, author and address of one Commons file (people may be portrait format)."""
+    params = {"action": "query", "format": "json", "titles": f"File:{file_name}", "prop": "imageinfo",
+              "iiprop": "url|size|extmetadata", "iiurlwidth": 1200}
+    try:
+        resp = requests.get(API, params=params, timeout=20, headers={"User-Agent": config.USER_AGENT})
+        resp.raise_for_status()
+        pages = resp.json().get("query", {}).get("pages", {})
+    except (requests.RequestException, ValueError):
+        return None
+    for page in pages.values():
+        got = _commons_image(page, min_width=500, allow_portrait=True)
+        if got:
+            return got[1]
+    return None
+
+
+def from_wikipedia(story: dict, used: set[str]) -> dict | None:
+    """Main photo of the Wikipedia article about a person, place or organisation in the story."""
+    names = [n for n in ([story.get("location")] + list(story.get("entities") or [])) if isinstance(n, str) and n.strip()]
+    seen = set()
+    for name in names[:8]:
+        if name.lower() in seen:
+            continue
+        seen.add(name.lower())
+        for lang in ("de", "en"):
+            file_name = wiki_lead_image(name, lang)
+            if not file_name:
+                continue
+            image = commons_file(file_name)
+            if not image or image["remote_url"] in used:
+                continue
+            got = download(image["remote_url"], story["id"])
+            if got:
+                used.add(image["remote_url"])
+                image.update(got)
+                image["credit"] = f"Foto: {image['author']} / {image['licence']} · Wikimedia Commons"
+                return image
+            break
+    return None
 
 
 def keyword_query(story: dict) -> str:
@@ -189,6 +266,11 @@ def keyword_query(story: dict) -> str:
 
 
 def from_commons(story: dict, topic_cfg: dict, used: set[str]) -> dict | None:
+    # 1) the photo of the person/place/organisation the story is about (Wikipedia)
+    image = from_wikipedia(story, used)
+    if image:
+        return image
+    # 2) a search on Wikimedia Commons, 3) the topic's default search words
     queries = [q for q in (story.get("commons_query"), keyword_query(story)) if q]
     queries += topic_cfg.get(story["topic"], {}).get("commons", [])
     for query in queries:

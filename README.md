@@ -12,7 +12,7 @@ News from Germany and Europe, seen from every side – an AI-powered media compa
 
 <p align="center"><a href="https://absynced.github.io/mehrsicht/"><b>🔗 Live: absynced.github.io/mehrsicht</b></a></p>
 
-![Mehrsicht homepage](https://absynced.github.io/mehrsicht/screenshots/home-desktop.jpg)
+![Mehrsicht homepage](https://raw.githubusercontent.com/ABsynced/mehrsicht/screenshots/home-desktop.jpg)
 
 > The screenshots are taken automatically from the live site every 6 hours, so they always show the current news.
 
@@ -50,13 +50,13 @@ It is a fully automated pipeline: **RSS → AI clustering → AI framing analysi
 
 | Story page | Perspectives & hover card |
 |---|---|
-| ![Story page](https://absynced.github.io/mehrsicht/screenshots/story-desktop.jpg) | ![Distribution of perspectives](https://absynced.github.io/mehrsicht/screenshots/story-perspectives.jpg) |
+| ![Story page](https://raw.githubusercontent.com/ABsynced/mehrsicht/screenshots/story-desktop.jpg) | ![Distribution of perspectives](https://raw.githubusercontent.com/ABsynced/mehrsicht/screenshots/story-perspectives.jpg) |
 | **Fact-check radar** | **Topic page** |
-| ![Fact-checks](https://absynced.github.io/mehrsicht/screenshots/factchecks.jpg) | ![Topic page](https://absynced.github.io/mehrsicht/screenshots/topic.jpg) |
+| ![Fact-checks](https://raw.githubusercontent.com/ABsynced/mehrsicht/screenshots/factchecks.jpg) | ![Topic page](https://raw.githubusercontent.com/ABsynced/mehrsicht/screenshots/topic.jpg) |
 
 <p align="center">
-  <img src="https://absynced.github.io/mehrsicht/screenshots/home-mobile.jpg" width="260" alt="Homepage on a phone">&nbsp;&nbsp;
-  <img src="https://absynced.github.io/mehrsicht/screenshots/story-mobile.jpg" width="260" alt="Story page on a phone">
+  <img src="https://raw.githubusercontent.com/ABsynced/mehrsicht/screenshots/home-mobile.jpg" width="260" alt="Homepage on a phone">&nbsp;&nbsp;
+  <img src="https://raw.githubusercontent.com/ABsynced/mehrsicht/screenshots/story-mobile.jpg" width="260" alt="Story page on a phone">
 </p>
 
 ## How it works

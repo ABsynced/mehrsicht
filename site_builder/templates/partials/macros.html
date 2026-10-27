@@ -16,7 +16,7 @@
 {% set small = img and img.w and img.w < 700 %}
 <div class="media {{ cls }}{% if small %} media--small{% endif %}" style="--tint: {{ story.tint }}{% if small %}; --bg: url('{{ root }}{{ img.src }}'){% endif %}">
   {% if img %}
-    <img src="{{ root }}{{ img.src }}" alt="" loading="lazy"{% if img.w %} width="{{ img.w }}" height="{{ img.h }}"{% endif %}>
+    <img src="{{ root }}{{ img.src }}" alt="" loading="lazy"{% if img.w %} width="{{ img.w }}" height="{{ img.h }}"{% endif %}{% if img.h and img.w and img.h > img.w %} class="portrait"{% endif %}>
   {% else %}
     {% for s in shapes(story.illustration) %}<div class="shape" style="{{ s }}"></div>{% endfor %}
   {% endif %}
