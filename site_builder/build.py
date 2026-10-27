@@ -297,6 +297,7 @@ def build() -> None:
                 topics_nav=topics_nav, today=date_de(generated), updated=ago(data["generated_at"], now),
                 now=now, year=year, demo=demo, press_photos=press_photos, site_url=config.SITE_URL,
                 newsletter_action=config.NEWSLETTER_FORM_ACTION, contact_email=config.CONTACT_EMAIL,
+                impressum_name=config.IMPRESSUM_NAME, impressum_address=config.IMPRESSUM_ADDRESS,
                 bucket_names=BUCKET_NAMES, bucket_colors=BUCKET_COLORS, page_size=PAGE_SIZE,
                 story_url=lambda st: f"{root}{prefix}geschichte/{st['id']}.html",
                 story_url_id=lambda sid: f"{root}{prefix}geschichte/{sid}.html",

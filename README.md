@@ -5,14 +5,16 @@ News from Germany and Europe, seen from every side – an AI-powered media compa
 <p align="center">
   <img alt="Python" src="https://img.shields.io/badge/Python-3.11+-3776AB?logo=python&logoColor=white">
   <img alt="AI" src="https://img.shields.io/badge/AI-open--source%20LLM%20via%20Groq-F55036">
-  <img alt="Tests" src="https://img.shields.io/badge/tests-25%20passing-2E7D32">
+  <img alt="Tests" src="https://img.shields.io/badge/tests-26%20passing-2E7D32">
   <img alt="Hosting" src="https://img.shields.io/badge/hosting-GitHub%20Pages-222">
   <img alt="Privacy" src="https://img.shields.io/badge/cookies-none-0F766E">
 </p>
 
-![Mehrsicht homepage](docs/screenshots/home-desktop.jpg)
+<p align="center"><a href="https://absynced.github.io/mehrsicht/"><b>🔗 Live: absynced.github.io/mehrsicht</b></a></p>
 
-> Screenshots show the built-in **demo mode**: every outlet, headline and fact-check in them is invented.
+![Mehrsicht homepage](https://absynced.github.io/mehrsicht/screenshots/home-desktop.jpg)
+
+> The screenshots are taken automatically from the live site every 6 hours, so they always show the current news.
 
 ## The idea
 
@@ -48,13 +50,13 @@ It is a fully automated pipeline: **RSS → AI clustering → AI framing analysi
 
 | Story page | Perspectives & hover card |
 |---|---|
-| ![Story page](docs/screenshots/story-desktop.jpg) | ![Distribution of perspectives](docs/screenshots/story-perspectives.jpg) |
+| ![Story page](https://absynced.github.io/mehrsicht/screenshots/story-desktop.jpg) | ![Distribution of perspectives](https://absynced.github.io/mehrsicht/screenshots/story-perspectives.jpg) |
 | **Fact-check radar** | **Topic page** |
-| ![Fact-checks](docs/screenshots/factchecks.jpg) | ![Topic page](docs/screenshots/topic.jpg) |
+| ![Fact-checks](https://absynced.github.io/mehrsicht/screenshots/factchecks.jpg) | ![Topic page](https://absynced.github.io/mehrsicht/screenshots/topic.jpg) |
 
 <p align="center">
-  <img src="docs/screenshots/home-mobile.jpg" width="260" alt="Homepage on a phone">&nbsp;&nbsp;
-  <img src="docs/screenshots/story-mobile.jpg" width="260" alt="Story page on a phone">
+  <img src="https://absynced.github.io/mehrsicht/screenshots/home-mobile.jpg" width="260" alt="Homepage on a phone">&nbsp;&nbsp;
+  <img src="https://absynced.github.io/mehrsicht/screenshots/story-mobile.jpg" width="260" alt="Story page on a phone">
 </p>
 
 ## How it works
@@ -107,7 +109,7 @@ python -m http.server 8000 --directory site   # open http://localhost:8000
 The full beginner-friendly walkthrough is in **[docs/SETUP.md](docs/SETUP.md)**.
 
 ```bash
-python -m pytest -q              # 25 tests, offline
+python -m pytest -q              # 26 tests, offline
 python -m pipeline.check_feeds   # are all news and fact-check feeds reachable?
 python -m pipeline.check_ai --live
 ```

@@ -1,7 +1,7 @@
 # Runs the whole Mehrsicht pipeline every 6 hours and publishes the site
 # on GitHub Pages. Repository secrets (Settings > Secrets and variables >
 # Actions): GROQ_API_KEY and CEREBRAS_API_KEY (both free), optional FACTCHECK_API_KEY,
-# NEWSLETTER_FORM_ACTION. Variables: SITE_URL and optional CONTACT_EMAIL.
+# NEWSLETTER_FORM_ACTION. Variables: SITE_URL, CONTACT_EMAIL, IMPRESSUM_NAME, IMPRESSUM_ADDRESS.
 # Every 6 hours = 4 runs a day, which fits Groq's free daily limits.
 
 name: Nachrichten aktualisieren
@@ -36,6 +36,8 @@ jobs:
       NEWSLETTER_FORM_ACTION: ${{ secrets.NEWSLETTER_FORM_ACTION }}
       SITE_URL: ${{ vars.SITE_URL }}
       CONTACT_EMAIL: ${{ vars.CONTACT_EMAIL }}
+      IMPRESSUM_NAME: ${{ vars.IMPRESSUM_NAME }}
+      IMPRESSUM_ADDRESS: ${{ vars.IMPRESSUM_ADDRESS }}
     steps:
       - uses: actions/checkout@v4
 
@@ -72,6 +74,11 @@ jobs:
 
       - name: Website bauen
         run: python -m site_builder.build
+
+      # Fresh screenshots of today's site for the README (site/screenshots/*.jpg)
+      - name: Screenshots
+        continue-on-error: true
+        run: python -m site_builder.screenshots
 
       - uses: actions/upload-pages-artifact@v3
         with:

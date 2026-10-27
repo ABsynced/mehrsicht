@@ -100,7 +100,7 @@ INFO    Gespeichert: data/edition_eu.json (5 Geschichten)
 43 Share-Kacheln erzeugt in data/share                      ← social images
 Ausgabe DE: Startseite + 8 Geschichten
 Fertig: …/mehrsicht/site
-25 passed                                                   ← all tests OK
+26 passed                                                   ← all tests OK
 ```
 
 Open the site: double-click `site/index.html`, or better, start a small local server:

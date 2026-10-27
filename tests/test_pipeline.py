@@ -354,3 +354,14 @@ def test_factcheckers_config_loads():
     from pipeline.factfeeds import load_checkers
     names = [c["name"] for c in load_checkers("de")]
     assert "BR24 #Faktenfuchs" in names and len(load_checkers("eu")) >= 5
+
+
+def test_impressum_from_settings(monkeypatch):
+    from pipeline import config
+    from site_builder.build import build, SITE
+    run_edition("de", offline=True)
+    monkeypatch.setattr(config, "IMPRESSUM_NAME", "Erika Muster")
+    monkeypatch.setattr(config, "IMPRESSUM_ADDRESS", ["Musterweg 1", "60311 Frankfurt"])
+    build()
+    html = (SITE / "impressum.html").read_text(encoding="utf-8")
+    assert "Erika Muster" in html and "60311 Frankfurt" in html and "todo" not in html

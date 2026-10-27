@@ -4,13 +4,20 @@
 <main class="wrap page">
   <article class="prose">
     <h1>Impressum</h1>
-    <p class="todo">Vor dem öffentlichen Start ausfüllen. Deutsche Websites brauchen ein Impressum mit Namen und ladungsfähiger Anschrift (§ 5 DDG). Wer seine Privatadresse nicht zeigen will, kann einen Impressum-Service (c/o-Adresse) nutzen.</p>
-    <h2>Angaben</h2>
-    <p>[Vorname Nachname]<br>[Straße Hausnummer oder c/o-Adresse]<br>[PLZ Ort]</p>
+    {% if impressum_name and impressum_address %}
+    <h2>Angaben gemäß § 5 DDG</h2>
+    <p>{{ impressum_name }}<br>{% for line in impressum_address %}{{ line }}<br>{% endfor %}</p>
     <h2>Kontakt</h2>
-    <p>E-Mail: [kontakt@deine-domain.de]</p>
-    <h2>Verantwortlich für den Inhalt</h2>
-    <p>[Vorname Nachname], Anschrift wie oben</p>
+    <p>{% if contact_email %}E-Mail: <a href="mailto:{{ contact_email }}">{{ contact_email }}</a>{% else %}Kontakt über die Angaben oben.{% endif %}</p>
+    <h2>Verantwortlich für den Inhalt nach § 18 Abs. 2 MStV</h2>
+    <p>{{ impressum_name }}, Anschrift wie oben</p>
+    <h2>Über dieses Projekt</h2>
+    <p>Mehrsicht ist ein privates, nicht-kommerzielles Portfolio-Projekt. Die Seite zeigt ausschließlich Schlagzeilen und kurze Anreißer aus öffentlichen RSS-Feeds und verlinkt stets auf die Originalartikel. Die Einordnung der Medien ist eine offengelegte Schätzung. Urteile in Faktenchecks stammen von den jeweils verlinkten Faktencheck-Redaktionen.</p>
+    <h2>Haftung für Links</h2>
+    <p>Für die Inhalte verlinkter externer Seiten sind ausschließlich deren Betreiber verantwortlich. Rechtswidrige Inhalte waren zum Zeitpunkt der Verlinkung nicht erkennbar; bei Bekanntwerden entfernen wir entsprechende Links umgehend.</p>
+    {% else %}
+    <p class="todo">Noch nicht ausgefüllt. Setze IMPRESSUM_NAME, IMPRESSUM_ADDRESS und CONTACT_EMAIL (in .env oder als GitHub-Variablen), dann erscheint hier das vollständige Impressum.</p>
+    {% endif %}
   </article>
 </main>
 {% endblock %}

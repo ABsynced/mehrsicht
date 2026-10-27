@@ -72,6 +72,10 @@ FACTCHECK_API_KEY = os.getenv("FACTCHECK_API_KEY", "").strip()
 NEWSLETTER_FORM_ACTION = os.getenv("NEWSLETTER_FORM_ACTION", "").strip()
 CONTACT_EMAIL = os.getenv("CONTACT_EMAIL", "").strip()  # for "Fehler melden" / "Quelle vorschlagen"
 SITE_URL = os.getenv("SITE_URL", "").strip().rstrip("/")
+# Impressum / Datenschutz. Set them in .env or as GitHub repository variables,
+# so no personal data has to be written into the code. Use "|" for a new line.
+IMPRESSUM_NAME = os.getenv("IMPRESSUM_NAME", "").strip()
+IMPRESSUM_ADDRESS = [line.strip() for line in os.getenv("IMPRESSUM_ADDRESS", "").split("|") if line.strip()]
 
 USER_AGENT = "MehrsichtBot/1.0 (+https://github.com/ABsynced/mehrsicht)"
 
