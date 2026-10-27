@@ -61,16 +61,7 @@ It is a fully automated pipeline: **RSS → AI clustering → AI framing analysi
 
 ## How it works
 
-```mermaid
-flowchart LR
-    A[23 RSS feeds<br>DE + EU outlets] --> B[fetch.py<br>headlines + teasers]
-    B --> C[cluster.py<br>AI groups articles<br>about the same event]
-    F[Fact-checkers<br>RSS + ClaimReview] --> D
-    C --> D[analyze.py<br>summaries per side,<br>framing words, parties]
-    D --> E[archive.py<br>7-day memory,<br>reuses analyses]
-    E --> G[build.py<br>Jinja2 → static HTML]
-    G --> H[GitHub Pages<br>every 6 hours]
-```
+![How Mehrsicht works: fetch, cluster, analyse, fact-check, remember, trends, build, publish](docs/how-it-works.png)
 
 | Step | What happens | Tech |
 |---|---|---|
