@@ -10,6 +10,14 @@ from pipeline.textutil import slugify
 from pipeline.fetch import fetch_all
 
 
+def _save_demo_edition(code="de"):
+    """Build an offline demo edition and save it where the site builder looks."""
+    data = run_edition(code, offline=True)
+    config.DATA_DIR.mkdir(parents=True, exist_ok=True)
+    (config.DATA_DIR / f"edition_{code}.json").write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")
+    return data
+
+
 def test_licence_filter():
     assert licence_ok("CC BY-SA 4.0")
     assert licence_ok("CC0")
@@ -316,7 +324,7 @@ def test_archive_match_and_trending():
 
 def test_site_build_has_new_pages():
     from site_builder.build import build, SITE
-    run_edition("de", offline=True)
+    _save_demo_edition("de")
     build()
     assert (SITE / "themen.html").exists() and (SITE / "fuer-dich.html").exists() and (SITE / "faq.html").exists()
     assert any((SITE / "thema").glob("*.html"))
@@ -359,7 +367,7 @@ def test_factcheckers_config_loads():
 def test_impressum_from_settings(monkeypatch):
     from pipeline import config
     from site_builder.build import build, SITE
-    run_edition("de", offline=True)
+    _save_demo_edition("de")
     monkeypatch.setattr(config, "IMPRESSUM_NAME", "Erika Muster")
     monkeypatch.setattr(config, "IMPRESSUM_ADDRESS", ["Musterweg 1", "60311 Frankfurt"])
     build()
