@@ -1,0 +1,13 @@
+# ERFUNDENE Beispiel-Medien für den Offline-Demo-Modus (Europa).
+edition: eu
+sources:
+  - {id: fr_a, name: Medium (FR) A, country: FR, lang: fr, lean: -1}
+  - {id: de_m, name: Medium (DE) M, country: DE, lang: de, lean: 0}
+  - {id: it_m, name: Medium (IT) M, country: IT, lang: it, lean: 0}
+  - {id: es_l, name: Medium (ES) L, country: ES, lang: es, lean: -1}
+  - {id: pl_r, name: Medium (PL) R, country: PL, lang: pl, lean: 1}
+  - {id: nl_r, name: Medium (NL) R, country: NL, lang: nl, lean: 1}
+  - {id: fr_r, name: Medium (FR) R, country: FR, lang: fr, lean: 1}
+  - {id: at_r, name: Medium (AT) R, country: AT, lang: de, lean: 1}
+  - {id: de_l, name: Medium (DE) L, country: DE, lang: de, lean: -1}
+  - {id: be_m, name: Medium (BE) M, country: BE, lang: fr, lean: 0}

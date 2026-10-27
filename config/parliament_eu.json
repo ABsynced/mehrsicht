@@ -1,0 +1,20 @@
+{
+  "name": "Europäisches Parlament",
+  "subtitle": "Sitzverteilung bei der Konstituierung 2024",
+  "total": 720,
+  "majority": 361,
+  "default_coalition": ["EPP", "SD", "RENEW"],
+  "groups": [
+    {"id": "LEFT", "name": "Die Linke (GUE)", "color": "#A8174A", "seats": 46},
+    {"id": "SD", "name": "S&D", "color": "#E30613", "seats": 136},
+    {"id": "GREENS", "name": "Grüne/EFA", "color": "#3FAE49", "seats": 53},
+    {"id": "RENEW", "name": "Renew", "color": "#E6B800", "seats": 77},
+    {"id": "EPP", "name": "EVP", "color": "#3399FF", "seats": 188},
+    {"id": "ECR", "name": "EKR", "color": "#0A3D7A", "seats": 78},
+    {"id": "PFE", "name": "PfE", "color": "#2B225D", "seats": 84},
+    {"id": "ESN", "name": "ESN", "color": "#7A5230", "seats": 25},
+    {"id": "NI", "name": "Fraktionslos", "color": "#A1A7B3", "seats": 33}
+  ],
+  "other_parties": [],
+  "note": "Stand Konstituierung Juli 2024. Fraktionsgrößen ändern sich; vor dem Start aktualisieren."
+}

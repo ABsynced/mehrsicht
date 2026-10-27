@@ -1,0 +1,12 @@
+# ERFUNDENE Beispiel-Medien für den Offline-Demo-Modus.
+edition: de
+sources:
+  - {id: a, name: Medium A, lean: -2}
+  - {id: b, name: Medium B, lean: -1}
+  - {id: c, name: Medium C, lean: -1}
+  - {id: d, name: Medium D, lean: 0}
+  - {id: e, name: Medium E, lean: 0}
+  - {id: f, name: Medium F, lean: 0}
+  - {id: g, name: Medium G, lean: 1}
+  - {id: h, name: Medium H, lean: 1}
+  - {id: i, name: Medium I, lean: 2}

@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}Für dich – Mehrsicht{% endblock %}
+{% block content %}
+<main class="wrap page" data-for-you>
+  <span class="crumbs"><a href="{{ ed.home }}">Start</a> › Für dich</span>
+  <header class="page-head">
+    <h1>Für dich</h1>
+    <p>Geschichten zu den Themen, denen du folgst, und alles, was du gemerkt hast. Gespeichert nur in diesem Browser – kein Konto, keine Cookies.</p>
+  </header>
+
+  <section aria-labelledby="fl-t">
+    <div class="list-head"><h2 id="fl-t">Deine Themen</h2><a href="{{ ed.base }}themen.html">Themen entdecken →</a></div>
+    <div class="topic-chips" data-followed></div>
+    <p class="empty" data-followed-empty>Du folgst noch keinem Thema. Tippe auf <strong>+</strong> neben einem Thema in der Leiste oben.</p>
+  </section>
+
+  <section aria-labelledby="fs-t">
+    <div class="list-head"><h2 id="fs-t">Neu in deinen Themen</h2></div>
+    <div class="grid-cards" data-for-you-stories data-loadmore data-page-size="8">
+      <button type="button" class="btn btn--outline load-more" data-loadmore-btn hidden>Weitere Geschichten laden</button>
+    </div>
+    <p class="empty" data-for-you-empty hidden>Gerade keine Geschichten zu deinen Themen.</p>
+  </section>
+
+  <section aria-labelledby="sv-t">
+    <div class="list-head"><h2 id="sv-t">Gemerkt</h2></div>
+    <div class="grid-cards" data-saved></div>
+    <p class="empty" data-saved-empty>Noch nichts gemerkt. Auf jeder Geschichte gibt es den Knopf <strong>Merken</strong>.</p>
+  </section>
+
+  <section aria-labelledby="hd-t">
+    <div class="list-head"><h2 id="hd-t">Ausgeblendet</h2><button type="button" class="btn btn--outline btn--sm" data-unhide-all>Alle wieder einblenden</button></div>
+    <p class="note" data-hidden-count></p>
+  </section>
+
+  <script type="application/json" data-story-index>{{ story_index | tojson }}</script>
+</main>
+{% endblock %}

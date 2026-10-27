@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Faktenchecks – Mehrsicht {{ "Europa" if ed.code == "eu" else "Deutschland" }}{% endblock %}
+{% block content %}
+{% set checks = data.factchecks or [] %}
+<main class="wrap page">
+  <span class="crumbs"><a href="{{ ed.home }}">Start</a> › Faktenchecks</span>
+  <header class="page-head">
+    <h1>Faktencheck-Radar</h1>
+    <p>Falsche und irreführende Behauptungen der letzten 30 Tage, geprüft von unabhängigen Faktencheck-Redaktionen. Mehrsicht fällt keine eigenen Urteile: Jedes Urteil stammt von der genannten Redaktion und ist verlinkt.</p>
+  </header>
+
+  <div class="arts-tabs" role="toolbar" aria-label="Nach Urteil filtern">
+    <button type="button" data-verdict-tab="" aria-selected="true">Alle <span>{{ checks | length }}</span></button>
+    {% for v, label in [("false", "Falsch"), ("misleading", "Irreführend"), ("context", "Kontext fehlt"), ("true", "Stimmt")] %}
+    {% set n = checks | selectattr("verdict_class", "equalto", v) | list | length %}
+    {% if n %}<button type="button" data-verdict-tab="{{ v }}" aria-selected="false">{{ label }} <span>{{ n }}</span></button>{% endif %}
+    {% endfor %}
+  </div>
+
+  {% if checks %}
+  <div class="fc-grid" data-loadmore data-page-size="18">
+    {% for fc in checks %}
+    <article class="fc-card fc-card--{{ fc.verdict_class }}" data-lm-item data-verdict="{{ fc.verdict_class }}">
+      <div class="fc-card-top">{{ m.verdict(fc) }}<small>{{ fc.publisher }}{% if fc.example %} (Beispiel){% endif %}{% if fc.date %} · {{ fc.date | ago(now) }}{% endif %}</small></div>
+      <h3>„{{ fc.claim | trim('„“"') }}“</h3>
+      {% if fc.explanation and fc.explanation != fc.claim %}<p>{{ fc.explanation }}</p>{% endif %}
+      <div class="fcr-links">
+        {% if fc.story_id %}<a href="{{ story_url_id(fc.story_id) }}">Dazu in den Nachrichten: {{ fc.story_title }}</a>{% endif %}
+        {% if fc.url and fc.url != "#" %}<a href="{{ fc.url }}" rel="noopener" target="_blank">Faktencheck lesen ↗</a>{% endif %}
+      </div>
+    </article>
+    {% endfor %}
+    <button type="button" class="btn btn--outline load-more" data-loadmore-btn hidden>Weitere Faktenchecks laden</button>
+  </div>
+  {% else %}
+  <p class="empty">Gerade keine Faktenchecks geladen. Tipp: Mit einem kostenlosen Google-Schlüssel (FACTCHECK_API_KEY) kommen deutlich mehr Prüfungen.</p>
+  {% endif %}
+</main>
+{% endblock %}

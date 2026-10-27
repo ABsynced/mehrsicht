@@ -1,0 +1,78 @@
+# Nachrichtenquellen der Deutschland-Ausgabe.
+#
+# lean = politische Einordnung des MEDIUMS (nicht einzelner Artikel):
+#   -2 = links, -1 = eher links, 0 = Mitte, 1 = eher rechts, 2 = rechts
+#
+# WICHTIG: Diese Werte sind VORLÄUFIG. Vor dem öffentlichen Start müssen sie
+# mit einer veröffentlichten Studie belegt werden (z. B. Publikumsanalysen
+# wie Pew Research Center 2018 "News Media and Political Attitudes in
+# Germany") und auf der Seite "Unsere Methode" offen erklärt werden.
+#
+# RSS-Adressen können sich ändern. Wenn ein Feed nicht mehr lädt,
+# zeigt das Protokoll eine Warnung; dann die Adresse auf der Website
+# des Mediums neu suchen.
+
+edition: de
+sources:
+  - id: tagesschau
+    name: tagesschau.de
+    rss: https://www.tagesschau.de/xml/rss2/
+    lean: 0
+  - id: zdf
+    name: ZDFheute
+    rss: https://www.zdfheute.de/rss/zdf/nachrichten
+    lean: 0
+  - id: dlf
+    name: Deutschlandfunk
+    rss: https://www.deutschlandfunk.de/nachrichten-100.rss
+    lean: 0
+  - id: spiegel
+    name: DER SPIEGEL
+    rss: https://www.spiegel.de/schlagzeilen/index.rss
+    lean: -1
+  - id: zeit
+    name: ZEIT ONLINE
+    rss: https://newsfeed.zeit.de/index
+    lean: -1
+  - id: sz
+    name: Süddeutsche Zeitung
+    rss: https://rss.sueddeutsche.de/rss/Topthemen
+    lean: -1
+  - id: taz
+    name: taz
+    rss: https://taz.de/!p4608;rss/
+    lean: -2
+  - id: fr
+    name: Frankfurter Rundschau
+    rss: https://www.fr.de/politik/rssfeed.rdf
+    lean: -1
+  - id: tagesspiegel
+    name: Tagesspiegel
+    rss: https://www.tagesspiegel.de/contentexport/feed/home
+    lean: 0
+  - id: ntv
+    name: n-tv
+    rss: https://www.n-tv.de/rss
+    lean: 0
+  - id: handelsblatt
+    name: Handelsblatt
+    rss: https://feeds.cms.handelsblatt.com/schlagzeilen
+    lean: 0
+  - id: faz
+    name: FAZ
+    rss: https://www.faz.net/rss/aktuell/
+    lean: 1
+  - id: welt
+    name: WELT
+    rss: https://www.welt.de/feeds/latest.rss
+    lean: 1
+  # FOCUS online: alte Feed-Adresse funktioniert nicht mehr (Okt. 2026).
+  # Wieder aktivieren (# entfernen), sobald eine neue Adresse gefunden ist.
+  # - id: focus
+  #   name: FOCUS online
+  #   rss: https://rss.focus.de/fol/XML/rss_folnews.xml
+  #   lean: 1
+  - id: nzz
+    name: NZZ
+    rss: https://www.nzz.ch/recent.rss
+    lean: 1

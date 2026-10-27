@@ -1,0 +1,158 @@
+{% extends "base.html" %}
+{% block title %}Mehrsicht {{ "Europa" if ed.code == "eu" else "Deutschland" }} – Mehr sehen. Besser verstehen.{% endblock %}
+{% block og_image %}{% if stories and stories[0].share_files.link %}<meta property="og:image" content="{{ site_url }}/{{ stories[0].share_files.link }}">{% endif %}{% endblock %}
+
+
+{% block content %}
+<section class="hero" aria-label="Einleitung">
+  <div class="wrap">
+    <div class="hero-text">
+      <span class="kicker-pill">{{ "EUROPA-AUSGABE" if ed.code == "eu" else "DEUTSCHLAND-AUSGABE" }}</span>
+      <h1><span class="l">Mehr</span> sehen.<br>Besser <span class="r">verstehen</span>.</h1>
+      <p>{% if ed.code == "eu" %}Sieh, wie Medien in ganz Europa dieselbe Nachricht erzählen. Mit KI-Einordnung und Faktenchecks direkt im Text.{% else %}Sieh, wie linke, mittige und rechte Medien dieselbe Nachricht erzählen. Mit KI-Einordnung und Faktenchecks direkt im Text.{% endif %}</p>
+      <div class="actions">
+        <a class="btn btn--light" href="#newsletter">Briefing abonnieren</a>
+        <a class="btn btn--outline-dark" href="{{ root }}methode.html">So funktioniert es</a>
+      </div>
+      <div class="stats">
+        <div><strong>{{ data.sources | length }}</strong><span>Quellen</span></div>
+        <div><strong>{{ stories | length }}</strong><span>Geschichten heute</span></div>
+        <div><strong>{{ data.checks_count }}</strong><span>Faktenchecks</span></div>
+      </div>
+    </div>
+
+    {% set slides = hero %}
+    {% if slides %}
+    <div class="carousel" data-carousel aria-roledescription="Karussell" aria-label="Top-Geschichten">
+      {% for s in slides %}
+      <a class="slide feature{% if loop.first %} active{% endif %}" href="{{ story_url(s) }}" aria-roledescription="Folie" aria-label="{{ loop.index }} von {{ slides | length }}">
+        <span class="feature-kicker feature-kicker--light">{{ s.topic }}</span>
+        {{ m.feature_media(s, root, "h2") }}
+        <div class="slide-foot">
+          {{ m.bias(s.percents) }}
+          {{ m.credit(s) }}
+        </div>
+      </a>
+      {% endfor %}
+      <div class="carousel-nav">
+        <button class="arrow" type="button" data-prev aria-label="Vorherige Geschichte"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg></button>
+        <div class="segments">
+          {% for s in slides %}<button type="button" data-go="{{ loop.index0 }}" aria-label="Geschichte {{ loop.index }}: {{ s.title }}"><span><i></i></span></button>{% endfor %}
+        </div>
+        <button class="arrow" type="button" data-next aria-label="Nächste Geschichte"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>
+      </div>
+    </div>
+    {% endif %}
+  </div>
+</section>
+
+<main class="wrap page home-grid">
+  <section id="nachrichten" class="home-news" aria-labelledby="news-t">
+    <div class="list-head">
+      <h2 id="news-t">Neueste Nachrichten</h2>
+      <div class="list-filters" role="toolbar" aria-label="Sortierung">
+        <button type="button" data-sort="sources" aria-pressed="true">Meiste Quellen</button>
+        <button type="button" data-sort="recent" aria-pressed="false">Neueste</button>
+        <button type="button" data-sort="split" aria-pressed="false">Größte Spaltung</button>
+        <button type="button" data-filter-checks aria-pressed="false">Mit Faktencheck</button>
+      </div>
+    </div>
+    {% set top = features %}
+    {% if top %}
+    <div class="features">
+      {% for s in top %}
+      <a class="feature{% if loop.first %} feature--lg{% endif %}" href="{{ story_url(s) }}" data-filterable data-id="{{ s.id }}"
+         data-topic="{{ s.topic }}" data-checks="{{ s.factchecks | length }}"
+         data-text="{{ (s.title ~ ' ' ~ s.summary ~ ' ' ~ s.topic ~ ' ' ~ (s.articles | map(attribute='source_name') | join(' '))) | lower }}">
+        <span class="feature-kicker">{{ s.topic }}</span>
+        {{ m.feature_media(s, root, "h3") }}
+        {{ m.credit(s) }}
+      </a>
+      {% endfor %}
+    </div>
+    {% endif %}
+    <div class="news" data-news data-loadmore data-page-size="{{ page_size }}">
+      {% for s in news_list %}
+      <a class="news-item" data-filterable data-lm-item data-id="{{ s.id }}" href="{{ story_url(s) }}"
+         data-topic="{{ s.topic }}" data-sources="{{ s.source_count }}" data-recent="{{ s.last_seen or '' }}"
+         data-split="{{ ([s.percents.l, s.percents.r] | max) - ([s.percents.l, s.percents.r] | min) }}"
+         data-checks="{{ s.factchecks | length }}"
+         data-text="{{ (s.title ~ ' ' ~ s.summary ~ ' ' ~ s.topic ~ ' ' ~ (s.articles | map(attribute='source_name') | join(' ')) ~ ' ' ~ (s.factchecks | map(attribute='claim') | join(' '))) | lower }}">
+        {{ m.media(s, root, badges=false) }}
+        <div class="body">
+          <div class="meta">
+            <span class="cat">{{ s.topic }}</span><span>{{ s.last_seen | ago(now) }}</span><span>{{ s.source_count }} Quellen</span>
+            {% for fc in s.factchecks if fc.verdict != "STIMMT" %}{% if loop.first %}<span class="flag-alert">{{ loop.length }} {{ "Faktencheck" if loop.length == 1 else "Faktenchecks" }}</span>{% endif %}{% endfor %}
+          </div>
+          <h3>{{ s.title }}</h3>
+          <p>{{ s.summary }}</p>
+          {{ m.party_chips(s, parties) }}
+        </div>
+        <div class="coverage">
+          <small>Berichterstattung</small>
+          {{ m.bias(s.percents, "bias--small") }}
+          <span>{{ m.lean_label(s) }}</span>
+        </div>
+      </a>
+      {% endfor %}
+      <p class="empty" data-empty hidden>Keine Geschichten gefunden.</p>
+      <button type="button" class="btn btn--outline load-more" data-loadmore-btn hidden>Weitere Geschichten laden <span data-loadmore-count></span></button>
+    </div>
+  </section>
+  <aside class="home-side" aria-label="Überblick">
+    <section class="card brief" aria-labelledby="brief-t">
+      <div class="card-head"><h3 id="brief-t">Tagesbriefing</h3><small>5 Min.</small></div>
+      {% for s in hero %}
+      <a href="{{ story_url(s) }}" data-id="{{ s.id }}">{{ s.title }}{{ m.bias(s.percents, "bias--thin", labels=false) }}</a>
+      {% endfor %}
+    </section>
+
+    {% if data.factchecks %}
+    <section class="card fc-radar" id="faktencheck" aria-labelledby="fcr-t">
+      <div class="card-head"><h3 id="fcr-t">Faktencheck-Radar</h3><span class="live-dot">aktuell</span></div>
+      <p class="note" style="margin: 0 0 4px">Behauptungen, die Faktencheck-Redaktionen gerade geprüft haben.</p>
+      {% for fc in data.factchecks if fc.verdict != "STIMMT" %}{% if loop.index <= 5 %}
+      <div class="fcr-item">
+        {{ m.verdict(fc) }}
+        <span class="claim">„{{ fc.claim | trim('„“"') }}“</span>
+        <small class="note">{{ fc.publisher }}{% if fc.example %} (Beispiel){% endif %}{% if fc.date %} · {{ fc.date | ago(now) }}{% endif %}</small>
+        <span class="fcr-links">
+          {% if fc.story_id %}<a href="{{ story_url_id(fc.story_id) }}">In den Nachrichten</a>{% endif %}
+          {% if fc.url and fc.url != "#" %}<a href="{{ fc.url }}" rel="noopener" target="_blank">Faktencheck lesen ↗</a>{% endif %}
+        </span>
+      </div>
+      {% endif %}{% endfor %}
+      <a class="btn btn--outline btn--sm" href="{{ ed.base }}faktenchecks.html">Alle {{ data.checks_count }} Faktenchecks</a>
+    </section>
+    {% endif %}
+
+    {% set parl = data.parliament %}
+    <section class="card parliament parliament--side" id="parlament" aria-labelledby="parl-t">
+      <div class="card-head" style="flex-wrap: wrap"><h3 id="parl-t">{{ parl.name }}</h3><small>{{ parl.subtitle }}</small></div>
+      <div class="hemicycle" data-hemicycle>
+        <svg viewBox="0 0 1000 530" role="img" aria-label="Halbkreis-Sitzplan: {{ parl.name }} mit {{ parl.total }} Sitzen"></svg>
+        <div class="total"><strong data-coal-seats>0</strong><span>von {{ parl.total }} · Mehrheit ab {{ parl.majority }}</span></div>
+      </div>
+      <strong style="font-size: 14px">Koalitionsrechner</strong>
+      <span class="note">Tippe auf Fraktionen, um eine Mehrheit zu bilden.</span>
+      <div class="party-chips" data-party-chips></div>
+      <div class="coal-bar" data-coal-bar><span class="maj" style="left: {{ (parl.majority / parl.total * 100) | round(2) }}%"></span></div>
+      <span class="verdict-line" data-coal-verdict aria-live="polite"></span>
+      {% if data.party_presence %}
+      <div class="presence-box">
+        <div class="card-head" style="margin: 0"><strong style="font-size: 14px">Parteien in den Nachrichten</strong><small>Anteil</small></div>
+        <div class="presence">
+          {% set maxv = data.party_presence[0].share %}
+          {% for p in data.party_presence[:6] %}
+          <span class="name"><i class="dot" style="--party: {{ p.color }}"></i>{{ p.name }}</span>
+          <span class="track"><i style="--party: {{ p.color }}; width: {{ (p.share / maxv * 100) | round(1) }}%"></i></span>
+          <span class="mono" style="text-align: right">{{ p.share }}%</span>
+          {% endfor %}
+        </div>
+      </div>
+      {% endif %}
+      <script type="application/json" data-parliament-json>{{ parl | tojson }}</script>
+    </section>
+  </aside>
+</main>
+{% endblock %}

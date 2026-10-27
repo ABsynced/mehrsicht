@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block title %}Unsere Methode – Mehrsicht{% endblock %}
+{% block content %}
+<main class="wrap page">
+  <article class="prose">
+    <h1>Unsere Methode</h1>
+    <p>Mehrsicht zeigt, wie unterschiedlich Medien über dieselbe Nachricht berichten. Wir sagen nicht, was du denken sollst. Wir machen sichtbar, welche Perspektiven es gibt.</p>
+
+    <h2>1. Nachrichten sammeln</h2>
+    <p>Alle sechs Stunden lädt ein Programm die öffentlichen RSS-Feeds von {{ source_count_de }} deutschsprachigen und {{ source_count_eu }} europäischen Medien. Wir nutzen nur Schlagzeilen und kurze Anreißer und verlinken immer auf den Originalartikel.</p>
+
+    <h2 id="medien">2. Wie wir Medien einordnen</h2>
+    <p>Jedes Medium hat in unserer Liste eine Einordnung von „links“ über „Mitte“ bis „rechts“. Diese Einordnung betrifft das <strong>Medium</strong>, nicht einzelne Artikel. Sie stützt sich auf veröffentlichte Studien zur Leserschaft und Ausrichtung von Medien. <span class="todo">[Vor dem Start ergänzen: welche Studie, Stand, Link]</span></p>
+    <p>Die Prozentzahlen bei jeder Geschichte („L 29 % · M 43 % · R 28 %“) zählen nur, wie viele Medien jeder Richtung über die Geschichte berichten. Das ist eine Zählung, keine KI-Bewertung.</p>
+
+    <h2>3. Was die KI macht</h2>
+    <p>Ein frei verfügbares Open-Source-KI-Modell (über die Dienste Groq und Cerebras) gruppiert Meldungen, die dasselbe Ereignis betreffen, und beschreibt, worauf die verschiedenen Seiten den Schwerpunkt legen: welche Wörter auffallen und wer zitiert wird. Die KI bewertet nicht, wer recht hat. KI kann Fehler machen; melde sie uns bitte.</p>
+
+    <h2 id="eigentuemer">Wem gehören die Medien?</h2>
+    <p>Bei jeder Geschichte zeigen wir, welche Art von Eigentümer hinter den berichtenden Medien steht: öffentlich-rechtlich, Medienkonzern, Verlag in Familienbesitz, Stiftung, Genossenschaft, Aktiengesellschaft oder Finanzinvestor. Die Angaben stammen aus Impressum und Verlagsangaben und sind <strong>vorläufig</strong>. Fehler bitte melden.</p>
+    <p>Eine Bewertung der Faktentreue einzelner Medien zeigen wir bewusst nicht: Dafür gibt es für deutsche Medien keine unabhängige, offene Datenquelle.</p>
+
+    <h2>Trends</h2>
+    <p>„Im Trend“ zählt für jedes Thema, wie viele Medien in den letzten 72 Stunden berichtet haben, wobei neuere Berichte stärker zählen (Gewicht e<sup>−Alter/24 Std.</sup>).</p>
+
+    <h2 id="faktenchecks">4. Woher Faktenchecks kommen</h2>
+    <p>Mehrsicht entscheidet nie selbst, ob etwas falsch ist. Urteile wie „FALSCH“ oder „IRREFÜHREND“ stammen von professionellen Faktencheck-Redaktionen, die ihre Prüfungen im offenen ClaimReview-Format veröffentlichen. Wir sammeln die neuesten Prüfungen von CORRECTIV, dpa, AFP, BR24 #Faktenfuchs, tagesschau Faktenfinder, Mimikama und anderen und verknüpfen sie mit passenden Nachrichten. Geschichten, zu denen es einen Faktencheck gibt, zeigen wir bevorzugt. Wo eine Redaktion keine maschinenlesbaren Daten liefert, liest die KI nur das Urteil ab, das die Redaktion selbst geschrieben hat. Wir verlinken jeden Faktencheck.</p>
+
+    <h2>5. Bilder</h2>
+    <p>Fotos stammen aus Wikimedia Commons und anderen freien Quellen, nur mit Lizenzen, die eine Bearbeitung erlauben (CC0, CC BY, CC BY-SA, gemeinfrei). Jedes Foto trägt einen Bildnachweis. Wir zeigen keine Gesichter neben Faktencheck-Urteilen. Gibt es kein passendes Foto, zeigen wir eine Themen-Illustration.</p>
+
+  </article>
+</main>
+{% endblock %}

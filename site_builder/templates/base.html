@@ -1,0 +1,240 @@
+{% import "partials/macros.html" as m %}<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block title %}Mehrsicht – Mehr sehen. Besser verstehen.{% endblock %}</title>
+<meta name="description" content="{% block description %}Nachrichten aus Deutschland und Europa aus allen Perspektiven: Mehrsicht vergleicht, wie linke, mittige und rechte Medien berichten – mit KI-Einordnung und Faktenchecks.{% endblock %}">
+<meta property="og:site_name" content="Mehrsicht">
+<meta property="og:title" content="{{ self.title() }}">
+<meta property="og:description" content="{{ self.description() }}">
+{% block og_image %}{% endblock %}
+<link rel="icon" href="{{ root }}assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="{{ root }}assets/css/main.css">
+</head>
+<body class="{% block body_class %}{% endblock %}" data-root="{{ root }}" data-edition="{{ ed.code }}">
+<a class="sr-only" href="#inhalt">Zum Inhalt springen</a>
+{% set contact = ("mailto:" ~ contact_email) if contact_email else (root ~ "faq.html#kontakt") %}
+
+{% if demo %}<div class="demo-banner">Demo-Modus: Alle Medien, Schlagzeilen und Faktenchecks auf dieser Seite sind erfundene Beispiele.</div>{% endif %}
+{% if press_photos %}<div class="demo-banner demo-banner--blue">Lokale Ansicht mit Pressefotos aus den Feeds der Medien. Rechte bei den genannten Fotografen und Agenturen – nicht öffentlich veröffentlichen.</div>{% endif %}
+
+<div class="utility">
+  <div class="wrap">
+    <div class="left">
+      <a href="{{ root }}methode.html">Unsere Methode</a>
+      <a href="{{ root }}methode.html#medien">Wie wir Medien einordnen</a>
+      <a href="{{ root }}methode.html#eigentuemer">Wem gehören die Medien?</a>
+    </div>
+    <div class="right">
+      <span>{{ today }}</span>
+      <span class="upd">Aktualisiert {{ updated }}</span>
+      <details class="edition">
+        <summary aria-label="Ausgabe wählen">{{ m.flag(ed.code) }} {{ ed.label }}
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+        </summary>
+        <div class="edition-menu">
+          <a href="{{ root }}index.html" aria-current="{{ 'true' if ed.code == 'de' else 'false' }}">{{ m.flag("de") }}<span>Deutschland<small>Bundestag, Länder, deutsche Medien</small></span></a>
+          <a href="{{ root }}eu/index.html" aria-current="{{ 'true' if ed.code == 'eu' else 'false' }}">{{ m.flag("eu") }}<span>Europa<small>EU-Parlament, europäische Medien</small></span></a>
+        </div>
+      </details>
+    </div>
+  </div>
+</div>
+
+<header class="site-header" data-sticky>
+  <div class="wrap bar">
+    <button class="icon-btn" type="button" data-open-drawer aria-label="Menü öffnen">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h10"/></svg>
+    </button>
+    <div class="brand">
+      {{ m.logo(ed.home) }}
+      <a class="ed-flag" href="{{ ed.other_home }}" title="Zur {{ ed.other_label }} wechseln" aria-label="{{ ed.label }} – zur {{ ed.other_label }} wechseln">{{ m.flag(ed.code) }}</a>
+    </div>
+    <nav class="main-nav" aria-label="Hauptnavigation">
+      <a href="{{ ed.home }}" {% if page == "home" %}aria-current="page"{% endif %}>Start</a>
+      <a href="{{ ed.base }}fuer-dich.html" {% if page == "fuer-dich" %}aria-current="page"{% endif %}>Für dich<i class="dot-new" data-follow-dot hidden></i></a>
+      <a href="{{ ed.base }}themen.html" {% if page in ("themen", "topic") %}aria-current="page"{% endif %}>Themen</a>
+      <a href="{{ ed.base }}faktenchecks.html" {% if page == "faktenchecks" %}aria-current="page"{% endif %}>Faktenchecks</a>
+      <a href="{{ ed.home }}#parlament">{{ "EU-Parlament" if ed.code == "eu" else "Bundestag" }}</a>
+    </nav>
+    <form class="search" role="search" action="{{ ed.home }}" method="get" data-search-form>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#5B6270" stroke-width="2.2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
+      <label class="sr-only" for="q">Nachrichten durchsuchen</label>
+      <input id="q" name="q" type="search" placeholder="Suche Themen, Medien oder Behauptungen" data-search autocomplete="off">
+    </form>
+    <a class="btn btn--dark support" href="{{ root }}unterstuetzen.html" aria-label="Unterstützen">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>
+      <span class="support-label">Unterstützen</span>
+    </a>
+  </div>
+  <div class="trend-row">
+    <div class="wrap trend-bar" aria-label="Gerade im Trend">
+      <svg class="trend-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#5B6270" stroke-width="2" aria-hidden="true"><path d="M3 17l6-6 4 4 8-8M15 7h6v6"/></svg>
+      {% if trending %}
+        {% for t in trending %}
+        <span class="tchip">
+          <a href="{{ topic_url(t.slug) }}">{{ m.topic_avatar(t, root, 22) }}<span>{{ t.name }}</span></a>
+          {{ m.follow_button(t.slug, t.name, topic_path(t.slug), "follow--chip") }}
+        </span>
+        {% endfor %}
+      {% else %}
+        {% for t in topics_nav %}<span class="tchip"><a href="{{ topic_url(t.slug) }}"><span>{{ t.name }}</span></a></span>{% endfor %}
+      {% endif %}
+    </div>
+  </div>
+</header>
+
+<div id="inhalt">
+{% block content %}{% endblock %}
+</div>
+
+<footer class="site-footer">
+  <div class="flag-strip" aria-hidden="true">{% if ed.code == "eu" %}<i style="background:#1A3E9E"></i><i style="background:#FFCC00"></i><i style="background:#1A3E9E"></i>{% else %}<i style="background:#0E1116"></i><i style="background:#DD0000"></i><i style="background:#FFCE00"></i>{% endif %}</div>
+  <div class="wrap" style="padding-top: 48px">
+    <section class="newsletter" id="newsletter" aria-labelledby="nl-title">
+      <div class="intro">
+        <small>JEDEN FREITAG, 7 UHR</small>
+        <h2 id="nl-title">{{ "Das Europa-Briefing" if ed.code == "eu" else "Das Wochenbriefing" }}</h2>
+        <span>Die 5 wichtigsten Themen aus Deutschland und Europa, wie links, Mitte und rechts sie erzählen, plus die Falschbehauptung der Woche. 5 Minuten Lesezeit.</span>
+      </div>
+      <form data-newsletter action="{{ newsletter_action or '#' }}" method="post" novalidate>
+        <div data-nl-fields>
+          <label class="main" for="nl-email">E-Mail-Adresse</label>
+          <div class="fields">
+            <input id="nl-email" name="EMAIL" type="email" autocomplete="email" placeholder="name@beispiel.de" required>
+            <button type="submit">Briefing abonnieren</button>
+          </div>
+          <p class="form-error" data-nl-error hidden>Bitte gib eine gültige E-Mail-Adresse ein.</p>
+          <div class="opts" style="margin-top: 10px">
+            <label><input type="checkbox" name="weekly" checked> Wochenbriefing</label>
+            <label><input type="checkbox" name="daily"> Täglicher Überblick</label>
+            <label><input type="checkbox" name="alerts" checked> Faktencheck-Alarm</label>
+          </div>
+          <p class="note" style="color: #8B93A1; margin: 10px 0 0">Kostenlos, jederzeit abbestellbar. Du bekommst zuerst eine Bestätigungs-E-Mail.</p>
+        </div>
+        <div class="form-ok" data-nl-ok hidden>{% if newsletter_action %}Fast geschafft: Bitte bestätige deine Anmeldung in der E-Mail, die wir dir gerade geschickt haben.{% else %}Danke! Der Newsletter startet bald – wir sind noch in der Testphase.{% endif %}</div>
+      </form>
+    </section>
+
+    <div class="foot-grid foot-grid--top">
+      <div>
+        <strong>Nachrichten</strong>
+        <a href="{{ ed.home }}">Startseite</a>
+        <a href="{{ ed.base }}fuer-dich.html">Für dich</a>
+        <a href="{{ ed.base }}themen.html">Alle Themen</a>
+        <a href="{{ ed.base }}faktenchecks.html" {% if page == "faktenchecks" %}aria-current="page"{% endif %}>Faktenchecks</a>
+      </div>
+      <div>
+        <strong>Deutschland</strong>
+        <a href="{{ root }}index.html">Deutschland-Ausgabe</a>
+        <a href="{{ root }}index.html#parlament">Bundestag &amp; Koalitionsrechner</a>
+        {% for slug, name in [("rente", "Rente"), ("migration", "Migration"), ("wirtschaft", "Wirtschaft"), ("klima", "Klima"), ("wohnen", "Wohnen")] %}<a href="{{ topic_url_de(slug) }}">{{ name }}</a>{% endfor %}
+      </div>
+      <div>
+        <strong>Europa</strong>
+        <a href="{{ root }}eu/index.html">Europa-Ausgabe</a>
+        <a href="{{ root }}eu/index.html#parlament">EU-Parlament &amp; Mehrheiten</a>
+        {% for slug, name in [("europa", "EU-Politik"), ("handel", "Handel"), ("migration", "Asyl &amp; Migration"), ("klima", "Klima &amp; Energie"), ("verteidigung", "Sicherheit")] %}<a href="{{ topic_url_eu(slug) }}">{{ name | safe }}</a>{% endfor %}
+      </div>
+      <div>
+        <strong>Im Trend in Deutschland</strong>
+        {% for t in (trending_all.get("de") or [])[:5] %}<a href="{{ topic_url_de(t.slug) }}">{{ t.name }}</a>{% else %}<span class="muted">Noch keine Trends</span>{% endfor %}
+      </div>
+      <div>
+        <strong>Im Trend in Europa</strong>
+        {% for t in (trending_all.get("eu") or [])[:5] %}<a href="{{ topic_url_eu(t.slug) }}">{{ t.name }}</a>{% else %}<span class="muted">Noch keine Trends</span>{% endfor %}
+      </div>
+    </div>
+
+    <div class="foot-grid foot-grid--bottom">
+      <div class="foot-brand">
+        {{ m.logo(ed.home, light=true, size=44) }}
+        <span class="tagline">MEHR SEHEN. BESSER VERSTEHEN.</span>
+        <span>Nachrichten aus Deutschland und Europa aus allen Perspektiven, KI-gestützt eingeordnet und offen erklärt.</span>
+      </div>
+      <div>
+        <strong>Über Mehrsicht</strong>
+        <a href="{{ root }}methode.html">Unsere Methode</a>
+        <a href="{{ root }}methode.html#medien">Wie wir Medien einordnen</a>
+        <a href="{{ root }}methode.html#eigentuemer">Wem gehören die Medien?</a>
+        <a href="{{ root }}methode.html#faktenchecks">Woher Faktenchecks kommen</a>
+        <a href="{{ root }}unterstuetzen.html">Unterstützen</a>
+      </div>
+      <div>
+        <strong>Hilfe</strong>
+        <a href="{{ root }}faq.html">Häufige Fragen</a>
+        <a href="{{ contact }}">Fehler melden</a>
+        <a href="{{ contact }}">Quelle vorschlagen</a>
+        <a href="{{ root }}faq.html#kontakt">Kontakt</a>
+      </div>
+      <div>
+        <strong>Werkzeuge</strong>
+        <a href="{{ ed.home }}#newsletter">Wochenbriefing</a>
+        <a href="{{ ed.home }}#parlament">Koalitionsrechner</a>
+        <a href="{{ ed.base }}fuer-dich.html">Gespeicherte Geschichten</a>
+        <a href="{{ ed.base }}themen.html">Themen folgen</a>
+      </div>
+    </div>
+
+    <div class="foot-bottom">
+      <span class="foot-legal">
+        <a href="{{ root }}impressum.html">Impressum</a>
+        <a href="{{ root }}datenschutz.html">Datenschutz</a>
+        <span>Keine Cookies, kein Tracking</span>
+      </span>
+      <details class="edition edition--footer">
+        <summary aria-label="Ausgabe wählen">{{ m.flag(ed.code) }} {{ "Europa" if ed.code == "eu" else "Deutschland" }}
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+        </summary>
+        <div class="edition-menu edition-menu--up">
+          <a href="{{ root }}index.html">{{ m.flag("de") }}<span>Deutschland</span></a>
+          <a href="{{ root }}eu/index.html">{{ m.flag("eu") }}<span>Europa</span></a>
+        </div>
+      </details>
+    </div>
+    <p class="foot-copy">© {{ year }} Mehrsicht · Einordnungen sind KI-Schätzungen, Faktenchecks stammen von verlinkten Quellen.</p>
+  </div>
+</footer>
+
+<div class="drawer" data-drawer aria-hidden="true">
+  <button class="backdrop" type="button" data-close-drawer aria-label="Menü schließen"></button>
+  <nav class="panel" aria-label="Menü">
+    <div class="head">
+      {{ m.logo(ed.home, size=28) }}
+      <button class="icon-btn" type="button" data-close-drawer aria-label="Menü schließen"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+    </div>
+    <div class="body">
+      <div>
+        <div class="label" style="margin-bottom: 6px">Ausgabe</div>
+        <div class="seg">
+          <a class="flag-btn flag-btn--de" href="{{ root }}index.html" aria-current="{{ 'true' if ed.code == 'de' else 'false' }}" title="Deutschland-Ausgabe"><span class="sr-only">Deutschland</span></a>
+          <a class="flag-btn flag-btn--eu" href="{{ root }}eu/index.html" aria-current="{{ 'true' if ed.code == 'eu' else 'false' }}" title="Europa-Ausgabe"><span class="sr-only">Europa</span></a>
+        </div>
+      </div>
+      <div class="links">
+        <div class="label notranslate" translate="no">Mehrsicht</div>
+        <a href="{{ ed.base }}fuer-dich.html">Für dich</a>
+        <a href="{{ ed.base }}themen.html">Alle Themen</a>
+        <a href="{{ ed.base }}faktenchecks.html" {% if page == "faktenchecks" %}aria-current="page"{% endif %}>Faktenchecks</a>
+        <a href="{{ ed.home }}#parlament">{{ "EU-Parlament" if ed.code == "eu" else "Bundestag" }}</a>
+      </div>
+      <div class="links">
+        <div class="label">Ressorts heute</div>
+        {% for t in topics_nav %}<a href="{{ topic_url(t.slug) }}"><span>{{ t.name }}</span><small>{{ t.count }} {{ "Geschichte" if t.count == 1 else "Geschichten" }}</small></a>{% endfor %}
+      </div>
+      <div class="links">
+        <div class="label">Über uns</div>
+        <a href="{{ root }}methode.html">Unsere Methode</a>
+        <a href="{{ root }}faq.html">Häufige Fragen</a>
+        <a href="{{ root }}unterstuetzen.html">Unterstützen</a>
+      </div>
+    </div>
+  </nav>
+</div>
+
+<div class="toast" data-toast role="status" aria-live="polite" hidden></div>
+<script src="{{ root }}assets/js/app.js" defer></script>
+{% block scripts %}{% endblock %}
+</body>
+</html>

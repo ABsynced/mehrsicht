@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}Alle Themen – Mehrsicht {{ "Europa" if ed.code == "eu" else "Deutschland" }}{% endblock %}
+{% block content %}
+{% set cats = topics.values() | selectattr("kind", "equalto", "category") | sort(attribute="name") | list %}
+{% set ents = topics.values() | selectattr("kind", "equalto", "entity") | sort(attribute="name") | list %}
+<main class="wrap page">
+  <span class="crumbs"><a href="{{ ed.home }}">Start</a> › Themen</span>
+  <header class="page-head">
+    <h1>Themen</h1>
+    <p>Folge Themen, Personen und Orten aus {{ "Europa" if ed.code == "eu" else "Deutschland" }}. Gefolgte Themen erscheinen unter <a href="{{ ed.base }}fuer-dich.html">Für dich</a> und werden nur in deinem Browser gespeichert.</p>
+  </header>
+
+  {% if trending %}
+  <section aria-labelledby="tr-t">
+    <div class="list-head"><h2 id="tr-t">Gerade im Trend</h2></div>
+    <div class="topic-grid">
+      {% for t in trending %}{% set full = topics.get(t.slug, t) %}
+      <div class="topic-tile">
+        <a href="{{ topic_url(t.slug) }}">{{ m.topic_avatar(full, root, 44) }}<span><strong>{{ t.name }}</strong><small>Platz {{ loop.index }} · {{ t.count }} Geschichten</small></span></a>
+        {{ m.follow_button(t.slug, t.name, topic_path(t.slug)) }}
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+  {% endif %}
+
+  <section aria-labelledby="rs-t">
+    <div class="list-head"><h2 id="rs-t">Ressorts</h2></div>
+    <div class="topic-grid">
+      {% for t in cats %}
+      <div class="topic-tile">
+        <a href="{{ topic_url(t.slug) }}">{{ m.topic_avatar(t, root, 44) }}<span><strong>{{ t.name }}</strong><small>{{ t.story_ids | length }} {{ "Geschichte" if t.story_ids | length == 1 else "Geschichten" }}</small></span></a>
+        {{ m.follow_button(t.slug, t.name, topic_path(t.slug)) }}
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+
+  {% if ents %}
+  <section aria-labelledby="pe-t">
+    <div class="list-head"><h2 id="pe-t">Personen, Orte &amp; Organisationen</h2></div>
+    <div class="topic-grid">
+      {% for t in ents %}
+      <div class="topic-tile">
+        <a href="{{ topic_url(t.slug) }}">{{ m.topic_avatar(t, root, 44) }}<span><strong>{{ t.name }}</strong><small>{{ t.story_ids | length }} Geschichten</small></span></a>
+        {{ m.follow_button(t.slug, t.name, topic_path(t.slug)) }}
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+  {% endif %}
+</main>
+{% endblock %}

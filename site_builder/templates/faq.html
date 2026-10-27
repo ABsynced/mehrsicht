@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Häufige Fragen – Mehrsicht{% endblock %}
+{% block content %}
+<main class="wrap page">
+  <article class="prose faq">
+    <h1>Häufige Fragen</h1>
+
+    <details open><summary>Was ist Mehrsicht?</summary>
+      <p>Mehrsicht sammelt Nachrichten aus Deutschland und Europa und zeigt, wie Medien aus unterschiedlichen politischen Richtungen über dieselbe Geschichte berichten. Eine KI fasst jede Perspektive zusammen, Faktenchecks erscheinen direkt im Text.</p></details>
+
+    <details><summary>Woher kommen die Nachrichten?</summary>
+      <p>Aus den öffentlichen RSS-Feeds von {{ source_count_de }} deutschen und {{ source_count_eu }} europäischen Medien. Wir zeigen nur Schlagzeilen und kurze Anreißer und verlinken immer auf den Originalartikel.</p></details>
+
+    <details><summary>Wie entscheidet ihr, was „links“, „Mitte“ oder „rechts“ ist?</summary>
+      <p>Jedes Medium hat eine offengelegte Einordnung auf einer Skala von −2 (links) bis +2 (rechts). Sie stützt sich auf öffentliche Medienanalysen und ist eine Schätzung, kein Urteil über Qualität. Details unter <a href="{{ root }}methode.html#medien">Methode</a>.</p></details>
+
+    <details><summary>Wie entsteht „Im Trend“?</summary>
+      <p>Für jedes Thema zählen wir, wie viele Medien in den letzten 72 Stunden darüber berichtet haben. Neuere Berichte zählen mehr als ältere (Halbwertszeit etwa ein Tag). Die Themen mit der höchsten Punktzahl stehen oben in der Leiste.</p></details>
+
+    <details><summary>Speichert ihr etwas über mich?</summary>
+      <p>Nein. Keine Cookies, kein Tracking, keine Konten. Gefolgte Themen, gemerkte und ausgeblendete Geschichten liegen nur im Speicher deines Browsers (localStorage) und verlassen dein Gerät nie.</p></details>
+
+    <details><summary>Die KI hat etwas falsch zusammengefasst.</summary>
+      <p>Das kann passieren. Unter jeder Zusammenfassung gibt es den Link „Fehler melden“. Die Originalartikel sind immer verlinkt.</p></details>
+
+    <h2 id="kontakt">Kontakt</h2>
+    <p>{% if contact_email %}Schreib uns an <a href="mailto:{{ contact_email }}">{{ contact_email }}</a> – für Fehler, Quellenvorschläge und Feedback.{% else %}<span class="todo">Kontaktadresse folgt (CONTACT_EMAIL in .env setzen).</span>{% endif %}</p>
+  </article>
+</main>
+{% endblock %}

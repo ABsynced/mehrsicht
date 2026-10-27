@@ -1,0 +1,61 @@
+# Wem gehören die Medien? (Eigentümer-Kategorie pro Quelle)
+#
+# VORLÄUFIG – Stand Oktober 2026, aus öffentlich bekannten Angaben zusammengestellt.
+# Vor der Veröffentlichung jede Zeile prüfen (Impressum / "Über uns" des Mediums,
+# KEK-Mediendatenbank: https://www.kek-online.de/medienkonzentration/mediendatenbank).
+#
+# Kategorien (feste Liste, damit die Farben gleich bleiben):
+categories:
+  oeffentlich:    {name: Öffentlich-rechtlich,      color: "#0F766E", info: "Finanziert über den Rundfunkbeitrag, staatsfern organisiert."}
+  konzern:        {name: Medienkonzern,             color: "#7C3AED", info: "Teil eines großen Medienunternehmens mit vielen Marken."}
+  familie:        {name: Verlag in Familienbesitz,  color: "#B45309", info: "Verlag, der überwiegend einer Familie oder Privatperson gehört."}
+  investor:       {name: Finanzinvestor,            color: "#BE123C", info: "Mehrheitlich im Besitz von Investoren oder Fonds."}
+  stiftung:       {name: Stiftung / Trust,          color: "#1D4ED8", info: "Gehört einer Stiftung, die die Unabhängigkeit sichern soll."}
+  genossenschaft: {name: Genossenschaft / Mitarbeiter, color: "#15803D", info: "Gehört Leserinnen, Lesern oder Mitarbeitenden."}
+  ag:             {name: Aktiengesellschaft,        color: "#475569", info: "Börsen- oder Aktiengesellschaft mit vielen Anteilseignern."}
+
+outlets:
+  tagesschau:    {category: oeffentlich,    owner: "ARD (NDR)"}
+  zdf:           {category: oeffentlich,    owner: "ZDF"}
+  dlf:           {category: oeffentlich,    owner: "Deutschlandradio"}
+  spiegel:       {category: genossenschaft, owner: "SPIEGEL-Verlag (Mehrheit bei der Mitarbeiter KG)"}
+  zeit:          {category: familie,        owner: "Zeitverlag (Dieter von Holtzbrinck Medien)"}
+  sz:            {category: familie,        owner: "Südwestdeutsche Medien Holding"}
+  taz:           {category: genossenschaft, owner: "taz Verlagsgenossenschaft"}
+  fr:            {category: familie,        owner: "Ippen Mediengruppe"}
+  tagesspiegel:  {category: familie,        owner: "Dieter von Holtzbrinck Medien"}
+  ntv:           {category: konzern,        owner: "RTL Deutschland (Bertelsmann)"}
+  handelsblatt:  {category: familie,        owner: "Dieter von Holtzbrinck Medien"}
+  faz:           {category: stiftung,       owner: "FAZIT-Stiftung"}
+  welt:          {category: konzern,        owner: "Axel Springer"}
+  focus:         {category: konzern,        owner: "Hubert Burda Media"}
+  nzz:           {category: ag,             owner: "NZZ AG"}
+  politico_eu:   {category: konzern,        owner: "Axel Springer"}
+  euronews:      {category: investor,       owner: "Alpac Capital (Mehrheit)"}
+  guardian_eu:   {category: stiftung,       owner: "Scott Trust"}
+  lemonde:       {category: investor,       owner: "Groupe Le Monde (Privatinvestoren)"}
+  lefigaro:      {category: familie,        owner: "Groupe Dassault"}
+  elpais:        {category: konzern,        owner: "PRISA"}
+  corriere:      {category: konzern,        owner: "RCS MediaGroup"}
+  tagesschau_eu: {category: oeffentlich,    owner: "ARD (NDR)"}
+  welt_eu:       {category: konzern,        owner: "Axel Springer"}
+  # Erfundene Demo-Medien (Offline-Modus)
+  a:    {category: genossenschaft, owner: "Beispiel"}
+  b:    {category: familie,        owner: "Beispiel"}
+  c:    {category: stiftung,       owner: "Beispiel"}
+  d:    {category: oeffentlich,    owner: "Beispiel"}
+  e:    {category: oeffentlich,    owner: "Beispiel"}
+  f:    {category: ag,             owner: "Beispiel"}
+  g:    {category: konzern,        owner: "Beispiel"}
+  h:    {category: familie,        owner: "Beispiel"}
+  i:    {category: investor,       owner: "Beispiel"}
+  fr_a: {category: investor,       owner: "Beispiel"}
+  de_m: {category: oeffentlich,    owner: "Beispiel"}
+  it_m: {category: konzern,        owner: "Beispiel"}
+  es_l: {category: konzern,        owner: "Beispiel"}
+  pl_r: {category: familie,        owner: "Beispiel"}
+  nl_r: {category: ag,             owner: "Beispiel"}
+  fr_r: {category: familie,        owner: "Beispiel"}
+  at_r: {category: konzern,        owner: "Beispiel"}
+  de_l: {category: genossenschaft, owner: "Beispiel"}
+  be_m: {category: oeffentlich,    owner: "Beispiel"}

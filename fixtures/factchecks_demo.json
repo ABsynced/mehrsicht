@@ -1,0 +1,17 @@
+{
+ "note": "ERFUNDENE Beispiel-Faktenchecks für den Offline-Demo-Modus. Im Live-Betrieb kommen Urteile nur von echten Faktencheck-Redaktionen.",
+ "factchecks": [
+  {"match": ["rente", "halbiert"], "claim": "Die Rente wird ab 2027 halbiert.", "rating": "Falsch",
+   "explanation": "Das Gesetz sieht keine Kürzung der Renten vor. Die Zahl geht auf ein Diagramm zurück, das das Rentenniveau mit dem Bruttolohn verwechselt.",
+   "publisher": "Beispiel-Faktencheck", "url": "#"},
+  {"match": ["gasheizungen", "2027"], "claim": "Alle Gasheizungen müssen 2027 raus.", "rating": "Irreführend",
+   "explanation": "Die neuen Fristen betreffen vor allem neu eingebaute Heizungen, nicht bestehende Anlagen.",
+   "publisher": "Beispiel-Faktencheck", "url": "#"},
+  {"match": ["lehrermangel", "lehrkräfte"], "claim": "Bis 2030 fehlen 80.000 Lehrkräfte.", "rating": "Fehlender Kontext",
+   "explanation": "Die Zahl stammt aus einer von mehreren Prognosen. Andere Studien kommen auf deutlich niedrigere oder höhere Werte.",
+   "publisher": "Beispiel-Faktencheck", "url": "#"},
+  {"match": ["bargeld", "digitalen"], "claim": "Die EU schafft 2027 das Bargeld ab.", "rating": "Falsch",
+   "explanation": "Es gibt keinen solchen Beschluss. Der digitale Euro soll Bargeld ergänzen, nicht ersetzen.",
+   "publisher": "Beispiel-Faktencheck", "url": "#"}
+ ]
+}

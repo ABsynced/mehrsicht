@@ -1,0 +1,62 @@
+# Nachrichtenquellen der Europa-Ausgabe.
+# Gleiche Regeln wie sources_de.yaml: lean ist VORLÄUFIG und muss vor dem
+# Start belegt werden. "country" ist der ISO-Ländercode, "lang" die Sprache
+# der Schlagzeilen (die KI übersetzt Zusammenfassungen ins Deutsche).
+
+edition: eu
+sources:
+  - id: politico_eu
+    name: POLITICO Europe
+    country: BE
+    lang: en
+    rss: https://www.politico.eu/feed/
+    lean: 0
+  - id: euronews
+    name: Euronews
+    country: FR
+    lang: en
+    rss: https://www.euronews.com/rss
+    lean: 0
+  - id: guardian_eu
+    name: The Guardian (Europa)
+    country: GB
+    lang: en
+    rss: https://www.theguardian.com/world/europe-news/rss
+    lean: -1
+  - id: lemonde
+    name: Le Monde
+    country: FR
+    lang: fr
+    rss: https://www.lemonde.fr/rss/une.xml
+    lean: -1
+  - id: lefigaro
+    name: Le Figaro
+    country: FR
+    lang: fr
+    rss: https://www.lefigaro.fr/rss/figaro_actualites.xml
+    lean: 1
+  - id: elpais
+    name: El País
+    country: ES
+    lang: es
+    rss: https://feeds.elpais.com/mrss-s/pages/ep/site/elpais.com/portada
+    lean: -1
+  - id: corriere
+    name: Corriere della Sera
+    country: IT
+    lang: it
+    rss: https://xml2.corriereobjects.it/rss/homepage.xml
+    site: https://www.corriere.it
+    lean: 0
+  - id: tagesschau_eu
+    name: tagesschau.de
+    country: DE
+    lang: de
+    rss: https://www.tagesschau.de/xml/rss2/
+    lean: 0
+  - id: welt_eu
+    name: WELT
+    country: DE
+    lang: de
+    rss: https://www.welt.de/feeds/latest.rss
+    lean: 1

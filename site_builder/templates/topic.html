@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+{% block title %}Nachrichten zu {{ t.name }} – Mehrsicht{% endblock %}
+{% block description %}Alle Geschichten zu {{ t.name }} aus {{ "Europa" if ed.code == "eu" else "Deutschland" }}, verglichen über linke, mittige und rechte Medien.{% endblock %}
+{% block content %}
+{% set contact = ("mailto:" ~ contact_email ~ "?subject=" ~ ("Quelle vorschlagen: " ~ t.name) | urlencode) if contact_email else (root ~ "faq.html#kontakt") %}
+<main class="wrap page topic-page">
+  <span class="crumbs"><a href="{{ ed.home }}">Start</a> › <a href="{{ ed.base }}themen.html">Themen</a> › {{ t.name }}</span>
+
+  <header class="topic-header">
+    {{ m.topic_avatar(t, root, 72) }}
+    <div class="topic-title">
+      <h1>Nachrichten zu {{ t.name }}</h1>
+      <p>{{ t_stories | length }} {{ "Geschichte" if t_stories | length == 1 else "Geschichten" }} · {{ total_sources }} Artikel aus {{ n_outlets }} Medien in den letzten 7 Tagen. {{ t.name }} {{ lean.text }}</p>
+    </div>
+    <button type="button" class="btn btn--dark follow-big" data-follow="{{ t.slug }}" data-name="{{ t.name }}" data-path="{{ topic_path(t.slug) }}" aria-pressed="false">
+      <span class="when-off">+ Folgen</span><span class="when-on">✓ Gefolgt</span>
+    </button>
+  </header>
+
+  <div class="story-cols">
+    <div class="story-main">
+      {% set top = t_stories[:3] %}
+      {% if top %}
+      <div class="top3">
+        {% for s in top %}
+        <a class="gcard gcard--big" href="{{ story_url(s) }}" data-id="{{ s.id }}">
+          {{ m.media(s, root, badges=false, credit=false) }}
+          <span class="gcard-body">
+            <span class="kick">{{ s.topic }} · {{ s.last_seen | ago(now) }}</span>
+            <strong>{{ s.title }}</strong>
+            {{ m.bias(s.percents, "bias--small") }}
+            {{ m.coverage_line(s) }}
+            <span class="see">Zur Geschichte →</span>
+          </span>
+        </a>
+        {% endfor %}
+      </div>
+      {% endif %}
+
+      {% set rest = t_stories[3:] %}
+      {% if rest %}
+      <section aria-labelledby="tl-t">
+        <div class="list-head"><h2 id="tl-t">Alle Geschichten zu {{ t.name }}</h2></div>
+        <div class="news" data-loadmore data-page-size="{{ page_size }}" style="margin-top: 0">
+          {% for s in rest %}
+          <a class="news-item news-item--compact" href="{{ story_url(s) }}" data-lm-item data-id="{{ s.id }}">
+            {{ m.media(s, root, badges=false, credit=false) }}
+            <div class="body">
+              <div class="meta"><span class="cat">{{ s.topic }}</span><span>{{ s.last_seen | ago(now) }}</span></div>
+              <h3>{{ s.title }}</h3>
+              {{ m.coverage_line(s) }}
+            </div>
+          </a>
+          {% endfor %}
+          <button type="button" class="btn btn--outline load-more" data-loadmore-btn hidden>Weitere Geschichten laden</button>
+        </div>
+      </section>
+      {% endif %}
+    </div>
+
+    <aside class="story-side">
+      {% if covered %}
+      <section class="card side-card" aria-labelledby="cm-t">
+        <h3 id="cm-t">Am häufigsten berichtet von</h3>
+        <ul class="outlet-rows">
+          {% for o in covered %}
+          <li>{{ m.outlet_avatar(o, root, 32) }}<span><strong>{{ o.name }}</strong><small>{{ o.stories }} {{ "Geschichte" if o.stories == 1 else "Geschichten" }}</small></span>{{ m.lean_badge(o.lean) }}</li>
+          {% endfor %}
+        </ul>
+        <a class="btn btn--outline btn--sm" href="{{ contact }}">Quelle vorschlagen</a>
+      </section>
+      {% endif %}
+
+      <section class="card side-card" aria-labelledby="mb-t">
+        <div class="card-head"><h3 id="mb-t">Medien-Bias zu {{ t.name }}</h3>{{ m.info("Summe aller Artikel zu diesem Thema, nach der Einordnung der Medien.") }}</div>
+        {{ m.bias(lean.percents) }}
+        <p class="note">{{ t.name }} {{ lean.text }}</p>
+      </section>
+
+      {% if related %}
+      <section class="card side-card" aria-labelledby="rt-t">
+        <h3 id="rt-t">Verwandte Themen</h3>
+        <div class="topic-chips">
+          {% for r in related %}
+          <span class="tchip tchip--light">
+            <a href="{{ topic_url(r.slug) }}">{{ m.topic_avatar(r, root, 22) }}<span>{{ r.name }}</span></a>
+            {{ m.follow_button(r.slug, r.name, topic_path(r.slug), "follow--chip") }}
+          </span>
+          {% endfor %}
+        </div>
+      </section>
+      {% endif %}
+    </aside>
+  </div>
+</main>
+{% endblock %}

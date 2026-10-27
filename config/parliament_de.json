@@ -1,0 +1,21 @@
+{
+  "name": "Bundestag",
+  "subtitle": "Sitzverteilung 21. Bundestag · Wahl 2025",
+  "total": 630,
+  "majority": 316,
+  "default_coalition": ["CDU", "SPD"],
+  "groups": [
+    {"id": "LINKE", "name": "Die Linke", "color": "#BE3075", "seats": 64},
+    {"id": "SPD", "name": "SPD", "color": "#E3000F", "seats": 120},
+    {"id": "GRUENE", "name": "Grüne", "color": "#1AA037", "seats": 85},
+    {"id": "SSW", "name": "SSW", "color": "#003C8F", "seats": 1},
+    {"id": "CDU", "name": "CDU/CSU", "color": "#151518", "seats": 208},
+    {"id": "AFD", "name": "AfD", "color": "#009EE0", "seats": 152}
+  ],
+  "other_parties": [
+    {"id": "FDP", "name": "FDP", "color": "#E5C800"},
+    {"id": "BSW", "name": "BSW", "color": "#7B2450"},
+    {"id": "FW", "name": "Freie Wähler", "color": "#F29400"}
+  ],
+  "note": "Sitzzahlen manuell pflegen, wenn sich Fraktionen ändern."
+}

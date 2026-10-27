@@ -1,0 +1,27 @@
+# Fact-checking newsrooms Mehrsicht takes verdicts from.
+# Mehrsicht NEVER decides itself that something is false.
+#
+# site = used with the free Google Fact Check Tools API (FACTCHECK_API_KEY in .env).
+#        This is the most reliable source: verdicts in the ClaimReview format.
+# rss  = used WITHOUT a key: the newest fact-check articles. The verdict is read
+#        from the article page (ClaimReview data) or, if missing, by the AI.
+# Test the feeds with:  python -m pipeline.check_feeds
+
+de:
+  - {name: "CORRECTIV.Faktencheck", site: correctiv.org,          rss: "https://correctiv.org/faktencheck/feed/"}
+  - {name: "dpa-Faktencheck",       site: dpa-factchecking.com}
+  - {name: "AFP Faktencheck",       site: faktencheck.afp.com}
+  - {name: "BR24 #Faktenfuchs",     site: br.de}
+  - {name: "tagesschau Faktenfinder", site: tagesschau.de,        rss: "https://www.tagesschau.de/faktenfinder/index~rss2.xml"}
+  - {name: "Mimikama",              site: mimikama.org,           rss: "https://www.mimikama.org/category/faktencheck/feed/"}
+  - {name: "APA-Faktencheck",       site: apa.at}
+
+eu:
+  - {name: "AFP Fact Check",        site: factcheck.afp.com}
+  - {name: "CORRECTIV.Faktencheck", site: correctiv.org,          rss: "https://correctiv.org/faktencheck/feed/"}
+  - {name: "Les Décodeurs (Le Monde)", site: lemonde.fr}
+  - {name: "Maldita",               site: maldita.es}
+  - {name: "Newtral",               site: newtral.es}
+  - {name: "Pagella Politica",      site: pagellapolitica.it}
+  - {name: "Demagog",               site: demagog.org.pl}
+  - {name: "Nieuwscheckers",        site: nieuwscheckers.nl}

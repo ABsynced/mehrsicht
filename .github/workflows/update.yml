@@ -1,0 +1,88 @@
+# Runs the whole Mehrsicht pipeline every 6 hours and publishes the site
+# on GitHub Pages. Repository secrets (Settings > Secrets and variables >
+# Actions): GROQ_API_KEY and CEREBRAS_API_KEY (both free), optional FACTCHECK_API_KEY,
+# NEWSLETTER_FORM_ACTION. Variables: SITE_URL and optional CONTACT_EMAIL.
+# Every 6 hours = 4 runs a day, which fits Groq's free daily limits.
+
+name: Nachrichten aktualisieren
+
+on:
+  schedule:
+    - cron: "17 */6 * * *"   # every 6 hours at minute 17 (UTC)
+  workflow_dispatch:          # adds a "Run workflow" button on GitHub
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      LLM_PROVIDER: groq,cerebras
+      # Public website: only free Wikimedia photos, never press photos.
+      IMAGE_SOURCE: commons
+      GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+      CEREBRAS_API_KEY: ${{ secrets.CEREBRAS_API_KEY }}
+      FACTCHECK_API_KEY: ${{ secrets.FACTCHECK_API_KEY }}
+      NEWSLETTER_FORM_ACTION: ${{ secrets.NEWSLETTER_FORM_ACTION }}
+      SITE_URL: ${{ vars.SITE_URL }}
+      CONTACT_EMAIL: ${{ vars.CONTACT_EMAIL }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Bibliotheken installieren
+        run: |
+          pip install -r requirements.txt
+          python -m playwright install --with-deps chromium
+
+      # Keeps the 7-day story archive, photos and outlet logos between runs,
+      # so stories keep their IDs and old analyses are reused (saves AI tokens).
+      - name: Archiv wiederherstellen
+        uses: actions/cache@v4
+        with:
+          path: |
+            data/archive_*.json
+            data/media
+          key: mehrsicht-archive-${{ github.run_id }}
+          restore-keys: mehrsicht-archive-
+
+      - name: Tests
+        run: python -m pytest -q
+
+      - name: Nachrichten holen und analysieren
+        # Without GROQ_API_KEY this still runs with real news, just without AI.
+        run: python -m pipeline.run --edition all
+
+      - name: Share-Kacheln erzeugen
+        run: python -m sharecards.render
+
+      - name: Website bauen
+        run: python -m site_builder.build
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

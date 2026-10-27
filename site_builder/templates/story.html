@@ -1,0 +1,337 @@
+{% extends "base.html" %}
+{% block title %}{{ s.title }} – Mehrsicht{% endblock %}
+{% block description %}{{ s.summary }}{% endblock %}
+{% block og_image %}{% if s.share_files.link %}<meta property="og:image" content="{{ site_url }}/{{ s.share_files.link }}"><meta name="twitter:card" content="summary_large_image">{% endif %}{% endblock %}
+{% block body_class %}page-story split{% endblock %}
+
+{% set side_names = {"links": "Links", "mitte": "Mitte", "rechts": "Rechts"} %}
+{% set visible_articles = s.articles | rejectattr("is_repost") | list %}
+{% set n_l = visible_articles | selectattr("bucket", "equalto", "L") | list | length %}
+{% set n_m = visible_articles | selectattr("bucket", "equalto", "M") | list | length %}
+{% set n_r = visible_articles | selectattr("bucket", "equalto", "R") | list | length %}
+{% set contact = ("mailto:" ~ contact_email ~ "?subject=" ~ ("Fehler: " ~ s.title) | urlencode) if contact_email else (root ~ "faq.html#kontakt") %}
+
+{% block content %}
+<main class="wrap page story-page" data-story="{{ s.id }}" data-story-title="{{ s.title }}" data-story-path="{{ story_path(s) }}"
+      data-story-image="{{ s.image.src if s.image else '' }}" data-story-topic="{{ s.topic }}">
+
+  <nav class="story-topics" aria-label="Themen dieser Geschichte">
+    {% for t in story_topics[:6] %}
+    <span class="tchip tchip--light">
+      <a href="{{ topic_url(t.slug) }}">{{ m.topic_avatar(t, root, 22) }}<span>{{ t.name }}</span></a>
+      {{ m.follow_button(t.slug, t.name, topic_path(t.slug), "follow--chip") }}
+    </span>
+    {% endfor %}
+  </nav>
+
+  <header class="story-header">
+    <h1 id="story-t">{{ s.title }}</h1>
+    <div class="story-meta">
+      <span>Veröffentlicht {{ s.first_seen | ago(now) }}</span>
+      {% if s.updated_at %}<span>Aktualisiert {{ s.updated_at | ago(now) }}</span>{% endif %}
+      {% if s.location %}<span class="loc"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>{{ s.location }}</span>{% endif %}
+      <span>{{ s.source_count }} Quellen</span>
+    </div>
+    <div class="story-actions">
+      <div class="share-row" aria-label="Teilen">
+        <a class="round-btn" data-share="x" href="#" target="_blank" rel="noopener" aria-label="Auf X teilen"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.7 3H21l-7.2 8.2L22 21h-6.6l-5.2-6.6L4.3 21H1l7.7-8.8L1 3h6.7l4.7 6.1L17.7 3zm-1.1 16h1.8L6.6 4.9H4.7L16.6 19z"/></svg></a>
+        <a class="round-btn" data-share="linkedin" href="#" target="_blank" rel="noopener" aria-label="Auf LinkedIn teilen"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9h4v12H3zM9 9h3.8v1.7h.1c.5-1 1.8-2 3.8-2 4 0 4.8 2.6 4.8 6V21h-4v-5.5c0-1.3 0-3-1.8-3s-2.1 1.4-2.1 2.9V21H9z"/></svg></a>
+        <a class="round-btn" data-share="facebook" href="#" target="_blank" rel="noopener" aria-label="Auf Facebook teilen"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M14 8V6.5c0-.8.2-1.3 1.4-1.3H17V2.2C16.7 2.1 15.7 2 14.6 2 12.2 2 10.6 3.4 10.6 6.1V8H8v3.3h2.6V22H14V11.3h2.7L17 8z"/></svg></a>
+        <a class="round-btn" data-share="whatsapp" href="#" target="_blank" rel="noopener" aria-label="Per WhatsApp teilen"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.6 14.2c-.2.7-1.4 1.3-2 1.4-.5.1-1.2.1-1.9-.1-.4-.1-1-.3-1.7-.6-3-1.3-4.9-4.3-5.1-4.5-.1-.2-1.2-1.6-1.2-3s.8-2.2 1-2.5c.3-.3.6-.4.8-.4h.6c.2 0 .4 0 .6.5l.9 2.1c.1.2.1.3 0 .5l-.3.5-.4.5c-.1.1-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.4 2.4 1.5.3.1.5.1.6-.1l.9-1c.2-.3.4-.2.6-.1l2 1c.3.1.5.2.5.3.1.2.1.6-.1 1.3z"/></svg></a>
+        <a class="round-btn" data-share="mail" href="#" aria-label="Per E-Mail teilen"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="1"/><path d="M3 7l9 6 9-6"/></svg></a>
+        <button class="round-btn" type="button" data-copy-link aria-label="Link kopieren"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></svg></button>
+      </div>
+      <div class="share-row">
+        <button class="pill-btn" type="button" data-save aria-pressed="false">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h12v18l-6-4-6 4z"/></svg><span data-save-label>Merken</span>
+        </button>
+        <button class="pill-btn" type="button" data-hide-story>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M3 3l18 18M10.6 6.1A10 10 0 0 1 12 6c5 0 9 6 9 6a17 17 0 0 1-2.6 3.2M6.2 6.9C4 8.5 3 12 3 12s4 6 9 6a9 9 0 0 0 4-.9"/></svg><span>Ausblenden</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="story-cols">
+    <div class="story-main">
+      <figure class="story-photo">
+        {{ m.media(s, root, cls="media--story", badges=false, credit=false) }}
+        <figcaption>{% if s.image %}{{ s.image.credit }}{% if s.image.page_url %} · <a href="{{ s.image.page_url }}" rel="noopener">Bildquelle</a>{% endif %}{% else %}Themen-Illustration von Mehrsicht · kein passendes freies Foto gefunden{% endif %}</figcaption>
+      </figure>
+
+      <section class="card perspectives" aria-labelledby="persp-t">
+        <div class="persp-head">
+          <h2 id="persp-t" class="sr-only">Zusammenfassung nach Perspektive</h2>
+          <div class="seg-toggle" role="tablist" aria-label="Perspektive wählen">
+            {% for key in ["links", "mitte", "rechts"] %}
+            <button type="button" role="tab" class="seg-{{ key }}" data-side="{{ key }}" aria-selected="{{ 'true' if key == 'mitte' else 'false' }}"{% if not s.sides[key] %} disabled title="Keine Quellen aus dieser Richtung"{% endif %}>{{ side_names[key] }}</button>
+            {% endfor %}
+          </div>
+          <button type="button" class="btn btn--outline btn--sm" data-compare-open aria-expanded="false" aria-controls="compare">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><rect x="3" y="4" width="7" height="16"/><rect x="14" y="4" width="7" height="16"/></svg>
+            Bias-Vergleich
+          </button>
+        </div>
+
+        {% for key in ["links", "mitte", "rechts"] %}
+        <div class="side-panel" data-side-text="{{ key }}"{% if key != "mitte" %} hidden{% endif %}>
+          {% set items = s.sides[key] or (s.bullets if key == "mitte" else []) %}
+          {% if items %}
+          <ul class="bullets bullets--{{ key }}">{% for b in items %}<li>{{ b }}</li>{% endfor %}</ul>
+          {% else %}
+          <p class="note">Keine Quellen aus dieser Richtung haben über diese Geschichte berichtet.</p>
+          {% endif %}
+        </div>
+        {% endfor %}
+
+        <div class="compare" id="compare" data-compare hidden>
+          {% for key in ["links", "mitte", "rechts"] %}
+          <div class="compare-col compare-col--{{ key }}">
+            <strong>{{ side_names[key] }}</strong>
+            {% if s.sides[key] %}<ul>{% for b in s.sides[key] %}<li>{{ b }}</li>{% endfor %}</ul>{% else %}<p class="note">Keine Quellen</p>{% endif %}
+            {% set words = s.framing_words | selectattr("side", "equalto", key) | list %}
+            {% if words %}<div class="words">{% for w in words %}<span class="w-{{ key }}">{{ w.word }}</span>{% endfor %}</div>{% endif %}
+          </div>
+          {% endfor %}
+        </div>
+
+        <div class="ai-foot">
+          <span class="ai-tag">{% if s.ai %}<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l1.8 5.2L19 9l-5.2 1.8L12 16l-1.8-5.2L5 9l5.2-1.8zM19 14l.9 2.6 2.6.9-2.6.9L19 21l-.9-2.6-2.6-.9 2.6-.9z"/></svg> Einordnung durch KI · {{ s.analysed_sources }} Quellen gelesen{% else %}Automatische Zusammenfassung aus den Anreißern (ohne KI){% endif %}</span>
+          <a href="{{ contact }}">Stimmt diese Zusammenfassung nicht? Fehler melden</a>
+        </div>
+        {% if s.tone %}<p class="note" style="margin: 0">Tonlage: {{ s.tone }}</p>{% endif %}
+      </section>
+
+      {% if s.factchecks %}
+      <section class="card checks" aria-labelledby="fc-t">
+        <div class="card-head"><h3 id="fc-t">Geprüfte Aussagen</h3><small>{{ s.factchecks | length }} Faktencheck{{ "s" if s.factchecks | length != 1 }}</small></div>
+        {% for fc in s.factchecks %}
+        <div class="check-row">
+          <span class="claim">„{{ fc.claim | trim('„“"') }}“</span>
+          <span>{{ m.verdict(fc) }}</span>
+          <span class="note">{{ fc.explanation }}</span>
+          <small class="note">{{ fc.publisher }}{% if fc.example %} (Beispiel){% endif %}{% if fc.url and fc.url != "#" %} · <a href="{{ fc.url }}" rel="noopener">Faktencheck lesen</a>{% endif %}</small>
+        </div>
+        {% endfor %}
+      </section>
+      {% endif %}
+
+      <section class="articles-box" id="artikel" aria-labelledby="arts-t" data-articles>
+        <div class="arts-head">
+          <h2 id="arts-t">{{ visible_articles | length }} Artikel</h2>
+          {% if s.factchecks %}
+          <span class="marks-toggle">Faktencheck-Markierungen
+            <button class="switch" type="button" role="switch" aria-checked="true" data-marks-switch aria-label="Faktencheck-Markierungen anzeigen"></button>
+          </span>
+          {% endif %}
+        </div>
+        <div class="arts-tools">
+          <div class="arts-tabs" role="tablist" aria-label="Artikel nach Richtung">
+            <button type="button" role="tab" data-art-tab="" aria-selected="true">Alle</button>
+            <button type="button" role="tab" data-art-tab="L" aria-selected="false">Links <span>{{ n_l }}</span></button>
+            <button type="button" role="tab" data-art-tab="M" aria-selected="false">Mitte <span>{{ n_m }}</span></button>
+            <button type="button" role="tab" data-art-tab="R" aria-selected="false">Rechts <span>{{ n_r }}</span></button>
+          </div>
+          <div class="arts-search">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#5B6270" stroke-width="2.2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
+            <label class="sr-only" for="art-q">Artikel durchsuchen</label>
+            <input id="art-q" type="search" placeholder="Medium oder Stichwort" data-art-search>
+          </div>
+          <label class="arts-sort"><span class="sr-only">Sortieren</span>
+            <select data-art-sort>
+              <option value="new">Neueste zuerst</option>
+              <option value="old">Älteste zuerst</option>
+              <option value="lean">Von links nach rechts</option>
+            </select>
+          </label>
+        </div>
+
+        <div class="art-list" data-art-list data-loadmore data-page-size="10">
+          {% for a in visible_articles %}
+          {% set src = sources.get(a.source_id, {}) %}
+          {% set cat = categories.get(a.ownership) if a.ownership else none %}
+          <article class="art-card"{% if loop.first or a.source_id not in (visible_articles[:loop.index0] | map(attribute="source_id") | list) %} id="art-{{ a.source_id }}"{% endif %} data-source="{{ a.source_id }}" data-lm-item data-bucket="{{ a.bucket }}" data-time="{{ a.published or '' }}" data-lean="{{ a.lean if a.lean is not none else 0 }}"
+                   data-text="{{ (a.source_name ~ ' ' ~ a.title ~ ' ' ~ (a.summary or '')) | lower }}">
+            <div class="art-top">
+              <span class="art-src">
+                {{ m.outlet_avatar(src or {"name": a.source_name}, root, 30) }}
+                <span>
+                  <strong>{{ a.source_name }}</strong>
+                  <small>{{ a.published | ago(now) }}{% if a.country %} · {{ country_names.get(a.country, a.country) }}{% endif %}</small>
+                </span>
+              </span>
+              <span class="art-badges">
+                {{ m.lean_badge(a.lean) }}
+                {% if cat %}<span class="own-badge" style="--own: {{ cat.color }}" title="{{ a.owner }}">{{ cat.name }}</span>{% endif %}
+              </span>
+              <details class="kebab">
+                <summary aria-label="Weitere Aktionen"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="12" cy="5" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="12" cy="19" r="1.8"/></svg></summary>
+                <div class="kebab-menu">
+                  <a href="{{ a.url }}" rel="noopener" target="_blank">Bei {{ a.source_name }} öffnen</a>
+                  <button type="button" data-copy="{{ a.url }}">Artikel-Link kopieren</button>
+                  <a href="{{ root }}methode.html#medien">Warum „{{ m.lean_badge(a.lean) | striptags }}“?</a>
+                  <a href="{{ contact }}">Einordnung melden</a>
+                </div>
+              </details>
+            </div>
+            <h3><a href="{{ a.url }}" rel="noopener" target="_blank">{{ a.title }}</a></h3>
+            {% if a.summary %}<p>{{ a | highlight(s.factchecks) }}</p>{% endif %}
+            {% for h in a.highlights %}{% set fc = s.factchecks[h.fc] %}
+            <div class="fc-box fc-box--{{ fc.verdict_class }}" data-fc-box="{{ loop.index0 }}-{{ a.source_id }}" hidden>
+              <div>{{ m.verdict(fc) }} <small>{{ fc.publisher }}{% if fc.example %} (Beispiel){% endif %}</small></div>
+              <span>{{ fc.explanation }}</span>
+              {% if fc.url and fc.url != "#" %}<small><a href="{{ fc.url }}" rel="noopener">Zum vollständigen Faktencheck</a></small>{% endif %}
+            </div>
+            {% endfor %}
+            <div class="art-foot">
+              <a href="{{ a.url }}" rel="noopener" target="_blank" class="read-link">Artikel lesen
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg></a>
+              {% if a.reposts %}<span class="reposts" title="{{ a.reposts | join(', ') }}">Auch übernommen von {{ a.reposts[0] }}{% if a.reposts | length > 1 %} +{{ a.reposts | length - 1 }}{% endif %}</span>{% endif %}
+              {% if src.owner %}<span class="owner-note">Eigentümer: {{ src.owner }}</span>{% endif %}
+            </div>
+          </article>
+          {% endfor %}
+          <p class="empty" data-art-empty hidden>Keine Artikel für diese Auswahl.</p>
+          <button type="button" class="btn btn--outline load-more" data-loadmore-btn hidden>Weitere Artikel laden</button>
+        </div>
+        <p class="note">Wir zeigen nur Schlagzeilen und kurze Anreißer aus den RSS-Feeds der Medien und verlinken immer auf das Original.</p>
+      </section>
+    </div>
+
+    <aside class="story-side">
+      <section class="card side-card" aria-labelledby="cov-t">
+        <h3 id="cov-t">Berichterstattung im Detail</h3>
+        <dl class="cov-table">
+          <div><dt>Quellen insgesamt</dt><dd>{{ s.source_count }}</dd></div>
+          <div><dt>Eher links</dt><dd class="c-l">{{ s.counts.L }}</dd></div>
+          <div><dt>Mitte</dt><dd>{{ s.counts.M }}</dd></div>
+          <div><dt>Eher rechts</dt><dd class="c-r">{{ s.counts.R }}</dd></div>
+          <div><dt>Zuletzt aktualisiert</dt><dd>{{ s.last_seen | ago(now) }}</dd></div>
+          <div><dt>Verteilung</dt><dd>{{ m.lean_label(s) }}</dd></div>
+        </dl>
+      </section>
+
+      <section class="card side-card dist" aria-labelledby="bd-t">
+        <div class="card-head"><h3 id="bd-t">Verteilung der Perspektiven</h3>{{ m.info("Wie viele der berichtenden Medien eher links, in der Mitte oder eher rechts eingeordnet sind. Fahre über ein Logo für die Schlagzeile, klicke, um zum Artikel zu springen.") }}</div>
+        <div class="split-bar" role="img" aria-label="{{ s.percents.l }} Prozent links, {{ s.percents.m }} Prozent Mitte, {{ s.percents.r }} Prozent rechts">
+          {% if s.percents.l %}<i class="l" style="flex: {{ s.percents.l }}">L {{ s.percents.l }}%</i>{% endif %}
+          {% if s.percents.m %}<i class="m" style="flex: {{ s.percents.m }}">M {{ s.percents.m }}%</i>{% endif %}
+          {% if s.percents.r %}<i class="r" style="flex: {{ s.percents.r }}">R {{ s.percents.r }}%</i>{% endif %}
+        </div>
+        <p class="note bd-text">{% if s.percents.m >= s.percents.l and s.percents.m >= s.percents.r %}{{ s.percents.m }} % der Quellen sind in der Mitte eingeordnet.{% elif s.percents.l > s.percents.r %}{{ s.percents.l }} % der Quellen sind eher links eingeordnet.{% else %}{{ s.percents.r }} % der Quellen sind eher rechts eingeordnet.{% endif %}</p>
+        <div class="lean-cols">
+          {% for col in columns %}
+          <div class="lean-col lean-col--{{ loop.index }}">
+            <div class="bubbles">
+              {% for o in col.outlets %}
+              <a class="bubble" href="#art-{{ o.id }}" data-jump="{{ o.id }}" aria-label="{{ o.name }}: {{ o.article_title }}">
+                {{ m.outlet_avatar(o, root, 32) }}
+                <span class="bubble-tip" role="tooltip">
+                  <strong>{{ o.name }}</strong>
+                  <small>{{ col.label }}{% if o.article_count > 1 %} · {{ o.article_count }} Artikel{% endif %}</small>
+                  <span>{{ o.article_title }}</span>
+                  <em>Zum Artikel →</em>
+                </span>
+              </a>
+              {% endfor %}
+            </div>
+            <span class="col-label">{{ col.label }}</span>
+          </div>
+          {% endfor %}
+        </div>
+      </section>
+
+      {% if owners %}
+      <section class="card side-card" aria-labelledby="own-t">
+        <div class="card-head"><h3 id="own-t">Wem gehören die Quellen?</h3>{{ m.info("Vorläufige Einordnung der Eigentümerstruktur aus öffentlich zugänglichen Angaben (Impressum, Verlagsangaben). Fehler bitte melden.") }}</div>
+        <div class="own-bar" role="img" aria-label="Eigentümer der Quellen">
+          {% for o in owners %}<i style="flex: {{ o.count }}; background: {{ o.color }}" title="{{ o.name }}: {{ o.count }}"></i>{% endfor %}
+        </div>
+        <ul class="own-list">
+          {% for o in owners %}
+          <li><i class="dot" style="--party: {{ o.color }}"></i><span>{{ o.name }}</span>{% if o.info %}{{ m.info(o.info) }}{% endif %}<b>{{ o.pct }} %</b></li>
+          {% endfor %}
+        </ul>
+        <p class="note" style="margin: 0"><a href="{{ root }}methode.html#eigentuemer">Wie wir Eigentümer einordnen</a></p>
+      </section>
+      {% endif %}
+
+      <section class="card side-card origin" aria-labelledby="org-t">
+        <h3 id="org-t" class="sr-only">Herkunft</h3>
+        {% if s.first_reported and s.first_reported.source_name %}
+        <p><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M13 2L4 14h7l-1 8 9-12h-7z"/></svg>
+          <span><strong>{{ s.first_reported.source_name }}</strong> hat zuerst berichtet{% if s.first_reported.published %}, {{ s.first_reported.published | ago(now) }}{% endif %}.</span></p>
+        {% endif %}
+        {% if countries %}<p><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg><span>{{ countries }}</span></p>{% endif %}
+      </section>
+
+      {% set known = s.parties | select("in", parties) | list %}
+      {% if known %}
+      <section class="card side-card" aria-labelledby="pt-t">
+        <h3 id="pt-t">Parteien im Fokus</h3>
+        <div style="margin-top: 10px">{{ m.party_chips(s, parties) }}</div>
+      </section>
+      {% endif %}
+
+      {% if s.share_files.story %}
+      <section class="card side-card" aria-labelledby="sh-t">
+        <h3 id="sh-t">Teilen als Bild</h3>
+        <p class="note" style="font-size: 13px">Automatisch erzeugte Bilder für Social Media.</p>
+        <div class="share-links">
+          {% for key, label in [("story", "Story-Kachel"), ("factcheck", "Faktencheck"), ("number", "Zahl"), ("link", "Link-Vorschau")] %}
+          {% if s.share_files[key] %}<a href="{{ root }}{{ s.share_files[key] }}" download><img src="{{ root }}{{ s.share_files[key] }}" alt="{{ label }} für {{ s.title }}" loading="lazy"><span>{{ label }}</span></a>{% endif %}
+          {% endfor %}
+        </div>
+      </section>
+      {% endif %}
+
+      {% if related %}
+      <section class="card side-card" aria-labelledby="rel-t">
+        <h3 id="rel-t">Mehr Geschichten wie diese</h3>
+        <div class="mini-list">
+          {% for r in related %}
+          <a class="mini" href="{{ story_url(r) }}" data-id="{{ r.id }}">
+            <span class="mini-body"><strong>{{ r.title }}</strong>{{ m.coverage_line(r) }}</span>
+            {% if r.image %}<img src="{{ root }}{{ r.image.src }}" alt="" loading="lazy">{% endif %}
+          </a>
+          {% endfor %}
+        </div>
+      </section>
+      {% endif %}
+
+      {% if story_topics %}
+      <section class="card side-card" aria-labelledby="sim-t">
+        <h3 id="sim-t">Ähnliche Themen</h3>
+        <ul class="topic-rows">
+          {% for t in story_topics %}
+          <li>
+            <a href="{{ topic_url(t.slug) }}">{{ m.topic_avatar(t, root, 32) }}<span>{{ t.name }}<small>{{ t.story_ids | length }} {{ "Geschichte" if t.story_ids | length == 1 else "Geschichten" }}</small></span></a>
+            {{ m.follow_button(t.slug, t.name, topic_path(t.slug)) }}
+          </li>
+          {% endfor %}
+        </ul>
+      </section>
+      {% endif %}
+    </aside>
+  </div>
+
+  {% if more %}
+  <section class="more-stories" aria-labelledby="more-t">
+    <div class="list-head"><h2 id="more-t">Weitere Geschichten</h2></div>
+    <div class="grid-cards" data-loadmore data-page-size="8">
+      {% for r in more %}
+      <a class="gcard" href="{{ story_url(r) }}" data-lm-item data-id="{{ r.id }}">
+        {{ m.media(r, root, badges=false, credit=false) }}
+        <span class="gcard-body">
+          <span class="kick">{{ r.topic }} · {{ r.last_seen | ago(now) }}</span>
+          <strong>{{ r.title }}</strong>
+          {{ m.coverage_line(r) }}
+        </span>
+      </a>
+      {% endfor %}
+      <button type="button" class="btn btn--outline load-more" data-loadmore-btn hidden>Weitere Geschichten laden</button>
+    </div>
+  </section>
+  {% endif %}
+</main>
+{% endblock %}

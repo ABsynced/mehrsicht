@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<style>
+@font-face { font-family: "Newsreader"; font-weight: 700; src: url("{{ fonts }}/newsreader-latin-700-normal.woff2"); }
+@font-face { font-family: "Newsreader"; font-weight: 600; src: url("{{ fonts }}/newsreader-latin-600-normal.woff2"); }
+@font-face { font-family: "Inter"; font-weight: 400; src: url("{{ fonts }}/inter-latin-400-normal.woff2"); }
+@font-face { font-family: "Inter"; font-weight: 700; src: url("{{ fonts }}/inter-latin-700-normal.woff2"); }
+@font-face { font-family: "IBM Plex Mono"; font-weight: 600; src: url("{{ fonts }}/ibm-plex-mono-latin-600-normal.woff2"); }
+@font-face { font-family: "Fraktur"; src: url("{{ fonts }}/unifrakturmaguntia-latin-400-normal.woff2"); }
+* { box-sizing: border-box; margin: 0; }
+body { width: {{ w }}px; height: {{ h }}px; overflow: hidden; font-family: "Inter", sans-serif; color: #0E1116; }
+.media { position: relative; overflow: hidden; background: {{ s.tint }}; }
+.media img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.shape { position: absolute; }
+.credit { position: absolute; right: 18px; bottom: 16px; font-size: 22px; color: #fff; background: rgba(14,17,22,.6); padding: 5px 12px; max-width: 90%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.logo { position: relative; font-family: "Fraktur", serif; line-height: 1; display: inline-block; }
+.logo span { position: absolute; top: 0; }
+.logo .a { left: -3px; color: #2563EB; } .logo .b { left: 3px; color: #EA580C; } .logo .c { position: relative; }
+.bias { display: flex; height: 64px; font-size: 30px; font-weight: 700; }
+.bias div { display: flex; align-items: center; padding: 0 20px; white-space: nowrap; overflow: hidden; }
+.bias .l { background: #2563EB; color: #fff; } .bias .m { background: #E4E7EC; color: #3A404C; justify-content: center; } .bias .r { background: #EA580C; color: #fff; justify-content: flex-end; }
+.title { font-family: "Newsreader", serif; font-weight: 700; line-height: 1.12; letter-spacing: -1px; }
+.stamp { display: inline-block; transform: rotate(-5deg); font-size: 84px; font-weight: 700; letter-spacing: 6px; padding: 16px 40px; border: 10px solid; }
+</style>
+</head>
+<body>
+{% macro bias(p) %}<div class="bias">{% if p.l %}<div class="l" style="flex: {{ p.l }}">L {{ p.l }}%</div>{% endif %}{% if p.m %}<div class="m" style="flex: {{ p.m }}">M {{ p.m }}%</div>{% endif %}{% if p.r %}<div class="r" style="flex: {{ p.r }}">R {{ p.r }}%</div>{% endif %}</div>{% endmacro %}
+{% macro media(style, show_credit=true) %}<div class="media" style="{{ style }}">{% if image %}<img src="{{ image }}">{% else %}{% for sh in shapes %}<div class="shape" style="{{ sh }}"></div>{% endfor %}{% endif %}{% if show_credit %}<span class="credit">{{ credit }}</span>{% endif %}</div>{% endmacro %}
+{% macro logo(size, color="#0E1116") %}<span class="logo" style="font-size: {{ size }}px; color: {{ color }}"><span class="a">Mehrsicht</span><span class="b">Mehrsicht</span><span class="c">Mehrsicht</span></span>{% endmacro %}
+
+{% if kind == "story" %}
+<div style="width: 1080px; height: 1350px; background: #fff; display: flex; flex-direction: column">
+  {{ media("height: 720px; flex: none") }}
+  <div style="flex: 1; padding: 56px 60px; display: flex; flex-direction: column; justify-content: space-between">
+    <div style="font-size: 30px; font-weight: 700; letter-spacing: 3px; color: #5B6270">{{ s.topic | upper }} · {{ s.source_count }} QUELLEN</div>
+    <div class="title" style="font-size: 78px">{{ s.share.title }}</div>
+    {{ bias(s.percents) }}
+    <div style="display: flex; justify-content: space-between; align-items: center">{{ logo(64) }}<span style="font-size: 28px; color: #5B6270">Mehr sehen. Besser verstehen.</span></div>
+  </div>
+</div>
+
+{% elif kind == "factcheck" %}
+<div style="width: 1080px; height: 1350px; position: relative">
+  {{ media("position: absolute; inset: 0", show_credit=false) }}
+  <div style="position: absolute; inset: 0; background: rgba(14,17,22,.82)"></div>
+  <div style="position: absolute; inset: 0; padding: 72px; display: flex; flex-direction: column; justify-content: space-between; color: #fff">
+    <div style="font-size: 32px; font-weight: 700; letter-spacing: 4px; color: #FCA5A5">FAKTENCHECK</div>
+    <div style="display: flex; flex-direction: column; gap: 56px">
+      <div class="title" style="font-size: 84px; font-weight: 600">„{{ fc.claim | trim('„“"') }}“</div>
+      <div><span class="stamp" style="color: {{ stamp_color }}; border-color: {{ stamp_color }}">{{ fc.verdict }}</span></div>
+      <div style="font-size: 38px; line-height: 1.45; color: #D5D9E0">{{ fc.explanation | truncate(170) }}</div>
+    </div>
+    <div style="display: flex; justify-content: space-between; align-items: flex-end; gap: 24px">{{ logo(64, "#fff") }}<span style="font-size: 24px; color: #A7AEBB; text-align: right">Faktencheck: {{ fc.publisher }}<br>Themenbild · {{ credit }}</span></div>
+  </div>
+</div>
+
+{% elif kind == "number" %}
+<div style="width: 1080px; height: 1350px; background: #0E1116; color: #fff; display: flex; flex-direction: column">
+  {{ media("height: 430px; flex: none") }}
+  <div style="flex: 1; padding: 60px 64px; display: flex; flex-direction: column; justify-content: space-between">
+    <div style="font-size: 32px; font-weight: 700; letter-spacing: 4px; color: #93C5FD">ZAHL DES TAGES</div>
+    <div style="font-family: 'IBM Plex Mono', monospace; font-size: {{ 230 if number | length < 7 else 150 }}px; font-weight: 600; line-height: 1; letter-spacing: -6px">{{ number }}</div>
+    <div style="font-size: 44px; line-height: 1.35; color: #D5D9E0">{{ number_label }}</div>
+    {{ logo(64, "#fff") }}
+  </div>
+</div>
+
+{% else %}
+<div style="width: 1200px; height: 630px; background: #fff; display: flex">
+  {{ media("width: 500px; flex: none") }}
+  <div style="flex: 1; padding: 44px 48px; display: flex; flex-direction: column; justify-content: space-between">
+    {{ logo(54) }}
+    <div class="title" style="font-size: 54px">{{ s.share.title }}</div>
+    <div style="display: flex; flex-direction: column; gap: 16px">{{ bias(s.percents) }}<span style="font-size: 24px; color: #5B6270">{{ s.source_count }} Quellen verglichen · {{ s.topic }}</span></div>
+  </div>
+</div>
+{% endif %}
+</body>
+</html>

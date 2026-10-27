@@ -1,0 +1,45 @@
+# Themen, die die KI einer Geschichte zuordnen darf.
+# illustration = Ersatzbild, wenn kein freies Foto gefunden wird
+# commons = Suchbegriffe für Wikimedia Commons (in dieser Reihenfolge probiert)
+# party_keywords = Begriffe, an denen Parteien im Text erkannt werden
+
+topics:
+  Rente:          {illustration: dome,  tint: "#5B7BB8", commons: ["Bundestag Plenarsaal", "Reichstag building Berlin"]}
+  Haushalt:       {illustration: chart, tint: "#6D6A8F", commons: ["Bundesministerium der Finanzen Berlin", "Reichstag building Berlin"]}
+  Migration:      {illustration: dome,  tint: "#7A68A8", commons: ["Bundesamt für Migration und Flüchtlinge Nürnberg"]}
+  Klima:          {illustration: house, tint: "#4E8F72", commons: ["Wärmepumpe", "Windpark Deutschland"]}
+  Wohnen:         {illustration: house, tint: "#3F6FB0", commons: ["Mehrfamilienhaus Berlin", "Wohnhaus Frankfurt am Main"]}
+  Wirtschaft:     {illustration: chart, tint: "#5B6B80", commons: ["Frankfurt am Main Skyline Bankenviertel", "Industrieanlage Deutschland"]}
+  Bildung:        {illustration: chart, tint: "#A25A78", commons: ["Schule Klassenzimmer Deutschland"]}
+  Verteidigung:   {illustration: dome,  tint: "#4A5568", commons: ["Bundesministerium der Verteidigung Bendlerblock"]}
+  Europa:         {illustration: stars, tint: "#1A3E9E", commons: ["European Parliament Strasbourg hemicycle", "Berlaymont building Brussels"]}
+  Handel:         {illustration: chart, tint: "#8A6A3F", commons: ["Containerhafen Hamburg"]}
+  Ausland:        {illustration: stars, tint: "#2A4F8F", commons: ["Auswärtiges Amt Berlin"]}
+  Gesundheit:     {illustration: chart, tint: "#3F7F6A", commons: ["Krankenhaus Deutschland"]}
+  Sonstiges:      {illustration: chart, tint: "#5B6270", commons: []}
+
+# Namen, die der Modus OHNE KI als Themen erkennt (mit KI nennt das Modell sie selbst).
+known_entities: [Bundestag, Bundesregierung, Bundesrat, Bundeswehr, Bundesverfassungsgericht, Kanzleramt,
+  Bayern, Berlin, Hessen, Frankfurt, Sachsen, Nordrhein-Westfalen, Mittelstand, Gewerkschaften,
+  EU, EU-Kommission, Europäisches Parlament, Brüssel, EZB, Nato, Frankreich, Polen, Italien, Spanien,
+  Niederlande, Österreich, Ukraine, Russland, USA, China, Mercosur, Macron, Meloni, Trump, Putin, Selenskyj]
+
+party_keywords:
+  CDU:    ["CDU", "CSU", "Union", "Merz", "Söder"]
+  SPD:    ["SPD", "Sozialdemokrat"]
+  GRUENE: ["Grüne", "Grünen", "Bündnis 90"]
+  AFD:    ["AfD"]
+  LINKE:  ["Linke", "Linkspartei"]
+  FDP:    ["FDP", "Liberale"]
+  BSW:    ["BSW", "Wagenknecht"]
+  FW:     ["Freie Wähler"]
+  SSW:    ["SSW"]
+  # Fraktionen im Europäischen Parlament
+  EPP:    ["EVP", "EPP", "Europäische Volkspartei"]
+  SD:     ["S&D", "Sozialdemokraten"]
+  RENEW:  ["Renew", "Liberalen"]
+  GREENS: ["Grüne/EFA", "Grünen im EU-Parlament"]
+  ECR:    ["EKR", "ECR", "Meloni"]
+  PFE:    ["Patrioten für Europa", "PfE", "Orbán", "Le Pen"]
+  ESN:    ["ESN", "Europa der Souveränen Nationen"]
+  LEFT:   ["Linksfraktion", "GUE/NGL"]

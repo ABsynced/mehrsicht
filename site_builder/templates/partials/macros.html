@@ -1,0 +1,128 @@
+{# Reusable pieces of the page. Import with: {% import "partials/macros.html" as m %} #}
+
+{# The logo. translate="no" stops browsers from auto-translating "Mehrsicht"
+   (that produced the broken "Multiple views views"). The blue/orange copies are
+   drawn by CSS from data-text, so there is only ONE word in the page. #}
+{% macro logo(href, light=false, size=32) -%}
+<a class="logo notranslate{% if light %} logo--light{% endif %}" translate="no" href="{{ href }}" style="font-size: {{ size }}px" data-text="Mehrsicht" aria-label="Mehrsicht – Startseite">Mehrsicht</a>
+{%- endmacro %}
+
+{% macro flag(code) -%}
+{% if code == "eu" %}{% include "partials/flag_eu.svg" %}{% else %}{% include "partials/flag_de.svg" %}{% endif %}
+{%- endmacro %}
+
+{% macro media(story, root, cls="", badges=true, credit=true) -%}
+{% set img = story.image %}
+{% set small = img and img.w and img.w < 700 %}
+<div class="media {{ cls }}{% if small %} media--small{% endif %}" style="--tint: {{ story.tint }}{% if small %}; --bg: url('{{ root }}{{ img.src }}'){% endif %}">
+  {% if img %}
+    <img src="{{ root }}{{ img.src }}" alt="" loading="lazy"{% if img.w %} width="{{ img.w }}" height="{{ img.h }}"{% endif %}>
+  {% else %}
+    {% for s in shapes(story.illustration) %}<div class="shape" style="{{ s }}"></div>{% endfor %}
+  {% endif %}
+  {% if badges %}
+  <div class="badges">
+    <span class="badge">{{ story.topic }}</span>
+    {% set bad = story.factchecks | selectattr("verdict", "in", ["FALSCH", "IRREFÜHREND", "KONTEXT FEHLT"]) | list %}
+    {% if bad %}<span class="badge badge--alert">{{ bad | length }} {{ "Faktencheck" if bad | length == 1 else "Faktenchecks" }}</span>{% endif %}
+  </div>
+  {% endif %}
+  {% if credit %}
+    <span class="credit">{% if img %}{{ img.credit }}{% else %}Illustration: Mehrsicht{% endif %}</span>
+  {% endif %}
+</div>
+{%- endmacro %}
+
+{# Big photo with the headline written inside it (dark fade at the bottom). #}
+{% macro feature_media(story, root, tag="h3") -%}
+<div class="feature-media">
+  {{ media(story, root, badges=false, credit=false) }}
+  {% set bad = story.factchecks | selectattr("verdict", "in", ["FALSCH", "IRREFÜHREND", "KONTEXT FEHLT"]) | list %}
+  {% if bad %}<div class="badges"><span class="badge badge--alert">{{ bad | length }} {{ "Faktencheck" if bad | length == 1 else "Faktenchecks" }}</span></div>{% endif %}
+  <div class="feature-overlay">
+    <i class="feature-bar" aria-hidden="true"></i>
+    <{{ tag }} class="feature-title">{{ story.title }}</{{ tag }}>
+    <span class="feature-sub">{{ story.source_count }} Quellen · {{ story.articles[0].source_name }}</span>
+  </div>
+</div>
+{%- endmacro %}
+
+{# Photo credit shown under a picture, like in newspapers. #}
+{% macro credit(story) -%}
+<span class="feature-credit">{% if story.image %}{{ story.image.credit }}{% else %}Illustration: Mehrsicht{% endif %}</span>
+{%- endmacro %}
+
+{% macro bias(p, size="", labels=true) -%}
+<div class="bias {{ size }}" role="img" aria-label="Berichterstattung: {{ p.l }} Prozent links, {{ p.m }} Prozent Mitte, {{ p.r }} Prozent rechts">
+  {% if p.l %}<div class="l" style="flex: {{ p.l }}">{% if labels %}L {{ p.l }}%{% endif %}</div>{% endif %}
+  {% if p.m %}<div class="m" style="flex: {{ p.m }}">{% if labels %}M {{ p.m }}%{% endif %}</div>{% endif %}
+  {% if p.r %}<div class="r" style="flex: {{ p.r }}">{% if labels %}R {{ p.r }}%{% endif %}</div>{% endif %}
+</div>
+{%- endmacro %}
+
+{# "▬▬ 50 % rechts · 8 Quellen" – the small coverage line under story titles. #}
+{% macro coverage_line(story) -%}
+{%- set p = story.percents -%}
+{%- set top = [p.l, p.m, p.r] | max -%}
+<span class="cov-line">
+  <span class="cov-mini" aria-hidden="true"><i class="l" style="flex: {{ p.l }}"></i><i class="m" style="flex: {{ p.m }}"></i><i class="r" style="flex: {{ p.r }}"></i></span>
+  {% if top == p.l and p.l > p.r %}{{ p.l }} % links{% elif top == p.r and p.r > p.l %}{{ p.r }} % rechts{% else %}{{ p.m }} % Mitte{% endif %} · {{ story.source_count }} Quellen
+</span>
+{%- endmacro %}
+
+{# Outlet logo (downloaded icon) or its first letter in a circle. #}
+{% macro outlet_avatar(source, root, size=28) -%}
+{%- set name = source.name or source.source_name or "?" -%}
+<span class="avatar" style="width: {{ size }}px; height: {{ size }}px" title="{{ name }}">
+  {%- if source.logo %}<img src="{{ root }}{{ source.logo }}" alt="" loading="lazy">{% else %}<span class="initial" style="font-size: {{ (size * 0.45) | round | int }}px">{{ name[:1] | upper }}</span>{% endif -%}
+</span>
+{%- endmacro %}
+
+{# Topic picture: photo of its newest story, or its first letter. #}
+{% macro topic_avatar(t, root, size=40) -%}
+<span class="avatar avatar--topic" style="width: {{ size }}px; height: {{ size }}px">
+  {%- if t.image %}<img src="{{ root }}{{ t.image }}" alt="" loading="lazy">{% else %}<span class="initial" style="font-size: {{ (size * 0.42) | round | int }}px">{{ t.name[:1] | upper }}</span>{% endif -%}
+</span>
+{%- endmacro %}
+
+{% macro follow_button(slug, name, path, cls="") -%}
+<button type="button" class="follow {{ cls }}" data-follow="{{ slug }}" data-name="{{ name }}" data-path="{{ path }}" aria-pressed="false" aria-label="{{ name }} folgen">
+  <svg class="i-plus" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+  <svg class="i-check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M5 12l5 5 9-10"/></svg>
+</button>
+{%- endmacro %}
+
+{% macro lean_badge(lean) -%}
+{%- if lean is not defined or lean is none -%}<span class="lean-badge lean-badge--x">Ohne Einordnung</span>
+{%- elif lean <= -2 -%}<span class="lean-badge lean-badge--l2">Links</span>
+{%- elif lean == -1 -%}<span class="lean-badge lean-badge--l1">Eher links</span>
+{%- elif lean == 0 -%}<span class="lean-badge lean-badge--m">Mitte</span>
+{%- elif lean == 1 -%}<span class="lean-badge lean-badge--r1">Eher rechts</span>
+{%- else -%}<span class="lean-badge lean-badge--r2">Rechts</span>{%- endif -%}
+{%- endmacro %}
+
+{% macro info(text) -%}
+<span class="info" tabindex="0" role="note" aria-label="{{ text }}">i<span class="tip">{{ text }}</span></span>
+{%- endmacro %}
+
+{% macro party_chips(story, parties) -%}
+{% set known = story.parties | select("in", parties) | list %}
+{% if known %}
+<div class="pchips">
+  {% for pid in known %}<span><i class="dot" style="--party: {{ parties[pid].color }}"></i>{{ parties[pid].name }}</span>{% endfor %}
+</div>
+{% endif %}
+{%- endmacro %}
+
+{% macro verdict(fc) -%}
+<span class="verdict verdict--{{ fc.verdict_class }}">{{ fc.verdict }}</span>
+{%- endmacro %}
+
+{% macro lean_label(story) -%}
+{%- set p = story.percents -%}
+{%- set top = [p.l, p.m, p.r] | max -%}
+{%- if top - ([p.l, p.m, p.r] | min) < 12 -%}Ausgewogen berichtet
+{%- elif top == p.l -%}Mehrheit der Quellen: links
+{%- elif top == p.r -%}Mehrheit der Quellen: rechts
+{%- else -%}Mehrheit der Quellen: Mitte{%- endif -%}
+{%- endmacro %}
