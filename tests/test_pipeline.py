@@ -434,7 +434,7 @@ def test_ai_choice_is_used(monkeypatch):
     class PickSecond:
         available = True
         def json(self, system, user, max_tokens=0, fast=False):
-            return {"pick": 2}
+            return {"S1": {"pick": 2, "query": "supermarket Berlin"}}
 
     story = {"id": "s2", "topic": "Wirtschaft", "title": "Supermarkt in Berlin", "summary": "",
              "entities": [], "location": None}
@@ -485,3 +485,28 @@ def test_headline_words_and_strict_topic_photos(monkeypatch):
     got = images.topic_fallbacks(story, {})
     assert [g["remote_url"] for g in got] == ["u2", "u2"] or [g["remote_url"] for g in got][0] == "u2"
     assert all(g["remote_url"] != "u1" for g in got)
+
+
+def test_ai_search_words_when_nothing_fits(monkeypatch):
+    """The AI rejects all candidates and gives its own search words; a matching photo is used."""
+    images = _patch_web(monkeypatch, {"Supermarkt": "Supermarkt_Kuehlregal.jpg"})
+    monkeypatch.setattr(images, "search_commons", lambda q: [
+        {"remote_url": "u-royal", "title": "Norwegian royal family 2023.jpg", "description": "", "author": "a",
+         "licence": "CC BY 4.0", "page_url": "p", "kind": "free", "date": "2023"}] if "royal" in q else [])
+
+    class NoneFits:
+        available = True
+        def json(self, system, user, max_tokens=0, fast=False):
+            return {"S1": {"pick": 0, "query": "Norwegian royal family"}}
+
+    story = {"id": "s9", "topic": "Ausland", "title": "Norwegische Königsfamilie: Gericht entscheidet", "summary": "",
+             "entities": [], "location": None}
+    got = images.choose_images([story], {}, set(), llm=NoneFits())
+    assert got["s9"]["how"] == "ki-suche" and "royal" in got["s9"]["title"]
+
+
+def test_historical_photos_go_last():
+    from pipeline.images import photo_year
+    assert photo_year({"title": "München 1 Milliarde 1923.jpg"}) == 1923
+    assert photo_year({"date": "2024-05-01", "title": "x.jpg"}) == 2024
+    assert photo_year({"title": "x.jpg"}) is None

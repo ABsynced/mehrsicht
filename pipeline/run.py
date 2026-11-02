@@ -17,7 +17,7 @@ from .analyze import analyse, build_story
 from .cluster import cluster
 from .factcheck import disinfo_of_the_moment
 from .fetch import fetch_all
-from .images import needs_new_image, pick_image
+from .images import choose_images, needs_new_image, pick_image
 from .llm import LLM
 from .logos import fetch_all_logos
 from .trending import build_topics, trending
@@ -92,14 +92,7 @@ def run_edition(edition: str, offline: bool) -> dict:
     # pictures that stay: nobody else may get them
     used_images = {s["image"].get("remote_url") for s in old_stories.values()
                    if s.get("image") and not needs_new_image(s["image"])}
-    image_ai_left = [config.AI_MAX_IMAGE_PICKS]  # the AI chooses at most this many photos per run
-
-    def choose_image(story: dict) -> dict | None:
-        use_ai = image_ai_left[0] > 0
-        image = pick_image(story, topic_cfg, offline, used_images, llm if use_ai else None)
-        if use_ai and llm.available:
-            image_ai_left[0] -= 1
-        return image
+    pending: list[tuple[dict, dict | None]] = []  # (story, old picture to keep if nothing better is found)
 
     updated, ai_requests, reused = [], 0, 0
     for group in groups:
@@ -126,8 +119,12 @@ def run_edition(edition: str, offline: bool) -> dict:
             story["analysed_sources"] = old.get("analysed_sources", story["source_count"])
 
         keep_image = old and not needs_new_image(old.get("image"))
-        story["image"] = old["image"] if keep_image else (
-            choose_image(story) or (old.get("image") if old and (old.get("image") or {}).get("kind") != "press" else None))
+        if keep_image:
+            story["image"] = old["image"]
+        else:
+            fallback = old.get("image") if old and (old.get("image") or {}).get("kind") != "press" else None
+            story["image"] = fallback
+            pending.append((story, fallback))
         story["updated_at"] = now.isoformat(timespec="minutes")
         updated.append(story)
 
@@ -138,8 +135,16 @@ def run_edition(edition: str, offline: bool) -> dict:
     # newest first, then (stable sort) missing photos and weak topic photos before everything else
     repick.sort(key=lambda s: s.get("last_seen") or "", reverse=True)
     repick.sort(key=lambda s: 0 if not s.get("image") or s["image"].get("how") == "themenfoto" else 1)
-    for s in repick[:config.MAX_IMAGE_REPICKS]:
-        s["image"] = choose_image(s) or s.get("image")
+    pending += [(s, s.get("image")) for s in repick[:config.MAX_IMAGE_REPICKS]]
+    if pending and not offline:
+        need = [s for s, _ in pending]
+        if "feed" in config.IMAGE_SOURCES:  # local use: press photos first, one story at a time
+            chosen = {s["id"]: img for s in need if (img := pick_image(s, topic_cfg, offline, used_images, llm))}
+        else:  # public site: free photos, the AI decides for 8 stories per request
+            chosen = choose_images(need, topic_cfg, used_images, llm)
+        for s, fallback in pending:
+            s["image"] = chosen.get(s["id"]) or fallback
+        log.info("Neue Fotos: %d von %d Geschichten", len(chosen), len(pending))
     if not offline:
         stories_all = updated + kept
         with_photo = sum(1 for s in stories_all if s.get("image"))

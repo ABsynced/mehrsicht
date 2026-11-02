@@ -175,6 +175,7 @@ def _commons_image(page: dict, min_width: int = 900, allow_portrait: bool = Fals
         "licence": licence,
         "title": title.removeprefix("File:"),
         "description": clean_html(meta.get("ImageDescription", {}).get("value", ""))[:160],
+        "date": clean_html((meta.get("DateTimeOriginal") or meta.get("DateTime") or {}).get("value", ""))[:40],
         "kind": "free",
     }
 
@@ -357,72 +358,137 @@ def topic_fallbacks(story: dict, topic_cfg: dict) -> list[dict]:
     return out
 
 
-def ai_choose(story: dict, cands: list[dict], llm) -> int | None:
-    """Let the AI pick the picture that fits the story. Returns an index, -1 for 'none fits', None if unsure."""
-    if not llm or not getattr(llm, "available", False) or len(cands) < 2:
-        return None
-    lines = []
-    for n, c in enumerate(cands[:10], 1):
-        parts = [f"Artikel: {c['article']}" if c.get("article") else "", f"Datei: {c['title']}",
-                 f"Beschreibung: {c['description']}" if c.get("description") else ""]
-        lines.append(f"{n}. " + " | ".join(p for p in parts if p))
-    system = ("Du bist Bildredakteur. Wähle das Foto, das zu dieser Nachricht passt: den Ort, das Ereignis, "
-              "den Gegenstand oder die Hauptperson der Schlagzeile. Wähle KEINE Personen, die in der Schlagzeile "
-              "nicht vorkommen, und keine Bilder, die nur zufällig ein Wort teilen. "
-              "Antworte als JSON: {\"pick\": Nummer} oder {\"pick\": 0}, wenn keins passt.")
-    user = f"Schlagzeile: {story['title']}\nWorum es geht: {story.get('summary') or ''}\n\nFotos:\n" + "\n".join(lines)
-    answer = llm.json(system, user, max_tokens=400, fast=True) or {}
-    try:
-        pick = int(answer.get("pick")) if isinstance(answer, dict) else None
-    except (TypeError, ValueError):
-        return None
-    if pick is None or pick < 0 or pick > min(len(cands), 10):
-        return None
-    return pick - 1  # 0 -> -1 = none fits
+OLD_YEAR = 1980  # photos from before this year are history, not news (unless the AI picks one on purpose)
 
 
-IMAGE_VERSION = 4  # new pictures get this number
-KEEP_FROM_VERSION = 3  # specific pictures from this version on are kept; topic photos need version 4
+def photo_year(c: dict) -> int | None:
+    for text in (c.get("date") or "", c.get("title") or ""):
+        m = re.search(r"\b(18\d\d|19\d\d|20\d\d)\b", text)
+        if m:
+            return int(m.group(1))
+    return None
 
 
-def _take(story: dict, cand: dict, used: set[str], allow_reuse: bool = False) -> dict | None:
+def ranked_candidates(story: dict, topic_cfg: dict, used: set[str]) -> list[dict]:
+    """Unused candidates, best word match first; historical photos at the end."""
+    cands = [c for c in candidates(story, topic_cfg) if c["remote_url"] not in used]
+    order = {"wikipedia-thema": 0, "wikipedia-suche": 1, "commons-suche": 2}
+    cands.sort(key=lambda c: ((photo_year(c) or 3000) < OLD_YEAR, -relevance(story, c), order.get(c["how"], 3)))
+    return cands
+
+
+AI_SYSTEM = (
+    "Du bist Bildredakteur einer Nachrichtenseite. Für jede Nachricht bekommst du nummerierte freie Fotos. "
+    "Wähle das Foto, das den Ort, das Ereignis, den Gegenstand oder die Hauptperson der Schlagzeile zeigt. "
+    "Wähle KEINE Personen, die in der Schlagzeile nicht vorkommen, keine historischen Bilder ohne Bezug "
+    "und keine Bilder, die nur zufällig ein Wort teilen. Wenn keins passt: pick 0. "
+    "Gib außerdem immer 'query' an: 2-5 ENGLISCHE Suchwörter für ein passendes Foto auf Wikimedia Commons "
+    "(Ort, Gebäude, Gegenstand oder Symbol des Themas; eine Person nur, wenn die Nachricht von ihr handelt). "
+    'Antwort als JSON: {"S1": {"pick": 2, "query": "Warsaw constitutional tribunal building"}, "S2": {...}}'
+)
+
+
+def _describe(c: dict) -> str:
+    parts = [f"Artikel: {c['article']}" if c.get("article") else "", f"Datei: {c['title']}",
+             f"Beschreibung: {c['description'][:110]}" if c.get("description") else "",
+             f"Jahr: {photo_year(c)}" if photo_year(c) else ""]
+    return " | ".join(p for p in parts if p)
+
+
+def ai_choose_batch(jobs: list[tuple[dict, list[dict]]], llm, per_request: int = 8) -> dict[str, dict]:
+    """One AI request decides for up to 8 stories: {story_id: {"pick": index or -1, "query": str}}."""
+    if not llm or not getattr(llm, "available", False):
+        return {}
+    decisions = {}
+    for start in range(0, len(jobs), per_request):
+        chunk = jobs[start:start + per_request]
+        blocks = []
+        for n, (story, cands) in enumerate(chunk, 1):
+            lines = [f"  {i}. {_describe(c)}" for i, c in enumerate(cands[:6], 1)] or ["  (keine Fotos gefunden)"]
+            blocks.append(f"### S{n}\nSchlagzeile: {story['title']}\nWorum es geht: {(story.get('summary') or '')[:200]}\nFotos:\n" + "\n".join(lines))
+        answer = llm.json(AI_SYSTEM, "\n\n".join(blocks), max_tokens=1200, fast=True) or {}
+        if not isinstance(answer, dict):
+            continue
+        for n, (story, cands) in enumerate(chunk, 1):
+            row = answer.get(f"S{n}") or {}
+            if not isinstance(row, dict):
+                continue
+            try:
+                pick = int(row.get("pick") or 0)
+            except (TypeError, ValueError):
+                pick = 0
+            pick = pick - 1 if 1 <= pick <= min(len(cands), 6) else -1
+            query = str(row.get("query") or "").strip()[:80]
+            decisions[story["id"]] = {"pick": pick, "query": query}
+    return decisions
+
+
+IMAGE_VERSION = 5      # new pictures get this number
+KEEP_FROM_VERSION = 5  # older choices are made again once (a limited number per run)
+
+
+def _take(story: dict, cand: dict, used: set[str], allow_reuse: bool = False, how: str | None = None) -> dict | None:
     if cand["remote_url"] in used and not allow_reuse:
         return None
     got = download(cand["remote_url"], story["id"])
     if not got:
         return None
     used.add(cand["remote_url"])
-    image = {k: v for k, v in cand.items() if k not in ("description",)}
+    image = {k: v for k, v in cand.items() if k not in ("description", "date")}
     image.update(got)
     image["v"] = IMAGE_VERSION
+    if how:
+        image["how"] = how
     image["credit"] = f"Foto: {image['author']} / {image['licence']} · Wikimedia Commons"
     return image
 
 
-def from_free_sources(story: dict, topic_cfg: dict, used: set[str], llm=None) -> dict | None:
-    cands = [c for c in candidates(story, topic_cfg) if c["remote_url"] not in used]
-    # Most relevant first; Wikipedia hits win ties (they show the real place/person/thing).
-    order = {"wikipedia-thema": 0, "wikipedia-suche": 1, "commons-suche": 2}
-    cands.sort(key=lambda c: (-relevance(story, c), order.get(c["how"], 3)))
-    choice = ai_choose(story, cands, llm)
-    if choice is not None and choice >= 0:
-        image = _take(story, cands[choice], used)
-        if image:
-            image["how"] += "+ki"
-            return image
-    if choice is None:  # no AI decision: trust the word match
-        for c in cands:
-            if relevance(story, c) <= 0:
-                break
-            image = _take(story, c, used)
+def _matches_query(c: dict, query: str) -> bool:
+    words = _words(query)
+    pic = _words(" ".join([c.get("title") or "", c.get("description") or ""]))
+    return any(w == p or (len(w) >= 5 and len(p) >= 5 and (w.startswith(p[:6]) or p.startswith(w[:6]))) for w in words for p in pic)
+
+
+def choose_images(stories: list[dict], topic_cfg: dict, used: set[str], llm=None) -> dict[str, dict]:
+    """Choose a free photo for each story. Returns {story_id: image}."""
+    jobs = [(s, ranked_candidates(s, topic_cfg, used)) for s in stories]
+    decisions = ai_choose_batch(jobs, llm)
+    chosen = {}
+    for story, cands in jobs:
+        d = decisions.get(story["id"])
+        image = None
+        # d["pick"] points into exactly the list the AI saw; _take refuses a photo another story took meanwhile
+        if d and 0 <= d["pick"] < len(cands):
+            image = _take(story, cands[d["pick"]], used)
             if image:
-                return image
-    # Nothing specific fits: a generic photo for the topic (may repeat), so no story is left without a picture.
-    for c in topic_fallbacks(story, topic_cfg):
-        image = _take(story, c, used, allow_reuse=True)
+                image["how"] += "+ki"
+        if not image and d and d.get("query"):
+            # the AI's own search words for a fitting photo
+            for c in search_commons(d["query"])[:8]:
+                if _matches_query(c, d["query"]) and (photo_year(c) or 3000) >= OLD_YEAR:
+                    image = _take(story, {**c, "article": ""}, used, how="ki-suche")
+                    if image:
+                        break
+        if not image and not d:  # no AI available: trust a clear word match with a recent photo
+            for c in cands:
+                if relevance(story, c) <= 0:
+                    break
+                if (photo_year(c) or 3000) >= OLD_YEAR:
+                    image = _take(story, c, used)
+                    if image:
+                        break
+        if not image:  # nothing specific fits: a generic photo for the topic (may repeat)
+            for c in topic_fallbacks(story, topic_cfg):
+                image = _take(story, c, used, allow_reuse=True)
+                if image:
+                    break
         if image:
-            return image
-    return None
+            chosen[story["id"]] = image
+    return chosen
+
+
+def from_free_sources(story: dict, topic_cfg: dict, used: set[str], llm=None) -> dict | None:
+    return choose_images([story], topic_cfg, used, llm).get(story["id"])
 
 
 def needs_new_image(image: dict | None) -> bool:
@@ -432,10 +498,7 @@ def needs_new_image(image: dict | None) -> bool:
         return True
     if image.get("kind") == "press":
         return "feed" not in config.IMAGE_SOURCES
-    v = image.get("v") or 0
-    if image.get("how") == "themenfoto":
-        return v < IMAGE_VERSION
-    return v < KEEP_FROM_VERSION
+    return (image.get("v") or 0) < KEEP_FROM_VERSION
 
 
 def pick_image(story: dict, topic_cfg: dict, offline: bool, used: set[str] | None = None, llm=None) -> dict | None:
