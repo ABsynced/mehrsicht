@@ -157,7 +157,7 @@ def _commons_image(page: dict, min_width: int = 900, allow_portrait: bool = Fals
     meta = info.get("extmetadata", {})
     licence = meta.get("LicenseShortName", {}).get("value", "")
     title = page.get("title", "")
-    if not licence_ok(licence) or title.lower().endswith((".svg", ".gif", ".tif", ".tiff", ".pdf")):
+    if not licence_ok(licence) or title.lower().endswith((".svg", ".gif", ".tif", ".tiff", ".pdf", ".webm", ".ogv")):
         return None
     if allow_portrait:
         width = info.get("width", 0)
@@ -174,24 +174,31 @@ def _commons_image(page: dict, min_width: int = 900, allow_portrait: bool = Fals
         "author": clean_html(meta.get("Artist", {}).get("value", "Unbekannt"))[:80],
         "licence": licence,
         "title": title.removeprefix("File:"),
+        "description": clean_html(meta.get("ImageDescription", {}).get("value", ""))[:160],
         "kind": "free",
     }
 
 
+def _get(url: str, params: dict) -> dict:
+    try:
+        resp = requests.get(url, params=params, timeout=20, headers={"User-Agent": config.USER_AGENT})
+        resp.raise_for_status()
+        return resp.json()
+    except (requests.RequestException, ValueError) as exc:
+        log.info("Bildsuche fehlgeschlagen (%s): %s", url[:40], exc)
+        return {}
+
+
 def search_commons(query: str) -> list[dict]:
-    """All usable pictures for a search, best first."""
-    params = {
+    """All usable pictures for a Commons search, best first."""
+    if not query:
+        return []
+    data = _get(API, {
         "action": "query", "format": "json", "generator": "search",
         "gsrsearch": f"filetype:bitmap {query}", "gsrnamespace": 6, "gsrlimit": 20,
         "prop": "imageinfo", "iiprop": "url|size|extmetadata", "iiurlwidth": 1200,
-    }
-    try:
-        resp = requests.get(API, params=params, timeout=20, headers={"User-Agent": config.USER_AGENT})
-        resp.raise_for_status()
-        pages = resp.json().get("query", {}).get("pages", {})
-    except (requests.RequestException, ValueError) as exc:
-        log.warning("Commons-Suche fehlgeschlagen (%s): %s", query, exc)
-        return []
+    })
+    pages = data.get("query", {}).get("pages", {})
     found = [r for r in (_commons_image(p) for p in pages.values()) if r]
     return [img for _, img in sorted(found, key=lambda f: f[0], reverse=True)]
 
@@ -202,96 +209,206 @@ WIKI_API = "https://{lang}.wikipedia.org/w/api.php"
 
 def wiki_lead_image(name: str, lang: str = "de") -> str | None:
     """File name of the main picture of a Wikipedia article – only if it is freely licensed."""
-    params = {"action": "query", "format": "json", "titles": name, "prop": "pageimages",
-              "piprop": "name", "pilicense": "free", "redirects": 1}
-    try:
-        resp = requests.get(WIKI_API.format(lang=lang), params=params, timeout=20,
-                            headers={"User-Agent": config.USER_AGENT})
-        resp.raise_for_status()
-        pages = resp.json().get("query", {}).get("pages", {})
-    except (requests.RequestException, ValueError):
-        return None
-    for page in pages.values():
+    data = _get(WIKI_API.format(lang=lang), {"action": "query", "format": "json", "titles": name,
+                                             "prop": "pageimages", "piprop": "name", "pilicense": "free", "redirects": 1})
+    for page in data.get("query", {}).get("pages", {}).values():
         if page.get("pageimage"):
             return page["pageimage"]
     return None
 
 
-def commons_file(file_name: str) -> dict | None:
-    """Licence, author and address of one Commons file (people may be portrait format)."""
-    params = {"action": "query", "format": "json", "titles": f"File:{file_name}", "prop": "imageinfo",
-              "iiprop": "url|size|extmetadata", "iiurlwidth": 1200}
-    try:
-        resp = requests.get(API, params=params, timeout=20, headers={"User-Agent": config.USER_AGENT})
-        resp.raise_for_status()
-        pages = resp.json().get("query", {}).get("pages", {})
-    except (requests.RequestException, ValueError):
-        return None
-    for page in pages.values():
-        got = _commons_image(page, min_width=500, allow_portrait=True)
-        if got:
-            return got[1]
-    return None
+def wiki_search_images(query: str, lang: str = "de", limit: int = 6) -> list[tuple[str, str]]:
+    """Search Wikipedia; return (article title, free lead image file) for the best matches."""
+    if not query:
+        return []
+    data = _get(WIKI_API.format(lang=lang), {
+        "action": "query", "format": "json", "generator": "search", "gsrsearch": query,
+        "gsrlimit": limit, "gsrnamespace": 0, "prop": "pageimages", "piprop": "name", "pilicense": "free"})
+    pages = sorted(data.get("query", {}).get("pages", {}).values(), key=lambda p: p.get("index", 99))
+    return [(p.get("title", ""), p["pageimage"]) for p in pages if p.get("pageimage")]
 
 
-def from_wikipedia(story: dict, used: set[str]) -> dict | None:
-    """Main photo of the Wikipedia article about a person, place or organisation in the story."""
-    names = [n for n in ([story.get("location")] + list(story.get("entities") or [])) if isinstance(n, str) and n.strip()]
-    seen = set()
-    for name in names[:8]:
-        if name.lower() in seen:
-            continue
-        seen.add(name.lower())
-        for lang in ("de", "en"):
-            file_name = wiki_lead_image(name, lang)
-            if not file_name:
-                continue
-            image = commons_file(file_name)
-            if not image or image["remote_url"] in used:
-                continue
-            got = download(image["remote_url"], story["id"])
+def commons_files(file_names: list[str]) -> dict[str, dict]:
+    """Licence, author, description and address for many Commons files in one request."""
+    out = {}
+    names = list(dict.fromkeys(f for f in file_names if f))
+    for i in range(0, len(names), 40):
+        chunk = names[i:i + 40]
+        data = _get(API, {"action": "query", "format": "json", "titles": "|".join(f"File:{n}" for n in chunk),
+                          "prop": "imageinfo", "iiprop": "url|size|extmetadata", "iiurlwidth": 1200})
+        q = data.get("query", {})
+        # the API may normalise names ("_" -> " "); map them back
+        norm = {n["to"]: n["from"] for n in q.get("normalized", [])}
+        for page in q.get("pages", {}).values():
+            got = _commons_image(page, min_width=500, allow_portrait=True)
             if got:
-                used.add(image["remote_url"])
-                image.update(got)
-                image["credit"] = f"Foto: {image['author']} / {image['licence']} · Wikimedia Commons"
-                return image
-            break
-    return None
+                key = norm.get(page.get("title", ""), page.get("title", "")).removeprefix("File:")
+                out[key] = got[1]
+    return out
 
 
+def commons_file(file_name: str) -> dict | None:
+    return commons_files([file_name]).get(file_name)
+
+
+# ---------------------------------------------------------------- choosing
 def keyword_query(story: dict) -> str:
     """Search words from the headline, e.g. 'Proteste Frankreich' (for stories without AI query)."""
     words = [w for w in re.findall(r"[A-ZÄÖÜ][\wäöüß\-]{3,}", story["title"]) if w.lower() not in STOPWORDS]
-    return " ".join(words[:3])
+    return " ".join(words[:4])
 
 
-def from_commons(story: dict, topic_cfg: dict, used: set[str]) -> dict | None:
-    # 1) the photo of the person/place/organisation the story is about (Wikipedia)
-    image = from_wikipedia(story, used)
-    if image:
-        return image
-    # 2) a search on Wikimedia Commons, 3) the topic's default search words
-    queries = [q for q in (story.get("commons_query"), keyword_query(story)) if q]
-    queries += topic_cfg.get(story["topic"], {}).get("commons", [])
-    for query in queries:
-        for image in search_commons(query):
-            if image["remote_url"] in used:
-                continue  # already shown on another story
-            got = download(image["remote_url"], story["id"])
-            if got:
-                used.add(image["remote_url"])
-                image.update(got)
-                image["credit"] = f"Foto: {image['author']} / {image['licence']} · Wikimedia Commons · bearbeitet"
+def _words(text: str) -> set[str]:
+    from .textutil import tokens
+    return tokens(text or "")
+
+
+def relevance(story: dict, cand: dict) -> float:
+    """How well a picture matches the story: shared words between the headline (+ main names)
+    and the picture's article title / file name / description. German compounds count when
+    one word starts with the other ('Supermarkt' ~ 'Supermarktkühlanlagen')."""
+    story_words = _words(story["title"] + " " + (story.get("summary") or ""))
+    pic_words = _words(" ".join([cand.get("article") or "", cand.get("title") or "", cand.get("description") or ""]))
+    if not story_words or not pic_words:
+        return 0.0
+    hits = 0
+    for w in story_words:
+        if any(w == p or (len(w) >= 5 and len(p) >= 5 and (w.startswith(p) or p.startswith(w))) for p in pic_words):
+            hits += 1
+    return hits / len(story_words) ** 0.5
+
+
+def candidates(story: dict, topic_cfg: dict) -> list[dict]:
+    """Collect possible free photos for a story (no downloads yet), most specific first."""
+    title_q = keyword_query(story)
+    ai_q = story.get("commons_query")
+    in_title = [e for e in (story.get("entities") or []) if isinstance(e, str) and e.lower() in story["title"].lower()]
+    others = [e for e in (story.get("entities") or []) if isinstance(e, str) and e not in in_title]
+    names = list(dict.fromkeys([n for n in in_title + ([story.get("location")] if story.get("location") else []) + others if n]))[:6]
+
+    wiki_hits: list[tuple[str, str, str]] = []   # (article, file, how)
+    for lang, query in (("de", title_q), ("de", ai_q), ("en", ai_q)):
+        for article, file_name in wiki_search_images(query, lang):
+            wiki_hits.append((article, file_name, "wikipedia-suche"))
+    for name in names:
+        for lang in ("de", "en"):
+            file_name = wiki_lead_image(name, lang)
+            if file_name:
+                wiki_hits.append((name, file_name, "wikipedia-thema"))
+                break
+    files = commons_files([f for _, f, _ in wiki_hits])
+    cands, seen = [], set()
+    for article, file_name, how in wiki_hits:
+        info = files.get(file_name)
+        if info and info["remote_url"] not in seen:
+            seen.add(info["remote_url"])
+            cands.append({**info, "article": article, "how": how})
+    for query in (ai_q, title_q):
+        for info in search_commons(query)[:5]:
+            if info["remote_url"] not in seen:
+                seen.add(info["remote_url"])
+                cands.append({**info, "article": "", "how": "commons-suche"})
+    return cands
+
+
+def topic_fallbacks(story: dict, topic_cfg: dict) -> list[dict]:
+    """Generic but fitting photos for the topic (last resort, may repeat across stories)."""
+    out = []
+    for query in topic_cfg.get(story["topic"], {}).get("commons", []) + ["Zeitungen Kiosk", "Bundestag Reichstagsgebäude"]:
+        out += [{**c, "article": "", "how": "themenfoto"} for c in search_commons(query)[:4]]
+        if len(out) >= 8:
+            break
+    return out
+
+
+def ai_choose(story: dict, cands: list[dict], llm) -> int | None:
+    """Let the AI pick the picture that fits the story. Returns an index, -1 for 'none fits', None if unsure."""
+    if not llm or not getattr(llm, "available", False) or len(cands) < 2:
+        return None
+    lines = []
+    for n, c in enumerate(cands[:10], 1):
+        parts = [f"Artikel: {c['article']}" if c.get("article") else "", f"Datei: {c['title']}",
+                 f"Beschreibung: {c['description']}" if c.get("description") else ""]
+        lines.append(f"{n}. " + " | ".join(p for p in parts if p))
+    system = ("Du bist Bildredakteur. Wähle das Foto, das zu dieser Nachricht passt: den Ort, das Ereignis, "
+              "den Gegenstand oder die Hauptperson der Schlagzeile. Wähle KEINE Personen, die in der Schlagzeile "
+              "nicht vorkommen, und keine Bilder, die nur zufällig ein Wort teilen. "
+              "Antworte als JSON: {\"pick\": Nummer} oder {\"pick\": 0}, wenn keins passt.")
+    user = f"Schlagzeile: {story['title']}\nWorum es geht: {story.get('summary') or ''}\n\nFotos:\n" + "\n".join(lines)
+    answer = llm.json(system, user, max_tokens=400, fast=True) or {}
+    try:
+        pick = int(answer.get("pick")) if isinstance(answer, dict) else None
+    except (TypeError, ValueError):
+        return None
+    if pick is None or pick < 0 or pick > min(len(cands), 10):
+        return None
+    return pick - 1  # 0 -> -1 = none fits
+
+
+IMAGE_VERSION = 3  # bump to choose all pictures again with an improved method
+
+
+def _take(story: dict, cand: dict, used: set[str], allow_reuse: bool = False) -> dict | None:
+    if cand["remote_url"] in used and not allow_reuse:
+        return None
+    got = download(cand["remote_url"], story["id"])
+    if not got:
+        return None
+    used.add(cand["remote_url"])
+    image = {k: v for k, v in cand.items() if k not in ("description",)}
+    image.update(got)
+    image["v"] = IMAGE_VERSION
+    image["credit"] = f"Foto: {image['author']} / {image['licence']} · Wikimedia Commons"
+    return image
+
+
+def from_free_sources(story: dict, topic_cfg: dict, used: set[str], llm=None) -> dict | None:
+    cands = [c for c in candidates(story, topic_cfg) if c["remote_url"] not in used]
+    # Most relevant first; Wikipedia hits win ties (they show the real place/person/thing).
+    order = {"wikipedia-thema": 0, "wikipedia-suche": 1, "commons-suche": 2}
+    cands.sort(key=lambda c: (-relevance(story, c), order.get(c["how"], 3)))
+    choice = ai_choose(story, cands, llm)
+    if choice is not None and choice >= 0:
+        image = _take(story, cands[choice], used)
+        if image:
+            image["how"] += "+ki"
+            return image
+    if choice is None:  # no AI decision: trust the word match
+        for c in cands:
+            if relevance(story, c) <= 0:
+                break
+            image = _take(story, c, used)
+            if image:
                 return image
+    # Nothing specific fits: a generic photo for the topic (may repeat), so no story is left without a picture.
+    for c in topic_fallbacks(story, topic_cfg):
+        image = _take(story, c, used, allow_reuse=True)
+        if image:
+            return image
     return None
 
 
-def pick_image(story: dict, topic_cfg: dict, offline: bool, used: set[str] | None = None) -> dict | None:
+def needs_new_image(image: dict | None) -> bool:
+    """True if a story has no picture, an outdated choice, a missing file, or a press
+    photo while press photos are not allowed (public website)."""
+    if not image or not image.get("src") or not (config.DATA_DIR / image["src"]).exists():
+        return True
+    if image.get("kind") == "press":
+        return "feed" not in config.IMAGE_SOURCES
+    return (image.get("v") or 0) < IMAGE_VERSION
+
+
+def pick_image(story: dict, topic_cfg: dict, offline: bool, used: set[str] | None = None, llm=None) -> dict | None:
     if offline:
         return None
     used = used if used is not None else set()
     for source in config.IMAGE_SOURCES:
-        image = from_feed(story, used) if source == "feed" else from_commons(story, topic_cfg, used) if source == "commons" else None
+        if source == "feed":
+            image = from_feed(story, used)
+        elif source == "commons":
+            image = from_free_sources(story, topic_cfg, used, llm)
+        else:
+            image = None
         if image:
             return image
     return None

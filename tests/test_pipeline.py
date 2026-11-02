@@ -375,29 +375,93 @@ def test_impressum_from_settings(monkeypatch):
     assert "Erika Muster" in html and "60311 Frankfurt" in html and "todo" not in html
 
 
-def test_wikipedia_lead_image(monkeypatch, tmp_path):
-    """The photo of a person in the story is found via Wikipedia, with licence and author."""
-    from pipeline import images
+class _FakeWeb:
+    """Pretend Wikipedia/Commons: a few articles and photos, no internet needed."""
+    FILES = {
+        "Supermarkt_Kuehlregal.jpg": ("Kühlregal in einem Supermarkt", 1600, 1000),
+        "Ursula_von_der_Leyen_2024.jpg": ("Portrait of Ursula von der Leyen", 1200, 1600),
+        "Reichstag_Berlin.jpg": ("Reichstagsgebäude in Berlin", 2000, 1200),
+    }
 
-    class Resp:
-        def __init__(self, data): self.data = data
-        def raise_for_status(self): pass
-        def json(self): return self.data
+    def __init__(self, search_hits):
+        self.search_hits = search_hits  # article title -> file
 
-    def fake_get(url, params=None, **kw):
+    def get(self, url, params=None, **kw):
+        class R:
+            def __init__(s, d): s.d = d
+            def raise_for_status(s): pass
+            def json(s): return s.d
+        p = params or {}
+        if "wikipedia" in url and p.get("generator") == "search":
+            pages = {str(i): {"index": i, "title": art, "pageimage": f} for i, (art, f) in enumerate(self.search_hits.items(), 1)}
+            return R({"query": {"pages": pages}})
         if "wikipedia" in url:
-            name = params["titles"]
-            return Resp({"query": {"pages": {"1": {"pageimage": "Merz_2024.jpg"} if name == "Friedrich Merz" else {}}}})
-        return Resp({"query": {"pages": {"2": {"title": "File:Merz_2024.jpg", "imageinfo": [{
-            "width": 1200, "height": 1600, "thumburl": "https://upload.example/merz.jpg",
-            "descriptionurl": "https://commons.example/Merz", "extmetadata": {
-                "LicenseShortName": {"value": "CC BY-SA 4.0"}, "Artist": {"value": "<a>Jane Doe</a>"}}}]}}}})
+            name = p["titles"]
+            return R({"query": {"pages": {"1": {"pageimage": "Ursula_von_der_Leyen_2024.jpg"} if "Leyen" in name else {}}}})
+        if p.get("generator") == "search":  # Commons search (topic photos)
+            return R({"query": {"pages": {"9": self._page("Reichstag_Berlin.jpg")}}})
+        titles = p["titles"].split("|")
+        return R({"query": {"pages": {str(i): self._page(t.removeprefix("File:")) for i, t in enumerate(titles)}}})
 
-    monkeypatch.setattr(images.requests, "get", fake_get)
-    monkeypatch.setattr(images, "download", lambda url, sid, referer=None: {"src": "media/x.jpg", "w": 900, "h": 1200})
-    story = {"id": "s1", "location": None, "entities": ["Bundestag", "Friedrich Merz"]}
-    img = images.from_wikipedia(story, set())
-    assert img and img["licence"] == "CC BY-SA 4.0" and "Jane Doe" in img["credit"]
+    def _page(self, name):
+        desc, w, h = self.FILES.get(name, ("", 1600, 1000))
+        return {"title": f"File:{name}", "imageinfo": [{"width": w, "height": h, "thumburl": f"https://up.example/{name}",
+                "descriptionurl": f"https://commons.example/{name}", "extmetadata": {
+                    "LicenseShortName": {"value": "CC BY-SA 4.0"}, "Artist": {"value": "Jane Doe"},
+                    "ImageDescription": {"value": desc}}}]}
+
+
+def _patch_web(monkeypatch, hits):
+    from pipeline import images
+    web = _FakeWeb(hits)
+    monkeypatch.setattr(images.requests, "get", web.get)
+    monkeypatch.setattr(images, "download", lambda url, sid, referer=None: {"src": "media/x.jpg", "w": 1200, "h": 800})
+    return images
+
+
+def test_fitting_photo_beats_unrelated_person(monkeypatch):
+    images = _patch_web(monkeypatch, {"Supermarkt": "Supermarkt_Kuehlregal.jpg"})
+    story = {"id": "s1", "topic": "Wirtschaft", "title": "Cyberangriffe auf Supermarktkühlanlagen",
+             "summary": "Hacker legen Kühlregale lahm.", "entities": ["Ursula von der Leyen", "Supermarkt"], "location": None}
+    img = images.from_free_sources(story, {}, set(), llm=None)
+    assert img and img["title"] == "Supermarkt_Kuehlregal.jpg" and img["v"] == images.IMAGE_VERSION
+    assert "Jane Doe" in img["credit"] and img["licence"] == "CC BY-SA 4.0"
+
+
+def test_ai_choice_is_used(monkeypatch):
+    images = _patch_web(monkeypatch, {"Supermarkt": "Supermarkt_Kuehlregal.jpg", "Berlin": "Reichstag_Berlin.jpg"})
+
+    class PickSecond:
+        available = True
+        def json(self, system, user, max_tokens=0, fast=False):
+            return {"pick": 2}
+
+    story = {"id": "s2", "topic": "Wirtschaft", "title": "Supermarkt in Berlin", "summary": "",
+             "entities": [], "location": None}
+    img = images.from_free_sources(story, {}, set(), llm=PickSecond())
+    assert img and img["how"].endswith("+ki")
+
+
+def test_every_story_gets_a_photo(monkeypatch):
+    """Nothing specific fits: a free topic photo is used instead of the drawn placeholder."""
+    images = _patch_web(monkeypatch, {})
+    story = {"id": "s3", "topic": "Ausland", "title": "Trump und seine Berater", "summary": "",
+             "entities": [], "location": None}
+    used = {"https://up.example/Reichstag_Berlin.jpg"}  # even if another story already uses it
+    img = images.from_free_sources(story, {"Ausland": {"commons": ["Auswärtiges Amt"]}}, used, llm=None)
+    assert img and img["how"] == "themenfoto"
+
+
+def test_press_photos_are_replaced_on_public_site(monkeypatch, tmp_path):
+    from pipeline import images
+    monkeypatch.setattr(config, "DATA_DIR", tmp_path)
+    (tmp_path / "media").mkdir()
+    (tmp_path / "media" / "a.jpg").write_bytes(b"x")
+    monkeypatch.setattr(config, "IMAGE_SOURCES", ["commons"])
+    assert images.needs_new_image({"src": "media/a.jpg", "kind": "press"})
+    assert not images.needs_new_image({"src": "media/a.jpg", "kind": "free", "v": images.IMAGE_VERSION})
+    assert images.needs_new_image({"src": "media/a.jpg", "kind": "free", "v": 1})
+    assert images.needs_new_image(None)
 
 
 def test_non_free_or_svg_images_are_rejected():

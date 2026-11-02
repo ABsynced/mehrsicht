@@ -17,7 +17,7 @@ from .analyze import analyse, build_story
 from .cluster import cluster
 from .factcheck import disinfo_of_the_moment
 from .fetch import fetch_all
-from .images import pick_image
+from .images import needs_new_image, pick_image
 from .llm import LLM
 from .logos import fetch_all_logos
 from .trending import build_topics, trending
@@ -89,7 +89,18 @@ def run_edition(edition: str, offline: bool) -> dict:
     groups = groups[:MAX_STORIES]
 
     taken: set[str] = set()
-    used_images = {s["image"].get("remote_url") for s in old_stories.values() if s.get("image")}
+    # pictures that stay: nobody else may get them
+    used_images = {s["image"].get("remote_url") for s in old_stories.values()
+                   if s.get("image") and not needs_new_image(s["image"])}
+    image_ai_left = [config.AI_MAX_IMAGE_PICKS]  # the AI chooses at most this many photos per run
+
+    def choose_image(story: dict) -> dict | None:
+        use_ai = image_ai_left[0] > 0
+        image = pick_image(story, topic_cfg, offline, used_images, llm if use_ai else None)
+        if use_ai and llm.available:
+            image_ai_left[0] -= 1
+        return image
+
     updated, ai_requests, reused = [], 0, 0
     for group in groups:
         old = archive.match(group["items"], old_stories, taken)
@@ -114,12 +125,19 @@ def run_edition(edition: str, offline: bool) -> dict:
         if old and analysis is old["analysis"]:
             story["analysed_sources"] = old.get("analysed_sources", story["source_count"])
 
-        keep_image = old and old.get("image") and (config.DATA_DIR / old["image"]["src"]).exists()
-        story["image"] = old["image"] if keep_image else pick_image(story, topic_cfg, offline, used_images)
+        keep_image = old and not needs_new_image(old.get("image"))
+        story["image"] = old["image"] if keep_image else choose_image(story)
         story["updated_at"] = now.isoformat(timespec="minutes")
         updated.append(story)
 
     kept = [s for sid, s in old_stories.items() if sid not in taken and archive.still_fresh(s, now)]
+    for s in kept:  # older stories without a (good) picture get one now
+        if needs_new_image(s.get("image")):
+            s["image"] = choose_image(s)
+    if not offline:
+        stories_all = updated + kept
+        with_photo = sum(1 for s in stories_all if s.get("image"))
+        log.info("Fotos: %d von %d Geschichten", with_photo, len(stories_all))
     stories = sorted(updated + kept, key=lambda s: s.get("last_seen") or "", reverse=True)
     for s in stories:  # (re)attach fact-checks, also to older stories from the archive
         s["factchecks"] = factfeeds.attach(s, checks) or s.get("factchecks", [])

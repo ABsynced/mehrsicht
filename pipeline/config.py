@@ -67,6 +67,8 @@ AI_ITEMS_PER_SOURCE = int(os.getenv("AI_ITEMS_PER_SOURCE", "15"))
 # Where photos come from, tried in order (see pipeline/images.py):
 #   feed    = real news photos from the RSS feeds (copyrighted: ONLY for local/private use)
 #   commons = free Wikimedia photos (safe for the public website)
+# How many photo choices per run the AI makes (the rest are matched by words).
+AI_MAX_IMAGE_PICKS = int(os.getenv("AI_MAX_IMAGE_PICKS", "20"))
 IMAGE_SOURCES = [s.strip().lower() for s in os.getenv("IMAGE_SOURCE", "feed,commons").split(",") if s.strip()]
 FACTCHECK_API_KEY = os.getenv("FACTCHECK_API_KEY", "").strip()
 NEWSLETTER_FORM_ACTION = os.getenv("NEWSLETTER_FORM_ACTION", "").strip()

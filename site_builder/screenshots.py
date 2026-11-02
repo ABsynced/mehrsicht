@@ -90,9 +90,34 @@ async def _shoot() -> list[str]:
     return done
 
 
+def photo_report() -> dict:
+    """How many stories have a photo and where it came from (saved next to the screenshots)."""
+    report = {}
+    for code in config.EDITIONS:
+        path = config.DATA_DIR / f"edition_{code}.json"
+        if not path.exists():
+            continue
+        stories = json.loads(path.read_text(encoding="utf-8"))["stories"]
+        how = {}
+        for s in stories:
+            key = (s.get("image") or {}).get("how") or ("ohne Foto" if not s.get("image") else "alt")
+            how[key] = how.get(key, 0) + 1
+        report[code] = {
+            "stories": len(stories),
+            "with_photo": sum(1 for s in stories if s.get("image")),
+            "sources": how,
+            "photos": [{"story": s["title"], "photo": (s.get("image") or {}).get("title"),
+                        "article": (s.get("image") or {}).get("article"), "how": (s.get("image") or {}).get("how")}
+                       for s in stories],
+        }
+    return report
+
+
 def main() -> None:
     if not (SITE / "index.html").exists():
         raise SystemExit("Zuerst die Website bauen: python -m site_builder.build")
+    OUT.mkdir(parents=True, exist_ok=True)
+    (OUT / "photo-report.json").write_text(json.dumps(photo_report(), ensure_ascii=False, indent=1), encoding="utf-8")
     done = asyncio.run(_shoot())
     print(f"{len(done)} Screenshots gespeichert in {OUT}: {', '.join(done)}")
 
