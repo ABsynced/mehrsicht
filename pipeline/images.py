@@ -284,12 +284,15 @@ def candidates(story: dict, topic_cfg: dict) -> list[dict]:
     ai_q = story.get("commons_query")
     in_title = [e for e in (story.get("entities") or []) if isinstance(e, str) and e.lower() in story["title"].lower()]
     others = [e for e in (story.get("entities") or []) if isinstance(e, str) and e not in in_title]
-    names = list(dict.fromkeys([n for n in in_title + ([story.get("location")] if story.get("location") else []) + others if n]))[:6]
+    # only names that matter for the headline (keeps the number of requests small)
+    names = list(dict.fromkeys([n for n in in_title + ([story.get("location")] if story.get("location") else []) if n]))[:3]
 
     wiki_hits: list[tuple[str, str, str]] = []   # (article, file, how)
-    for lang, query in (("de", title_q), ("de", ai_q), ("en", ai_q)):
+    for lang, query in (("de", title_q), ("de", ai_q if ai_q != title_q else None)):
         for article, file_name in wiki_search_images(query, lang):
             wiki_hits.append((article, file_name, "wikipedia-suche"))
+    if not wiki_hits and others:
+        names += others[:2]
     for name in names:
         for lang in ("de", "en"):
             file_name = wiki_lead_image(name, lang)
@@ -303,7 +306,7 @@ def candidates(story: dict, topic_cfg: dict) -> list[dict]:
         if info and info["remote_url"] not in seen:
             seen.add(info["remote_url"])
             cands.append({**info, "article": article, "how": how})
-    for query in (ai_q, title_q):
+    for query in dict.fromkeys(q for q in (ai_q, title_q) if q):
         for info in search_commons(query)[:5]:
             if info["remote_url"] not in seen:
                 seen.add(info["remote_url"])

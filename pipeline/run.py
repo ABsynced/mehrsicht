@@ -126,14 +126,18 @@ def run_edition(edition: str, offline: bool) -> dict:
             story["analysed_sources"] = old.get("analysed_sources", story["source_count"])
 
         keep_image = old and not needs_new_image(old.get("image"))
-        story["image"] = old["image"] if keep_image else choose_image(story)
+        story["image"] = old["image"] if keep_image else (
+            choose_image(story) or (old.get("image") if old and (old.get("image") or {}).get("kind") != "press" else None))
         story["updated_at"] = now.isoformat(timespec="minutes")
         updated.append(story)
 
     kept = [s for sid, s in old_stories.items() if sid not in taken and archive.still_fresh(s, now)]
-    for s in kept:  # older stories without a (good) picture get one now
-        if needs_new_image(s.get("image")):
-            s["image"] = choose_image(s)
+    # older stories without a (good) picture get one now – a limited number per run,
+    # newest first, so a run never takes too long (the rest follow in the next runs)
+    repick = [s for s in kept if needs_new_image(s.get("image"))]
+    repick.sort(key=lambda s: s.get("last_seen") or "", reverse=True)
+    for s in repick[:config.MAX_IMAGE_REPICKS]:
+        s["image"] = choose_image(s) or s.get("image")
     if not offline:
         stories_all = updated + kept
         with_photo = sum(1 for s in stories_all if s.get("image"))
