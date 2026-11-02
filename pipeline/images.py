@@ -217,6 +217,26 @@ def wiki_lead_image(name: str, lang: str = "de") -> str | None:
     return None
 
 
+def wiki_lead_images(names: list[str], lang: str = "de") -> dict[str, str]:
+    """Free main pictures of several Wikipedia articles in one request: {name: file}."""
+    names = [n for n in dict.fromkeys(names) if n][:20]
+    if not names:
+        return {}
+    data = _get(WIKI_API.format(lang=lang), {"action": "query", "format": "json", "titles": "|".join(names),
+                                             "prop": "pageimages", "piprop": "name", "pilicense": "free", "redirects": 1})
+    q = data.get("query", {})
+    back = {}
+    for step in ("normalized", "redirects"):
+        for m in q.get(step, []):
+            back[m["to"]] = back.get(m["from"], m["from"])
+    out = {}
+    for page in q.get("pages", {}).values():
+        if page.get("pageimage") and "missing" not in page:
+            title = page.get("title", "")
+            out[back.get(title, title)] = page["pageimage"]
+    return out
+
+
 def wiki_search_images(query: str, lang: str = "de", limit: int = 6) -> list[tuple[str, str]]:
     """Search Wikipedia; return (article title, free lead image file) for the best matches."""
     if not query:
@@ -278,27 +298,34 @@ def relevance(story: dict, cand: dict) -> float:
     return hits / len(story_words) ** 0.5
 
 
+def headline_words(story: dict) -> list[str]:
+    """Nouns and names from the headline ('Luftangriff', 'Saporischschja', 'Halloween')."""
+    words = re.findall(r"[A-ZÄÖÜ][\wäöüß\-]{3,}", story["title"])
+    return [w.strip("-") for w in dict.fromkeys(words) if w.lower() not in STOPWORDS][:5]
+
+
 def candidates(story: dict, topic_cfg: dict) -> list[dict]:
     """Collect possible free photos for a story (no downloads yet), most specific first."""
     title_q = keyword_query(story)
     ai_q = story.get("commons_query")
-    in_title = [e for e in (story.get("entities") or []) if isinstance(e, str) and e.lower() in story["title"].lower()]
-    others = [e for e in (story.get("entities") or []) if isinstance(e, str) and e not in in_title]
-    # only names that matter for the headline (keeps the number of requests small)
-    names = list(dict.fromkeys([n for n in in_title + ([story.get("location")] if story.get("location") else []) if n]))[:3]
+    entities = [e for e in (story.get("entities") or []) if isinstance(e, str)]
+    in_title = [e for e in entities if e.lower() in story["title"].lower()]
+    # Full names of people in the headline: "Tusk" -> "Donald Tusk" if the AI named him fully.
+    full = [e for e in entities if " " in e and any(e.lower().endswith(" " + w.lower()) for w in headline_words(story))]
+    names = list(dict.fromkeys(full + in_title + ([story.get("location")] if story.get("location") else [])
+                               + [w for w in headline_words(story) if not any(w in f for f in full)]))[:8]
 
     wiki_hits: list[tuple[str, str, str]] = []   # (article, file, how)
     for lang, query in (("de", title_q), ("de", ai_q if ai_q != title_q else None)):
         for article, file_name in wiki_search_images(query, lang):
             wiki_hits.append((article, file_name, "wikipedia-suche"))
-    if not wiki_hits and others:
-        names += others[:2]
+    leads = wiki_lead_images(names, "de")
+    missing = [n for n in names if n not in leads and (" " in n or n in in_title)]
+    if missing:
+        leads.update(wiki_lead_images(missing, "en"))
     for name in names:
-        for lang in ("de", "en"):
-            file_name = wiki_lead_image(name, lang)
-            if file_name:
-                wiki_hits.append((name, file_name, "wikipedia-thema"))
-                break
+        if name in leads:
+            wiki_hits.append((name, leads[name], "wikipedia-thema"))
     files = commons_files([f for _, f, _ in wiki_hits])
     cands, seen = [], set()
     for article, file_name, how in wiki_hits:
@@ -315,11 +342,17 @@ def candidates(story: dict, topic_cfg: dict) -> list[dict]:
 
 
 def topic_fallbacks(story: dict, topic_cfg: dict) -> list[dict]:
-    """Generic but fitting photos for the topic (last resort, may repeat across stories)."""
+    """Generic photos for the topic (last resort, may repeat across stories). A result only
+    counts if its file name or description contains one of the searched words."""
     out = []
-    for query in topic_cfg.get(story["topic"], {}).get("commons", []) + ["Zeitungen Kiosk", "Bundestag Reichstagsgebäude"]:
-        out += [{**c, "article": "", "how": "themenfoto"} for c in search_commons(query)[:4]]
-        if len(out) >= 8:
+    queries = topic_cfg.get(story["topic"], {}).get("commons", []) + ["Tageszeitungen Zeitungsstapel", "Reichstagsgebäude Berlin"]
+    for query in queries:
+        words = _words(query)
+        for c in search_commons(query)[:8]:
+            pic = _words(c.get("title", "") + " " + c.get("description", ""))
+            if any(w == p or (len(w) >= 5 and (p.startswith(w[:6]) or w.startswith(p[:6]))) for w in words for p in pic):
+                out.append({**c, "article": "", "how": "themenfoto"})
+        if len(out) >= 6:
             break
     return out
 
@@ -348,7 +381,8 @@ def ai_choose(story: dict, cands: list[dict], llm) -> int | None:
     return pick - 1  # 0 -> -1 = none fits
 
 
-IMAGE_VERSION = 3  # bump to choose all pictures again with an improved method
+IMAGE_VERSION = 4  # new pictures get this number
+KEEP_FROM_VERSION = 3  # specific pictures from this version on are kept; topic photos need version 4
 
 
 def _take(story: dict, cand: dict, used: set[str], allow_reuse: bool = False) -> dict | None:
@@ -398,7 +432,10 @@ def needs_new_image(image: dict | None) -> bool:
         return True
     if image.get("kind") == "press":
         return "feed" not in config.IMAGE_SOURCES
-    return (image.get("v") or 0) < IMAGE_VERSION
+    v = image.get("v") or 0
+    if image.get("how") == "themenfoto":
+        return v < IMAGE_VERSION
+    return v < KEEP_FROM_VERSION
 
 
 def pick_image(story: dict, topic_cfg: dict, offline: bool, used: set[str] | None = None, llm=None) -> dict | None:

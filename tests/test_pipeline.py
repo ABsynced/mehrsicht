@@ -472,3 +472,16 @@ def test_non_free_or_svg_images_are_rejected():
     page = {"title": "File:Photo.jpg", "imageinfo": [{"width": 2000, "height": 1200,
             "extmetadata": {"LicenseShortName": {"value": "CC BY-NC 2.0"}}}]}
     assert _commons_image(page, 500, True) is None
+
+
+def test_headline_words_and_strict_topic_photos(monkeypatch):
+    from pipeline import images
+    story = {"title": "Luftangriff in Saporischschja", "topic": "Ausland"}
+    assert images.headline_words(story) == ["Luftangriff", "Saporischschja"]
+    # a topic search that returns an unrelated shop photo must not be used
+    monkeypatch.setattr(images, "search_commons", lambda q: [
+        {"remote_url": "u1", "title": "Laedchen rubensstr-28.png", "description": "", "author": "a", "licence": "CC0"},
+        {"remote_url": "u2", "title": "Tageszeitungen am Kiosk.jpg", "description": "", "author": "a", "licence": "CC0"}])
+    got = images.topic_fallbacks(story, {})
+    assert [g["remote_url"] for g in got] == ["u2", "u2"] or [g["remote_url"] for g in got][0] == "u2"
+    assert all(g["remote_url"] != "u1" for g in got)

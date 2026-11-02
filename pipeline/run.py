@@ -135,7 +135,9 @@ def run_edition(edition: str, offline: bool) -> dict:
     # older stories without a (good) picture get one now – a limited number per run,
     # newest first, so a run never takes too long (the rest follow in the next runs)
     repick = [s for s in kept if needs_new_image(s.get("image"))]
+    # newest first, then (stable sort) missing photos and weak topic photos before everything else
     repick.sort(key=lambda s: s.get("last_seen") or "", reverse=True)
+    repick.sort(key=lambda s: 0 if not s.get("image") or s["image"].get("how") == "themenfoto" else 1)
     for s in repick[:config.MAX_IMAGE_REPICKS]:
         s["image"] = choose_image(s) or s.get("image")
     if not offline:
