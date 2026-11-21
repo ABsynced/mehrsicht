@@ -1,0 +1,1611 @@
+{
+ "de": {
+  "stories": 187,
+  "with_photo": 187,
+  "sources": {
+   "themenfoto": 95,
+   "wikipedia-suche+ki": 33,
+   "wikipedia-thema+ki": 12,
+   "ki-suche": 40,
+   "commons-suche+ki": 7
+  },
+  "photos": [
+   {
+    "story": "Trump trifft auf Kongress und Tech",
+    "photo": "Bundestag Berlin Deutschland Reichstagsgebäude - 04.jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "Jugendproteste in Deutschland",
+    "photo": "Bundestag Berlin Deutschland Reichstagsgebäude - 04.jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "Klimakonferenz verlängert",
+    "photo": "Windpark Pilsum.jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "Hackerangriffe auf FBI und US-Agrarministerium",
+    "photo": "Bundestag Berlin Deutschland Reichstagsgebäude - 04.jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "UK und EU nähern sich an",
+    "photo": "European Parliament hemicycle Strasbourg (cropped).jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "UNO-Gespräche über autonome Waffen ohne verbindliche Regelung",
+    "photo": "Palais des Nations Hauptgebäude.jpg",
+    "article": "Palais des Nations",
+    "how": "wikipedia-suche+ki"
+   },
+   {
+    "story": "Altersvorsorgedepot verzögert",
+    "photo": "2020-02-13 Deutscher Bundestag IMG 3440 by Stepro.jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "Mann wegen Palisades-Feuer verurteilt",
+    "photo": "Palisades Fire (54254471791).jpg",
+    "article": "Palisades-Feuer",
+    "how": "wikipedia-thema+ki"
+   },
+   {
+    "story": "Großbritannien: Schuldsprüche in Vergewaltigungsprozess",
+    "photo": "Bundestag Berlin Deutschland Reichstagsgebäude - 04.jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "Jugendproteste in deutschen Städten",
+    "photo": "Transparent Schulstreik.jpg",
+    "article": "Schulstreik gegen Wehrpflicht",
+    "how": "wikipedia-suche+ki"
+   },
+   {
+    "story": "Technologieaktien fallen stark",
+    "photo": "Frankfurt Taunusturm.Skyline.20130402.jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "Nahost-Konflikt: Deutschlands Rolle und humanitäre Lage",
+    "photo": "Auswärtiges Amt 0802.jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "Erst kam Big Tech. Jetzt stellen die KI-Millionäre San Francisco auf den Kopf",
+    "photo": "Frankfurt Taunusturm.Skyline.20130402.jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "Ukraine-Verhandlungen im Fokus",
+    "photo": "New Year's Eve from President of Ukraine Volodymyr Zelensky (31-12-2025) (cropped).jpg",
+    "article": "Wolodymyr Selenskyj",
+    "how": "wikipedia-suche+ki"
+   },
+   {
+    "story": "Billionen in den Depots: Vermögensverwalter - Kostenproblem in der Krösus-Branche",
+    "photo": "Frankfurt Taunusturm.Skyline.20130402.jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "US-Gericht billigt Vergleich von Bayer mit Glyphosat-Klägern",
+    "photo": "Frankfurt Taunusturm.Skyline.20130402.jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "Anthropic-Aktie fällt stark",
+    "photo": "Frankfurt Taunusturm.Skyline.20130402.jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "EU und Großbritannien vereinbaren Annäherung",
+    "photo": "European Parliament hemicycle Strasbourg (cropped).jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "COP31 verlängert, Verhandlungen dauern",
+    "photo": "Windpark Pilsum.jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "Russische Flugobjekte in Polen",
+    "photo": "Auswärtiges Amt 0802.jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "Dänemark beschuldigt Russland Mordkomplott",
+    "photo": "Bundestag Berlin Deutschland Reichstagsgebäude - 04.jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "Pistorius in Polen: Eine Reise im Zeichen der Erinnerungsarbeit",
+    "photo": "02023 0929 Orchard of Remembrance in Markowa.jpg",
+    "article": "",
+    "how": "ki-suche"
+   },
+   {
+    "story": "Bundesrat stoppt \"Startchancengesetz\" vorerst",
+    "photo": "Frankfurt Taunusturm.Skyline.20130402.jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "Mehrere Konflikte im Nahen Osten",
+    "photo": "Golan Heights relief v2.png",
+    "article": "Golanhöhen",
+    "how": "wikipedia-suche+ki"
+   },
+   {
+    "story": "26 Tote bei Luftangriffen in Saporischschja",
+    "photo": "Auswärtiges Amt 0802.jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "Jugendliche erneut zu Tausenden auf den Straßen",
+    "photo": "Flamingo Revolution Tirana Protest nr22 June 21 2026 40.jpg",
+    "article": "",
+    "how": "ki-suche"
+   },
+   {
+    "story": "Merz: Unterstützung der Ukraine bringt uns Dividende",
+    "photo": "Multi-wing event recognizes Ukraine support (7620574).jpg",
+    "article": "",
+    "how": "ki-suche"
+   },
+   {
+    "story": "Russischer Angriffskrieg: Brückenangriffe und Einladung",
+    "photo": "War in Ukraine (2022) ru.png",
+    "article": "",
+    "how": "ki-suche"
+   },
+   {
+    "story": "Hugendubel-Website gehackt",
+    "photo": "Bundestag Berlin Deutschland Reichstagsgebäude - 04.jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "Trump droht US-KI-Unternehmen mit Strafen",
+    "photo": "Bundestag Berlin Deutschland Reichstagsgebäude - 04.jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "Prien verteidigt Kürzungen bei \"Demokratie leben!\"",
+    "photo": "Visit of Karin Prien, German Federal Minister for Education, Family, Senior Citizens, Women and Youth, to the EC (P-070266-00-01).jpg",
+    "article": "",
+    "how": "ki-suche"
+   },
+   {
+    "story": "Gipfel in Antalya: Giftige Stimmung zwischen armen und reichen Ländern",
+    "photo": "European Parliament hemicycle Strasbourg (cropped).jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "Andy Burnham und die EU: In Brüssel wird wieder die britische Nationalhymne gespielt",
+    "photo": "TE-Collage Brussels.png",
+    "article": "Brüssel",
+    "how": "wikipedia-thema+ki"
+   },
+   {
+    "story": "+++ Ukraine-Krieg +++: Trump fordert wohl von Kiew Frieden mit Russland bis Anfang Januar",
+    "photo": "President Trump and Ukrainian President Zelenskyy Clash During Meeting in Oval Office, Feb. 28, 2025.jpg",
+    "article": "Disput zwischen Trump und Selenskyj im Weißen Haus 2025",
+    "how": "wikipedia-suche+ki"
+   },
+   {
+    "story": "Merz spricht von schrittweiser Aufhebung",
+    "photo": "Friedrich Merz in 2026.jpg",
+    "article": "Friedrich Merz",
+    "how": "wikipedia-suche+ki"
+   },
+   {
+    "story": "Gen‑Z‑Proteste in Deutschland",
+    "photo": "Coronaprotest Brandenburger Tor 1.JPG",
+    "article": "Proteste gegen Schutzmaßnahmen zur COVID-19-Pandemie in Deutschland",
+    "how": "wikipedia-suche+ki"
+   },
+   {
+    "story": "Jugendproteste und politische Reaktionen",
+    "photo": "Gen Z regelt Demo Hannover 31 Oktober 1.jpg",
+    "article": "Gen Z regelt",
+    "how": "wikipedia-suche+ki"
+   },
+   {
+    "story": "Dreiergipfel in Shenzhen: Präsidenten sprechen Frieden",
+    "photo": "TOP OF THE DIWANG BUILDING SEE SHENZHEN SKYLINE (12).jpg",
+    "article": "",
+    "how": "ki-suche"
+   },
+   {
+    "story": "Vorlesen, damit \"Kinder Superkraft Lesen entdecken können\"",
+    "photo": "FMS PTS Wien 3 int 05.jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "EU und London suchen wieder Nähe: Für die Rolle rückwärts beim Brexit ist viel Anlauf nötig",
+    "photo": "London Montage L.jpg",
+    "article": "London",
+    "how": "wikipedia-thema+ki"
+   },
+   {
+    "story": "Nachhaltigkeit: EU vereinfacht Regeln zu nachhaltigen Finanzprodukten",
+    "photo": "UBS HQ.jpg",
+    "article": "UBS",
+    "how": "wikipedia-suche+ki"
+   },
+   {
+    "story": "Militärpakt zwischen Deutschland und Polen ausbauen",
+    "photo": "Bundesministerium der Verteidigung in Berlin.jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "VW-Tarifrunde: Forderungen und Reaktionen",
+    "photo": "Volkswagen-kassel-baunatal-270307.jpg",
+    "article": "Volkswagenwerk Kassel",
+    "how": "wikipedia-suche+ki"
+   },
+   {
+    "story": "Die Kriegserklärung - VW und IG Metall auf Konfrontationskurs",
+    "photo": "Volkswagen Group China headquarters (20220327132049).jpg",
+    "article": "",
+    "how": "ki-suche"
+   },
+   {
+    "story": "Anthropic-IPO: Marktreaktionen im Fokus",
+    "photo": "Frankfurt Börse IHK.jpg",
+    "article": "",
+    "how": "commons-suche+ki"
+   },
+   {
+    "story": "Trump kritisiert Ukraine-Milliarden",
+    "photo": "Auswärtiges Amt 0802.jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "Alaska-Wahl: Regierung zieht sich zurück",
+    "photo": "Jkbrooks85 - 54015280500.jpg",
+    "article": "",
+    "how": "ki-suche"
+   },
+   {
+    "story": "Lufthansa streicht 1.000 Stellen an Drehkreuzen",
+    "photo": "Frankfurt Airport. Taxiway A, back of Terminal 1A (44810308872).jpg",
+    "article": "",
+    "how": "ki-suche"
+   },
+   {
+    "story": "Seitenhieb auf dem Apec-Gipfel: China begrüßte Japans Premierministerin mit anti-amerikanischem Protestsong",
+    "photo": "Auswärtiges Amt 0802.jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "APEC-Gipfel in Shenzhen: Dreiermeeting",
+    "photo": "SZ Shenzhen Longhua new Shenzhen Public Library North APEC event exhibition intro sign August 2026 N13P 107.jpg",
+    "article": "",
+    "how": "ki-suche"
+   },
+   {
+    "story": "Trump, Ukraine-Gipfel und Medien",
+    "photo": "Bundestag Berlin Deutschland Reichstagsgebäude - 04.jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "Iranische Angriffe und regionale Spannungen",
+    "photo": "Auswärtiges Amt 0802.jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "Ukraine-Krieg: Entwicklungen und politische Diskussionen",
+    "photo": "Bundesministerium der Verteidigung in Berlin.jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "Krisenstaat in der Karibik: Haitianische Polizei tötet 34 mutmaßliche Bandenmitglieder",
+    "photo": "Bundestag Berlin Deutschland Reichstagsgebäude - 04.jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "„Koalition der Willigen“ in Berlin: Ein Bröckchen Mauer und viel Soli",
+    "photo": "Berlin Brandenburg Airport Terminal 1 at night.jpg",
+    "article": "",
+    "how": "ki-suche"
+   },
+   {
+    "story": "Ukraine-Gipfel in Berlin: Aufnahmen zeigen Europas Krisentreffen",
+    "photo": "Ukraine solidarity protest Berlin Kanzleramt 2022-02-25 01.jpg",
+    "article": "",
+    "how": "ki-suche"
+   },
+   {
+    "story": "Rohingya-Urteil: Völkermord bestätigt",
+    "photo": "Auswärtiges Amt 0802.jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "Gipfel in Shenzhen: Xi, Trump, Putin",
+    "photo": "Commercial area of futian to east2020.jpg",
+    "article": "Shenzhen, China",
+    "how": "wikipedia-thema+ki"
+   },
+   {
+    "story": "VW streitet Nullrunden und Arbeitszeit",
+    "photo": "Frankfurt Taunusturm.Skyline.20130402.jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "EU-Kommission Ziel eines Cyberangriffs",
+    "photo": "Visit of Omar Alieu Touray to the European Commission - P060121-515427.jpg",
+    "article": "",
+    "how": "ki-suche"
+   },
+   {
+    "story": "BSI sieht höhere Gefahr für Cyberangriffe wegen KI",
+    "photo": "Entrance of heritage building at BSI, Pune.jpg",
+    "article": "",
+    "how": "ki-suche"
+   },
+   {
+    "story": "Landtag - Sachsen-Anhalt: AfD-Politiker Siegmund will bereits am 8. Dezember als Ministerpräsident kandidieren",
+    "photo": "00 1582 Landtag Sachsen-Anhalt.jpg",
+    "article": "",
+    "how": "ki-suche"
+   },
+   {
+    "story": "Zwei Sitze im Kontrollgremium: AfD in Sachsen-Anhalt kontrolliert jetzt den Verfassungsschutz mit",
+    "photo": "Bundestag Berlin Deutschland Reichstagsgebäude - 04.jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "Rücktritt - Niedersachsens Justizministerin Wahlmann legt nach Vorwürfen ihr Amt nieder",
+    "photo": "Taipei Taiwan Ministry-of-Justice-01.jpg",
+    "article": "",
+    "how": "ki-suche"
+   },
+   {
+    "story": "Siegmund tritt früher als geplant an",
+    "photo": "(2026) AfD Ulrich Siegmund 160856370 cropped.jpg",
+    "article": "Ulrich Siegmund",
+    "how": "wikipedia-suche+ki"
+   },
+   {
+    "story": "BASF zieht sich aus Evonik-Übernahme zurück",
+    "photo": "Frankfurt Taunusturm.Skyline.20130402.jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "GTA 6 in Deutschland verfügbar",
+    "photo": "GTA 6 Advertisements at Bloor-Yonge Station, November 13 2026 (03).jpg",
+    "article": "",
+    "how": "ki-suche"
+   },
+   {
+    "story": "Krim-Brücke erneut gesperrt",
+    "photo": "Moscow, Krymsky Bridge May 2023 04(DXO).jpg",
+    "article": "",
+    "how": "commons-suche+ki"
+   },
+   {
+    "story": "Dreiergipfel in Shenzhen",
+    "photo": "Shenzhen West at dust2021.jpg",
+    "article": "",
+    "how": "ki-suche"
+   },
+   {
+    "story": "Bund und UniCredit vereinbaren Commerzbank-Deal",
+    "photo": "Frankfurt Commerzbank vom Schaumainkai.jpg",
+    "article": "Commerzbank",
+    "how": "wikipedia-suche+ki"
+   },
+   {
+    "story": "USA und Venezuela unterzeichnen Militärabkommen",
+    "photo": "Bundesministerium der Verteidigung in Berlin.jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "Kinder in Konfliktgebieten 2025",
+    "photo": "3. Saving lives - now and in the future (9065226097).jpg",
+    "article": "",
+    "how": "ki-suche"
+   },
+   {
+    "story": "APEC-Gipfel: Treffen von Trump, Xi und Putin",
+    "photo": "Shenzhen City Skyline China (27197689149).jpg",
+    "article": "",
+    "how": "ki-suche"
+   },
+   {
+    "story": "Stromsteuer: Koalitionskritik und Gasfrage",
+    "photo": "(20260324) Berlin raid location 06.jpg",
+    "article": "",
+    "how": "ki-suche"
+   },
+   {
+    "story": "Trump, Putin und Xi treffen sich in Shenzhen",
+    "photo": "TOP OF THE DIWANG BUILDING SEE SHENZHEN SKYLINE (10).jpg",
+    "article": "",
+    "how": "ki-suche"
+   },
+   {
+    "story": "Berlin: Ukraine-Gipfel mit 30 Staatschefs",
+    "photo": "Kanzleramt building Berlin from east 2021-03-10 01.jpg",
+    "article": "",
+    "how": "commons-suche+ki"
+   },
+   {
+    "story": "USA und Venezuela schließen Militärabkommen",
+    "photo": "Amerikanische Militärstützpunkte in Südamerika.png",
+    "article": "Militärstützpunkte der Vereinigten Staaten in Lateinamerika und in der Karibik",
+    "how": "wikipedia-suche+ki"
+   },
+   {
+    "story": "Bahnverkehr in Nürnberg gestoppt",
+    "photo": "Nuremberg.Central railway station.jpg",
+    "article": "Nürnberg Hauptbahnhof",
+    "how": "wikipedia-suche+ki"
+   },
+   {
+    "story": "Dreier-Treffen Xi, Trump, Putin in Shenzhen",
+    "photo": "Shenzhen city montage.png",
+    "article": "Shenzhen",
+    "how": "wikipedia-thema+ki"
+   },
+   {
+    "story": "Jeffries nominiert als Sprecher des US-Repräsentantenhauses",
+    "photo": "Rep-Hakeem-Jeffries-Official-Portrait.jpg",
+    "article": "Hakeem Jeffries",
+    "how": "wikipedia-suche+ki"
+   },
+   {
+    "story": "Stromsteuer gesenkt – Koalition einigt sich",
+    "photo": "Biogas Photovoltaik Wind.jpg",
+    "article": "Erneuerbare Energien in Deutschland",
+    "how": "wikipedia-suche+ki"
+   },
+   {
+    "story": "Ukraine: Mehrere Tote nach Angriffen",
+    "photo": "Auswärtiges Amt 0802.jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "EU plant 45 Mrd. Euro‑Kredit für Ukraine",
+    "photo": "Signing ceremony of the Memorandum of Understanding on Macro-Financial Assistance to Ukraine under the Ukraine Support Loan (P-069765-00-07).jpg",
+    "article": "",
+    "how": "ki-suche"
+   },
+   {
+    "story": "Stromsteuer: Koalitionspläne und Kritik",
+    "photo": "Berlin Reichstag BW 1.jpg",
+    "article": "Flagge der Einheit",
+    "how": "wikipedia-suche+ki"
+   },
+   {
+    "story": "Technische Störung legt Nürnberger Hauptbahnhof komplett lahm",
+    "photo": "111 214-3 Nürnberg Hbf, 2013.jpg",
+    "article": "",
+    "how": "ki-suche"
+   },
+   {
+    "story": "SPD-Vorsitz: Netzwerk Berlin für Hubertus Heil als SPD-Chef",
+    "photo": "2017-06-25 Hubertus Heil by Olaf Kosinsky-1.jpg",
+    "article": "",
+    "how": "ki-suche"
+   },
+   {
+    "story": "«Fisch, Familie, Freiheit»: Die Demokratin Mary Peltola gewinnt die Senatswahl in Alaska",
+    "photo": "July 9, 2022 Planned Parenthood rally. Downtown Anchorage, Alaska (52206161473).jpg",
+    "article": "",
+    "how": "ki-suche"
+   },
+   {
+    "story": "Brasilien: Isoliert lebende Indigene erscheinen in Amazonasdorf",
+    "photo": "Bundestag Berlin Deutschland Reichstagsgebäude - 04.jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "Stromsteuer: unterschiedliche Reaktionen",
+    "photo": "2022 Germany 'Electricity as a luxury good'.jpg",
+    "article": "Strompreis",
+    "how": "wikipedia-suche+ki"
+   },
+   {
+    "story": "Dreiergipfel zwischen Trump, Putin und Xi",
+    "photo": "APEC Women's Entrepreneurship Summit (5224667455).jpg",
+    "article": "",
+    "how": "ki-suche"
+   },
+   {
+    "story": "Stromsteuer senken, Spritpreisdeckel einführen",
+    "photo": "Dublin, Co. Dublin - Ireland (9701343182).jpg",
+    "article": "",
+    "how": "ki-suche"
+   },
+   {
+    "story": "Datenleck Deutsche Bank: Vorwürfe und Reaktionen",
+    "photo": "Frankfurt Taunusturm.Skyline.20130402.jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "Demokraten gewinnen Senatssitz in Alaska",
+    "photo": "AK Megan Collie of UFCW (2895258437).jpg",
+    "article": "",
+    "how": "ki-suche"
+   },
+   {
+    "story": "Pistorius kritisiert US‑Kommentare",
+    "photo": "Ukraine Defense Contact Group (UDCG) meeting in Ramstein, Germany on March 19, 2024 - 12.jpg",
+    "article": "",
+    "how": "ki-suche"
+   },
+   {
+    "story": "Nvidia: Umsatz verdoppelt, Führungskrise bleibt",
+    "photo": "Frankfurt Taunusturm.Skyline.20130402.jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "Bundesverfassungsgericht entscheidet über BSW-Wahlbeschwerde",
+    "photo": "Bundesverfassungsgericht IMGP1634.jpg",
+    "article": "Bundesverfassungsgericht",
+    "how": "wikipedia-thema+ki"
+   },
+   {
+    "story": "APEC-Gipfel: Treffen von Xi und Trump, Putin gefeiert",
+    "photo": "APEC Women's Entrepreneurship Summit (5224667573).jpg",
+    "article": "",
+    "how": "ki-suche"
+   },
+   {
+    "story": "Aldi‑Nord‑Steuerfall im Fokus",
+    "photo": "Frankfurt Taunusturm.Skyline.20130402.jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "DWS verwaltet zwölf Milliarden Euro",
+    "photo": "DWS 11 WATERBUFFEL (02320591) - DWS 14 WATERVAL (02009391) - DWS 15 - WATERMAN (02009392) - DWS 10 WATERGEUS (02320590) - Sint-Janshaven - Rotterdam-2.jpg",
+    "article": "",
+    "how": "ki-suche"
+   },
+   {
+    "story": "Trump trifft asiatische Partner",
+    "photo": "Donald Trump and Rodrigo Duterte in Manila.jpg",
+    "article": "",
+    "how": "ki-suche"
+   },
+   {
+    "story": "Krim-Brücke: Angriff und internationale Reaktionen",
+    "photo": "Windpark Pilsum.jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "Ausschluss von Vanessa Emde beantragt",
+    "photo": "2026-10-29 Sitzung des Abgeordnetenhauses von Berlin by Sandro Halank–053.jpg",
+    "article": "Vanessa Emde",
+    "how": "wikipedia-suche+ki"
+   },
+   {
+    "story": "USA verlieren masernfreies Land-Status",
+    "photo": "Stralsund, Krankenhaus West, Haus (2013-07-21) 3, by Klugschnacker in Wikipedia.jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "Koalitionsausschuss diskutiert Stromsteuer",
+    "photo": "Bundestag Berlin Deutschland Reichstagsgebäude - 04.jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "Zehntausende protestieren in der Slowakei",
+    "photo": "Protest Slovensko je Európa. Prešov 25 Slovakia 8.jpg",
+    "article": "",
+    "how": "ki-suche"
+   },
+   {
+    "story": "Huang erwägt Rückkehr an Nvidia-Spitze",
+    "photo": "2788-2888 San Tomas Expwy.jpg",
+    "article": "Nvidia",
+    "how": "wikipedia-thema+ki"
+   },
+   {
+    "story": "Epstein-Fall und Deutsche Bank‑Kontroversen",
+    "photo": "Bundestag Berlin Deutschland Reichstagsgebäude - 04.jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "Trump reist nach Shenzhen",
+    "photo": "Auswärtiges Amt 0802.jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "Deutsche Bank Datenleck enthüllt Kontrollen",
+    "photo": "Deutsche-Bank-Hochhaus FFM.jpg",
+    "article": "Deutsche Bank",
+    "how": "wikipedia-thema+ki"
+   },
+   {
+    "story": "Hells Angels-Ableger in Mönchengladbach verboten",
+    "photo": "Bundestag Berlin Deutschland Reichstagsgebäude - 04.jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "Brückenangriffe im Ukraine-Konflikt",
+    "photo": "Bundestag Berlin Deutschland Reichstagsgebäude - 04.jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "Klimarisiko-Index 2027: Extremwetter weltweit",
+    "photo": "Windpark Pilsum.jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "SPD-Vorsitz: Giffey offen für Kandidatur",
+    "photo": "Franziska Giffey at the 2025 Berlin International Film Festival-2816.jpg",
+    "article": "Franziska Giffey",
+    "how": "wikipedia-thema+ki"
+   },
+   {
+    "story": "Stellwerk defekt, Bahnstrecke Berlin-Hannover betroffen",
+    "photo": "Bundesarchiv Bild 183-1990-0525-021, Zittau, Schmalspurbahn, Stellwerk.jpg",
+    "article": "Stellwerk",
+    "how": "wikipedia-thema+ki"
+   },
+   {
+    "story": "Stromsteuer: Koalitionsausschuss entscheidet",
+    "photo": "Bundeskanzleramt - Berlin - Deutschland - Germany - 04.jpg",
+    "article": "",
+    "how": "commons-suche+ki"
+   },
+   {
+    "story": "Berlin - Hisbollah-naher Verein verboten - Durchsuchungen",
+    "photo": "Bundestag Berlin Deutschland Reichstagsgebäude - 04.jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "Iran‑Krieg: Entwicklungen im Nahen Osten",
+    "photo": "Attack on IRIB's Live News Broadcasting Studio 07 (2).jpg",
+    "article": "Israelisch-iranischer Krieg 2025",
+    "how": "wikipedia-suche+ki"
+   },
+   {
+    "story": "Koalitionsausschuss diskutiert Stromsteuer und Rentenreform",
+    "photo": "2021-12-07 Unterzeichnung des Koalitionsvertrages der 20. Wahlperiode des Bundestages by Sandro Halank–108.jpg",
+    "article": "Koalitionsvertrag der 20. Wahlperiode des Bundestages",
+    "how": "wikipedia-suche+ki"
+   },
+   {
+    "story": "Krim-Brücke teilweise eingestürzt",
+    "photo": "Крымский мост 21 декабря 2019 года.jpg",
+    "article": "Krim-Brücke",
+    "how": "wikipedia-suche+ki"
+   },
+   {
+    "story": "Klimarisiken der letzten 30 Jahre: Hunderttausende Tote und Schäden in Billionenhöhe durch Extremwetter",
+    "photo": "Windpark Pilsum.jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "Studentenliste gewinnt in Serbien",
+    "photo": "Belgrad- Parlament.jpg",
+    "article": "",
+    "how": "commons-suche+ki"
+   },
+   {
+    "story": "Ruanda-Abschiebezentrum 2027 geplant",
+    "photo": "SS-Kaserne Nürnberg 001.jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "Nach Huang-Affäre: Bald alles neu in der KI-Chipindustrie?",
+    "photo": "Frankfurt Taunusturm.Skyline.20130402.jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "Tesla investiert drei Milliarden Euro in Grünheide",
+    "photo": "Frankfurt Taunusturm.Skyline.20130402.jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "Stromsteuer 2027: Koalitionsausschuss im Fokus",
+    "photo": "Frankfurt Taunusturm.Skyline.20130402.jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "Robert Pattinson wird neuer James Bond",
+    "photo": "Bundestag Berlin Deutschland Reichstagsgebäude - 04.jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "Schwesig erneut Ministerpräsidentin",
+    "photo": "European Parliament hemicycle Strasbourg (cropped).jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "Stahlindustrie fordert Strompreis‑Stabilität",
+    "photo": "Frankfurt Taunusturm.Skyline.20130402.jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "Kalifornien verklagt OpenAI wegen Hacking-Attacken",
+    "photo": "Auswärtiges Amt 0802.jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "US-Rechenzentren: CO2-Emissionen im Fokus",
+    "photo": "National Carbon Dioxide (CO₂) budgets inferred from atmospheric observations (SVS5081 - FossilFuels 2015 2020 White 4Kx3K).png",
+    "article": "",
+    "how": "ki-suche"
+   },
+   {
+    "story": "\"Dass er sich dafür hergibt ...\": Weltmeister Berthold kandidiert für AfD - DFB reagiert deutlich",
+    "photo": "Thomas Berthold – Tag der Legenden 2016 01.jpg",
+    "article": "Thomas Berthold",
+    "how": "wikipedia-suche+ki"
+   },
+   {
+    "story": "KI und Klimakonferenz in Antalya",
+    "photo": "Windpark Pilsum.jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "Spionageaffäre um Nvidia-Chef",
+    "photo": "Frankfurt Taunusturm.Skyline.20130402.jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "Vulcan-Rakete stürzt, Amazon verliert 40 Satelliten",
+    "photo": "Vulcan Centaur rollout (Peregrine) (cropped).jpg",
+    "article": "Liste der Vulcan-Raketenstarts",
+    "how": "wikipedia-suche+ki"
+   },
+   {
+    "story": "Estland schließt Grenzübergänge nach Russland",
+    "photo": "Lilli border crossing, EE-LV border5.jpg",
+    "article": "",
+    "how": "ki-suche"
+   },
+   {
+    "story": "Abschiebezentren Ruanda: SPD kritisiert",
+    "photo": "SS-Kaserne Nürnberg 001.jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "Stromsteuer-Debatte: Mütterrente bleibt unverändert",
+    "photo": "Frankfurt Taunusturm.Skyline.20130402.jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "KI-Waffen: 128 Länder beraten",
+    "photo": "Musée Rath (Genève, 2026).jpg",
+    "article": "",
+    "how": "commons-suche+ki"
+   },
+   {
+    "story": "Dreier-Gipfel zwischen Trump, Putin und Xi",
+    "photo": "European Parliament hemicycle Strasbourg (cropped).jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "SPD-Bundesvorsitz: Doppelspitze im Fokus",
+    "photo": "Bundestag Berlin Deutschland Reichstagsgebäude - 04.jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "BND-Dokumentenfall im Fokus",
+    "photo": "Bundesministerium der Verteidigung in Berlin.jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "Heil kandidiert für SPD-Vorsitz",
+    "photo": "Bundestag Berlin Deutschland Reichstagsgebäude - 04.jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "Israelischer Luftangriff tötet Hamas-Kommandeur",
+    "photo": "Forced Displacement of Gaza Strip Residents During the Gaza-Israel War 23-25.jpg",
+    "article": "",
+    "how": "ki-suche"
+   },
+   {
+    "story": "Kanaren: Rekordzahl Migranten erreicht Inselgruppe",
+    "photo": "Tenerife, Canary Islands ESA23970088.jpeg",
+    "article": "Teneriffa",
+    "how": "wikipedia-suche+ki"
+   },
+   {
+    "story": "Ramelow fordert Emde zum Fraktionsaustritt",
+    "photo": "Abgeordnetenhaus.jpg",
+    "article": "Abgeordnetenhaus von Berlin",
+    "how": "wikipedia-suche+ki"
+   },
+   {
+    "story": "Cyberangriff auf französischen Postdienstleister",
+    "photo": "2025-01-07 La Poste (boulevard de la République), Saint-Malo.jpg",
+    "article": "",
+    "how": "ki-suche"
+   },
+   {
+    "story": "Bremen stoppt Kampagne gegen Islamismus",
+    "photo": "Bremen, Rathaus -- 2021 -- 6465.jpg",
+    "article": "",
+    "how": "ki-suche"
+   },
+   {
+    "story": "Proteste in Prag gegen Rundfunkreform",
+    "photo": "2022-10-15 Václavské náměstí 1.jpg",
+    "article": "Wenzelsplatz",
+    "how": "wikipedia-suche+ki"
+   },
+   {
+    "story": "Papst feiert Messe in den Anden",
+    "photo": "Bundestag Berlin Deutschland Reichstagsgebäude - 04.jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "Ärztebezahlung: Kontroverse um Aufpreis",
+    "photo": "Tempelhof Boelckestraße St-Joseph Krankenhaus.JPG",
+    "article": "St. Joseph Krankenhaus Berlin-Tempelhof",
+    "how": "wikipedia-suche+ki"
+   },
+   {
+    "story": "Technikversagen und Golfplatzstreit",
+    "photo": "Bundestag Berlin Deutschland Reichstagsgebäude - 04.jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "Hubertus Heil kandidiert für SPD-Vorsitz",
+    "photo": "Hubertus Heil (2021).jpg",
+    "article": "Hubertus Heil",
+    "how": "wikipedia-suche+ki"
+   },
+   {
+    "story": "SpaceX fängt Starship erstmals wieder auf",
+    "photo": "SpaceX Starship before IFT-5.jpg",
+    "article": "",
+    "how": "commons-suche+ki"
+   },
+   {
+    "story": "Gen‑Z‑Proteste in Deutschland",
+    "photo": "Bundestag Berlin Deutschland Reichstagsgebäude - 06.jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "Antalya: Tausende demonstrieren bei Klimakonferenz",
+    "photo": "Windpark Pilsum.jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "Handwerk: Arbeitsplätze in Gefahr",
+    "photo": "Frankfurt Taunusturm.Skyline.20130402.jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "Rot‑Rot‑Grün in Mecklenburg‑Vorpommern",
+    "photo": "Schloss Schwerin 070506.jpg",
+    "article": "Landtag Mecklenburg-Vorpommern",
+    "how": "wikipedia-suche+ki"
+   },
+   {
+    "story": "Hamas-Kommandeur bei israelischem Luftangriff getötet",
+    "photo": "Auswärtiges Amt 0802.jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "Kassenärzte-Chef warnt vor Selbstzahler-Angeboten",
+    "photo": "Stralsund, Krankenhaus West, Haus (2013-07-27), by Klugschnacker in Wikipedia.jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "Flugstopp in den USA: Ursachen und Folgen",
+    "photo": "Auswärtiges Amt 0802.jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "Papst Leo XIV. in Peru: Reise und Rückkehr",
+    "photo": "Auswärtiges Amt 0802.jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "Präsidentenwahl 2027: Argentiniens „Kettensägen“-Präsident will wieder kandidieren",
+    "photo": "Auswärtiges Amt 0802.jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "Aktuelle Entwicklungen im Ukraine-Krieg",
+    "photo": "Auswärtiges Amt 0802.jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "Deutsche Hyperschallwaffen im Fokus",
+    "photo": "Bundesministerium der Verteidigung in Berlin.jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "Schlaf: Einschlafzucken und Angst",
+    "photo": "Cama de madeira.jpg",
+    "article": "Bett",
+    "how": "wikipedia-suche+ki"
+   },
+   {
+    "story": "USA schlagen NATO-Beitritt gegen Gebietsverzicht vor",
+    "photo": "Bundesministerium der Verteidigung in Berlin.jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "Altersvorsorge: Abzüge bei Frührente steigen",
+    "photo": "BfA-(DRV)Hochhaus in Berlin-Wilmersdorf.jpg",
+    "article": "Gebäude der Deutschen Rentenversicherung Bund",
+    "how": "wikipedia-suche+ki"
+   },
+   {
+    "story": "Sterbehilfe und Ukraine: Zwei Themen im Fokus",
+    "photo": "Bundesministerium der Verteidigung in Berlin.jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "Ukraine-Krieg: Medienfokus",
+    "photo": "Volodymyr Zelenskyy, President of Ukraine, received the Letters of Credence from the Newly Appointed Ambassadors of Poland, Australia, Thailand, Ghana and Uganda on 22 April 2024 - 10.jpg",
+    "article": "",
+    "how": "ki-suche"
+   },
+   {
+    "story": "Iran-Krieg: Medienfokus und Wortwahl",
+    "photo": "Auswärtiges Amt 0802.jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "Philippinen gewinnen ersten asiatischen ESC",
+    "photo": "Bundestag Berlin Deutschland Reichstagsgebäude - 06.jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "NATO‑Debatte um Donbass",
+    "photo": "European Parliament hemicycle Strasbourg (cropped).jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "Klimakrise: \"Wichtig ist das Gefühl von Selbstwirksamkeit\"",
+    "photo": "Windpark Pilsum.jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "Bargeld im Wald gefunden",
+    "photo": "Herbstwald bei Hülshof Gem. Bad Endbach.jpg",
+    "article": "Wald",
+    "how": "wikipedia-thema+ki"
+   },
+   {
+    "story": "Trauerakt für Hubert Aiwanger in München",
+    "photo": "2023-05-23-Hubert Aiwanger-Maischberger-6164.jpg",
+    "article": "Aiwanger",
+    "how": "wikipedia-thema+ki"
+   },
+   {
+    "story": "Microsoft‑Störung weltweit",
+    "photo": "Bundestag Berlin Deutschland Reichstagsgebäude - 06.jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "Meta in Italien mit 805 Mio. Euro Strafe belegt",
+    "photo": "Bundestag Berlin Deutschland Reichstagsgebäude - 06.jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "Flugverbot in den USA wegen technischer Störung aufgehoben",
+    "photo": "Auswärtiges Amt 0802.jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "Demokrat gewinnt Gouverneurswahl in Alaska",
+    "photo": "Auswärtiges Amt 0802.jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "Energiepolitik: Solarförderung für kleine Anlagen soll bleiben",
+    "photo": "Windpark Pilsum.jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "Staat steigt aus: Weltgrößte Reederei MSC will offenbar Meyer Werft kaufen",
+    "photo": "Frankfurt Taunusturm.Skyline.20130402.jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "Treffen am Rande des Gipfels: Trump trifft Xi und Putin in China",
+    "photo": "Auswärtiges Amt 0802.jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "Entlastung für alle?: Debatte um Senkung der Stromsteuer geht weiter",
+    "photo": "Frankfurt Taunusturm.Skyline.20130402.jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "Als angemessen dargestellt: Huang soll Nvidia-Führungskräfte über Affäre getäuscht haben",
+    "photo": "Official Presidential Portrait of President Donald J. Trump (2025).jpg",
+    "article": "Zweite Präsidentschaft von Donald Trump",
+    "how": "wikipedia-suche+ki"
+   },
+   {
+    "story": "Türkei: Tausende demonstrieren für Klima und Menschenrechte",
+    "photo": "Windpark Pilsum.jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "Nvidia-Skandal: Handelsminister im Fokus",
+    "photo": "Bundestag Berlin Deutschland Reichstagsgebäude - 06.jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "Mississippi-Kollision: Kreuzfahrtschiff kentert",
+    "photo": "Bundestag Berlin Deutschland Reichstagsgebäude - 06.jpg",
+    "article": "",
+    "how": "themenfoto"
+   }
+  ]
+ },
+ "eu": {
+  "stories": 77,
+  "with_photo": 77,
+  "sources": {
+   "themenfoto": 46,
+   "wikipedia-suche+ki": 18,
+   "wikipedia-thema+ki": 6,
+   "commons-suche+ki": 7
+  },
+  "photos": [
+   {
+    "story": "COP31: Verhandlungen über fossile Energien",
+    "photo": "Windpark Pilsum.jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "Brücken bleiben intakt, Stadt wird bombardiert",
+    "photo": "Auswärtiges Amt 0802.jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "Missile crash in Poland sparks alarm",
+    "photo": "Bundesministerium der Verteidigung in Berlin.jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "Dänemark beschuldigt Russland",
+    "photo": "European Parliament hemicycle Strasbourg (cropped).jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "Trump spricht über Ukraine und Iran",
+    "photo": "Official Presidential Portrait of President Donald J. Trump (2025).jpg",
+    "article": "Donald Trump",
+    "how": "wikipedia-suche+ki"
+   },
+   {
+    "story": "Parlement beschließt Gesetz zur Waffenverwendung",
+    "photo": "Bundesministerium der Verteidigung in Berlin.jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "UK‑EU Reset Deal in Brussels",
+    "photo": "Europa building February 2016.jpg",
+    "article": "Europagebäude",
+    "how": "wikipedia-suche+ki"
+   },
+   {
+    "story": "UK‑EU Reset: Neue Handels- und Mobilitätsabkommen",
+    "photo": "Bundestag Berlin Deutschland Reichstagsgebäude - 04.jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "Untersuchung wegen Leaks aus Innenministerium",
+    "photo": "European Parliament hemicycle Strasbourg (cropped).jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "Militärpakt zwischen Deutschland und Polen ausbauen",
+    "photo": "Карта военных союзов.png",
+    "article": "Militärpakt",
+    "how": "wikipedia-thema+ki"
+   },
+   {
+    "story": "UK-EU Summit: What to Expect",
+    "photo": "Grand Place Bruselas 2.jpg",
+    "article": "Brussels, Belgium",
+    "how": "wikipedia-thema+ki"
+   },
+   {
+    "story": "Anthropic-IPO: Marktreaktion bleibt negativ",
+    "photo": "Frankfurt Taunusturm.Skyline.20130402.jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "Shenzhen: Dreiergipfel zwischen Trump, Xi und Putin",
+    "photo": "Bundestag Berlin Deutschland Reichstagsgebäude - 04.jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "Kushner über NATO-Deckel für Kiew",
+    "photo": "European Parliament hemicycle Strasbourg (cropped).jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "Brexit‑Debatte nach Burnham",
+    "photo": "Official portrait of Andy Burnham MP 2026 (cropped 3x4).jpg",
+    "article": "Labour Party",
+    "how": "wikipedia-suche+ki"
+   },
+   {
+    "story": "Valencian campaign intensifies",
+    "photo": "Collage de la ciudad de Valencia, capital de la Comunidad Valenciana, España.png",
+    "article": "Valencia",
+    "how": "wikipedia-suche+ki"
+   },
+   {
+    "story": "Yalta 2.0 wird abgelehnt",
+    "photo": "European Parliament hemicycle Strasbourg (cropped).jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "Trump ruft europäische Ukraine-Hilfe an",
+    "photo": "European Parliament hemicycle Strasbourg (cropped).jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "Burnham und der EU‑Summit",
+    "photo": "European Parliament hemicycle Strasbourg (cropped).jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "Anthropic startet Rekord-Börsengang",
+    "photo": "Frankfurt Börse IHK.jpg",
+    "article": "",
+    "how": "commons-suche+ki"
+   },
+   {
+    "story": "Trump, Xi, Putin treffen sich in Shenzhen",
+    "photo": "Xi Jinping in July 2024 (cropped).jpg",
+    "article": "Xi Jinping",
+    "how": "wikipedia-suche+ki"
+   },
+   {
+    "story": "EU plant 45 bn € Kredit für Ukraine",
+    "photo": "Euromaidan collage.jpg",
+    "article": "Euromaidan",
+    "how": "wikipedia-suche+ki"
+   },
+   {
+    "story": "Historisches Dreier-Treffen von Xi, Trump und Putin",
+    "photo": "Commercial area of futian to east2020.jpg",
+    "article": "Shenzhen, China",
+    "how": "wikipedia-thema+ki"
+   },
+   {
+    "story": "Krim-Brücke erneut gesperrt",
+    "photo": "View of the arches of the Crimean Bridge.jpg",
+    "article": "",
+    "how": "commons-suche+ki"
+   },
+   {
+    "story": "AI-Datacenter-Emissionen im Fokus",
+    "photo": "WallmenrothDataCenterGroup2.jpg",
+    "article": "Data Center Group",
+    "how": "wikipedia-suche+ki"
+   },
+   {
+    "story": "Europa und China: Treffen mit Trump, Putin, Xi",
+    "photo": "European Parliament hemicycle Strasbourg (cropped).jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "EU plant 45 Mrd. Euro Kredit für Ukraine",
+    "photo": "Bundestag Berlin Deutschland Reichstagsgebäude - 04.jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "Historisches Treffen von Xi, Trump und Putin",
+    "photo": "European Parliament hemicycle Strasbourg (cropped).jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "EU beschleunigt Elektrifizierung",
+    "photo": "Übergabe des Gutscheins zur Vorplanung der Elektrifizierung der Bahnstrecke Dresden - Görlitz.jpeg",
+    "article": "",
+    "how": "commons-suche+ki"
+   },
+   {
+    "story": "Philippe präsentiert Programm ohne neue Maßnahmen",
+    "photo": "Bundestag Berlin Deutschland Reichstagsgebäude - 04.jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "Ukraine beschädigt Kerch-Brücke",
+    "photo": "Крымский мост 13 сентября 2019 года (1).jpg",
+    "article": "",
+    "how": "commons-suche+ki"
+   },
+   {
+    "story": "Jeffries nominiert als US-Repräsentantenhauschef",
+    "photo": "Auswärtiges Amt 0802.jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "Stromsteuer-Einigung erreicht",
+    "photo": "Frankfurt Taunusturm.Skyline.20130402.jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "Trilaterales Treffen in Shenzhen",
+    "photo": "Shenzhen city montage.png",
+    "article": "Shenzhen",
+    "how": "wikipedia-thema+ki"
+   },
+   {
+    "story": "Philippe in der Diskussion um die 2027‑Primäre",
+    "photo": "European Parliament hemicycle Strasbourg (cropped).jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "Iranische Angriffe nach US-Bombardierung",
+    "photo": "Shahed 136 rendering.png",
+    "article": "HESA Shahed 136",
+    "how": "wikipedia-suche+ki"
+   },
+   {
+    "story": "Demokraten gewinnen Alaska-Senatssitz",
+    "photo": "Alaska State Capitol, Juneau.jpg",
+    "article": "Alaska State Capitol",
+    "how": "wikipedia-suche+ki"
+   },
+   {
+    "story": "Mutter und Vater zu Haft verurteilt",
+    "photo": "Bundestag Berlin Deutschland Reichstagsgebäude - 04.jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "US kritisiert Ukraine, Deutschland reagiert",
+    "photo": "2025-05-28 Event, Politik- Besuch des Präsidenten der Ukraine Wolodymyr Selenskyj beim deutschen Bundespräsidenten Frank-Walter Steinmeier STP 5826.jpg",
+    "article": "Deutschlands Ukraine-Politik seit 2022",
+    "how": "wikipedia-suche+ki"
+   },
+   {
+    "story": "US und Iran im Spannungsfeld",
+    "photo": "Auswärtiges Amt 0802.jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "Lavrov kritisiert französische Truppen in Ukraine",
+    "photo": "Bundesministerium der Verteidigung in Berlin.jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "Ukrainische Angriffe auf Kerch-Brücke",
+    "photo": "Крымский мост 21 декабря 2019 года.jpg",
+    "article": "Krim-Brücke",
+    "how": "wikipedia-suche+ki"
+   },
+   {
+    "story": "Burnham verschiebt EU-Entscheidung",
+    "photo": "European Parliament hemicycle Strasbourg (cropped).jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "Rentenreform: Kontroverse um Marine Le Pen",
+    "photo": "2020-02-13 Deutscher Bundestag IMG 3440 by Stepro.jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "Brücken in Kiew getroffen",
+    "photo": "Північний міст 01.jpg",
+    "article": "Nordbrücke (Kiew)",
+    "how": "wikipedia-suche+ki"
+   },
+   {
+    "story": "Rentenreform: Regierung und Senat im Streit",
+    "photo": "2020-02-13 Deutscher Bundestag IMG 3440 by Stepro.jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "Kerch-Brücke beschädigt",
+    "photo": "Kerch. Crimean Bridge P5020707 2350.jpg",
+    "article": "",
+    "how": "commons-suche+ki"
+   },
+   {
+    "story": "IA und Arbeitsmarkt: unterschiedliche Perspektiven",
+    "photo": "2021 IAB - by 2eight - 7DS7742.jpg",
+    "article": "Institut für Arbeitsmarkt- und Berufsforschung",
+    "how": "wikipedia-suche+ki"
+   },
+   {
+    "story": "Brexit-Bewertung von Burnham",
+    "photo": "Auswärtiges Amt 0802.jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "Rwanda‑Plan: EU‑Landeskooperation angekündigt",
+    "photo": "SS-Kaserne Nürnberg 001.jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "Debat über Lebenshaltungskosten",
+    "photo": "European Parliament hemicycle Strasbourg (cropped).jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "Studentenliste bildet neues Parlament",
+    "photo": "Belgrad- Parlament.jpg",
+    "article": "",
+    "how": "commons-suche+ki"
+   },
+   {
+    "story": "EU- und US-Verhandlungen zur Ukraine",
+    "photo": "New Year's Eve from President of Ukraine Volodymyr Zelensky (31-12-2025) (cropped).jpg",
+    "article": "Wolodymyr Selenskyj",
+    "how": "wikipedia-suche+ki"
+   },
+   {
+    "story": "Debatte zur Rentenfrage 2027",
+    "photo": "European Parliament hemicycle Strasbourg (cropped).jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "Pape Leo XIV. wird von Rosenkranz getroffen",
+    "photo": "Rosenkranzring.jpg",
+    "article": "Rosenkranz",
+    "how": "wikipedia-thema+ki"
+   },
+   {
+    "story": "EU plant Abschiebezentrum in Ruanda",
+    "photo": "SS-Kaserne Nürnberg 001.jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "Estland schließt Grenze zu Russland",
+    "photo": "Estonia-Russia Border (52625575293).jpg",
+    "article": "",
+    "how": "commons-suche+ki"
+   },
+   {
+    "story": "Spionage und EU-Außenpolitik im Fokus",
+    "photo": "Bundestag Berlin Deutschland Reichstagsgebäude - 04.jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "Französische Wahl: Medienfokus",
+    "photo": "European Parliament hemicycle Strasbourg (cropped).jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "Ukraine: Energieangriffe und Satellitenbeschränkungen",
+    "photo": "Bundesministerium der Verteidigung in Berlin.jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "Heil kandidiert für SPD-Vorsitz",
+    "photo": "Bundestag Berlin Deutschland Reichstagsgebäude - 04.jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "Kanaren: Rekord ankommender Migranten",
+    "photo": "SS-Kaserne Nürnberg 001.jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "Prag: Protest gegen Rundfunkfinanzierung",
+    "photo": "Bundestag Berlin Deutschland Reichstagsgebäude - 04.jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "Drohnenangriffe auf drei Schiffe im Schwarzen Meer",
+    "photo": "Bayraktar TB2 Runway.jpg",
+    "article": "Bayraktar TB2",
+    "how": "wikipedia-suche+ki"
+   },
+   {
+    "story": "SpaceX fängt Starship wieder auf",
+    "photo": "Starship Booster Return on Final Approach (54063904149).jpg",
+    "article": "Starship-Testflug 5",
+    "how": "wikipedia-suche+ki"
+   },
+   {
+    "story": "Hubertus Heil kündigt SPD-Vorsitz-Kandidatur an",
+    "photo": "Hubertus Heil (2021).jpg",
+    "article": "Hubertus Heil",
+    "how": "wikipedia-suche+ki"
+   },
+   {
+    "story": "Ukraine‑Grenzen: Explosionen, Evakuierungen und politische Reaktionen",
+    "photo": "Auswärtiges Amt 0802.jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "Manifestationen in Frankreich",
+    "photo": "European Parliament hemicycle Strasbourg (cropped).jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "EU fordert Israel auf, Helfer nach Gaza zu lassen",
+    "photo": "Deir al-Balah.jpg",
+    "article": "Deir al-Balah",
+    "how": "wikipedia-suche+ki"
+   },
+   {
+    "story": "US Vorschlag: Ukraine cede Donbas für NATO",
+    "photo": "European Parliament hemicycle Strasbourg (cropped).jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "Millionen Euro Bargeld in Ungarn gefunden",
+    "photo": "Bundestag Berlin Deutschland Reichstagsgebäude - 06.jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "Portugal protestiert gegen Wohnungsnot",
+    "photo": "2022-11-04-Mehrfamilienhaus-Rheinbabenallee.jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "Michel Destot: Grenoble’s long‑time mayor dies",
+    "photo": "Michel Destot IMG 0573.jpg",
+    "article": "Michel Destot",
+    "how": "wikipedia-thema+ki"
+   },
+   {
+    "story": "COP31 Proteste in Antalya",
+    "photo": "Windpark Pilsum.jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "USA schlagen Ukraine mit NATO-Option vor",
+    "photo": "Auswärtiges Amt 0802.jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "EU-Team für Ukraine-Verhandlungen gebildet",
+    "photo": "European Parliament hemicycle Strasbourg (cropped).jpg",
+    "article": "",
+    "how": "themenfoto"
+   },
+   {
+    "story": "Trump, Xi, Putin planen Treffen in China",
+    "photo": "Auswärtiges Amt 0802.jpg",
+    "article": "",
+    "how": "themenfoto"
+   }
+  ]
+ }
+}
